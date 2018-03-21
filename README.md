@@ -7,7 +7,7 @@ As an organizer I want to be able to set a default template for both email and p
 > install requeriments for enviorement
 
 ```python
-$ pip install -r requeriments.txt
+$ pip install -r requirements.txt
 
 ```
 
