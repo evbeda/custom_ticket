@@ -6,9 +6,11 @@
 </head>
 <body>
     <h3>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h3>
-<a href="/accounts/logout/?next=/events/">Logout</a>
+    <a href="/accounts/logout/?next=/events/">Logout</a>
     {% for event in events %}
-    <p>{{ event }}</p>
+    <ul> <li>name: <b>{{ event.name.html }}</b> | start : <b>{{ event.start.local}}</b> | status:<b>{{ event.status }}</b> <a href="{% url 'events.views.show_tickets' eventID=event.id %}">See Tickets</a></li></ul>
      {% endfor %}
 </body>
 </html>
+
+
