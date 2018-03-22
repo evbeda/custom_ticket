@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import TemplateView
-from django.utils.decorators import method_decorator
-
 from eventbrite import Eventbrite
 
 
-@method_decorator(login_required, name='dispatch')
-class EventsView(TemplateView, LoginRequiredMixin):
+class EventsView(LoginRequiredMixin, TemplateView):
 
     template_name = "events/events.html"
 
@@ -17,13 +13,12 @@ class EventsView(TemplateView, LoginRequiredMixin):
         access_token = self.request.user.social_auth.get(provider='eventbrite').access_token
         eventbrite = Eventbrite(access_token)
         context['events'] = [
-            event['name']['html']
-            for event in eventbrite.get('/users/me/events/')['events']
+            event
+            # Status : live, draft, canceled, started, ended, all
+            for event in eventbrite.get('/users/me/events/?status=live,draft')['events']
         ]
         return context
 
 
-'''
-Status : live, draft, canceled, started, ended, all
-'''
-# ticket buyer settings
+class TicketsView(LoginRequiredMixin, TemplateView):
+    template_name = "events/show_tickets.html"
