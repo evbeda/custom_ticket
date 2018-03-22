@@ -14,10 +14,16 @@ class EventsView(TemplateView, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs):
         context = super(EventsView, self).get_context_data(**kwargs)
-        access_token = self.request.user.social_auth.all()[0].access_token
+        access_token = self.request.user.social_auth.get(provider='eventbrite').access_token
         eventbrite = Eventbrite(access_token)
         context['events'] = [
             event['name']['html']
             for event in eventbrite.get('/users/me/events/')['events']
         ]
         return context
+
+
+'''
+Status : live, draft, canceled, started, ended, all
+'''
+# ticket buyer settings
