@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'events',
+    'mail',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +61,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
 
-    'custom_ticket.middleware.SocialAuthExceptionMiddleware',
+    # El siguiente middleware, lanza el Error:
+    # django.core.exceptions.ImproperlyConfigured:
+    # WSGI application 'custom_ticket.wsgi.application'
+    # could not be loaded; Error importing module:
+    # 'No module named social.apps.django_app.middleware'
+
+    # 'custom_ticket.middleware.SocialAuthExceptionMiddleware',
 
 ]
 
@@ -154,6 +161,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Email config
+
+EMAIL_HOST = get_env_variable('EMAIL_HOST')
+EMAIL_PORT = int(get_env_variable('EMAIL_PORT'))
+EMAIL_HOST_USER = get_env_variable('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = get_env_variable('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = bool(get_env_variable('EMAIL_USE_TLS'))
+
 
 
 # Internationalization
