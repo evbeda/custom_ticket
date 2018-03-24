@@ -1,0 +1,24 @@
+{% block content %}
+
+    {% if form.errors %}
+        <strong>Fix the following errors.</strong>
+        {% for key, value in form.errors.items %}
+        <p>{{ key }}:{{ value.0 }}</p>
+        {% endfor %}
+
+    {% endif %}
+
+    <form role="form" method="post">{% csrf_token %}
+        <p>{{ form.to_email.label }} : {{ form.to_email }}</p>
+        <p>{{ form.from_email.label }} : {{ form.from_email }}</p>
+        <p>{{ form.subject.label }} : {{ form.subject }}</p>
+        <p>{{ form.message.label }} : {{ form.message }}</p>
+        <br>
+        <input type="submit" name="send_email" value="send_email">
+    </form>
+
+
+
+
+
+{% endblock %}
