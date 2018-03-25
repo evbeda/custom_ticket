@@ -10,15 +10,32 @@ class EventsView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventsView, self).get_context_data(**kwargs)
-        access_token = self.request.user.social_auth.get(provider='eventbrite').access_token
+        # access_token = self.request.user.social_auth.get(provider='eventbrite').access_token
+        access_token = self.request.user.social_auth.all()[0].access_token
         eventbrite = Eventbrite(access_token)
         context['events'] = [
             event
             # Status : live, draft, canceled, started, ended, all
             for event in eventbrite.get('/users/me/events/?status=live,draft')['events']
+
         ]
         return context
 
+    '''
 
-class TicketsView(LoginRequiredMixin, TemplateView):
-    template_name = "events/show_tickets.html"
+    Get ticket_classes, example:
+
+    '''
+    # import request
+    # url = "https://www.eventbriteapi.com/v3/users/owned_events/?token=" + str(access_token)
+    # "https://www.eventbriteapi.com/v3/events/" + eventID + "/ticket_classes/?token=" + access_token
+    # response = requests.get(url)
+    # print response.json()['events'][0]['name']['text']
+
+    # def get_event_ticket_classes(self, id, **data):
+    #     """
+    #     GET /events/:id/ticket_classes/
+    #     Returns a paginated response with a key of ``ticket_classes``,
+    #     containing a list of :format:`ticket_class`.
+    #     """
+    #     return self.get("/events/{0}/ticket_classes/".format(id), data=data)
