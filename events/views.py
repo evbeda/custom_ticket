@@ -11,6 +11,9 @@ class EventsView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(EventsView, self).get_context_data(**kwargs)
         # access_token = self.request.user.social_auth.get(provider='eventbrite').access_token
+        '''
+       If we have more than 2 users, we need to use the filter.But the filter does not work with -.access_token-
+        '''
         access_token = self.request.user.social_auth.all()[0].access_token
         eventbrite = Eventbrite(access_token)
         context['events'] = [
