@@ -4,5 +4,4 @@ from .views import EventsView
 
 urlpatterns = [
     url(r'^$', EventsView.as_view(), name='events'),
-
 ]
