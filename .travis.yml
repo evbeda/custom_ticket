@@ -2,8 +2,19 @@ language: python
 python:
   - "2.7"
 
+services: postgresql
+
+env:
+  global:
+  - DJANGO_SETTINGS_MODULE="mysite.settings"
+  - PYTHONPATH="/home/travis/build/evbeda/custom_ticket"
+  - PIP_USE_MIRRORS=true
+
 install:
   - pip install -r requirements.txt
+
+before_script:
+  - psql -c 'create database travisdb;' -U postgres
 
 script: coverage run manage.py test
 
