@@ -9,20 +9,16 @@ from django.core.mail import EmailMessage
 from forms import FormEmailSend
 
 
-class ViewSendEmail(FormView):
-    form_class = FormEmailSend
-    template_name = 'mail/email_send.html'
-
-    def post(self, *args, **kwargs):
-        print "sending email"
-        subject = 'test'
-        message = 'hello'
-        from_email = 'edacticket@gmail.com'
-        emails = ['asaiz@eventbrite.com']
-        return send_email(subject, message, from_email, emails)
+def send_email(request):
+    print "sending email"
+    subject = 'test'
+    message = 'hello'
+    from_email = 'edacticket@gmail.com'
+    emails = ['asaiz@eventbrite.com']
+    return do_send_email(subject, message, from_email, emails)
 
 
-def send_email(subject, message, from_email, emails):
+def do_send_email(subject, message, from_email, emails):
     logger = logging.getLogger(__name__)
     logger.error('sending email')
     email = EmailMessage(

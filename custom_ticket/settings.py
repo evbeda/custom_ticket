@@ -26,7 +26,7 @@ SECRET_KEY = 't6id7sj_w*wt%bu+wc!g-4&(q4_9hp6-mwn+zp)5aota3n0)g+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '0.0.0.0:5000', '127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '.herokuapp.com']
 
 
 def get_env_variable(var_name):
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
