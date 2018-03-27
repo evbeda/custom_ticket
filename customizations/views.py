@@ -33,4 +33,4 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                 email_confirmation=email
 
             )
-            return HttpResponseRedirect('/customizations/')
+            return HttpResponseRedirect('/home/')

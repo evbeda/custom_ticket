@@ -5,10 +5,11 @@
     <title>Document</title>
 </head>
 <body>
-    <div style="text-align: right;">
-        <h3>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h3>
-        <a href="/accounts/logout/?next=/events/">Logout</a>
-    </div>
+
+    <h3>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h3>
+    <a href="/accounts/logout/?next=/events/">Logout</a>
+
+
 
     </p>
     {% for customization in Customization %}
@@ -31,6 +32,8 @@
      <br>
      <br>
      <br>
-     <button> New</button>
+    <p>
+    <a href="/customizations/">Create a Customization</a>
+    </p>
 </body>
 </html>
