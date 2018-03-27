@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from events.models import Customization
-from django.views.generic import ListView
+from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from eventbrite import Eventbrite
 
@@ -33,6 +33,10 @@ class EventsView(LoginRequiredMixin, TemplateView):
 
 class HomeView(LoginRequiredMixin, ListView):
     model = Customization
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        return context
 
     #Get ticket_classes, example:
 
