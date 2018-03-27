@@ -9,7 +9,7 @@
     {% endif %}
 
     <h2>Create customization</h2>
-    <form enctype="multipart/form-data" role="form" method="post">{% csrf_token %}
+    <form  role="form" method="post">{% csrf_token %}
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
         <p>{{ form.logo.label }} : {{ form.logo }}</p>
         <p>{{ form.message.label }} : {{ form.message }}</p>

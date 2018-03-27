@@ -25,6 +25,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             ticket = TicketTemplate.objects.create()
             email = EmailConfirmation.objects.create(
                 message=message,
+                logo=logo
             )
             Customization.objects.create(
                 user=self.request.user,
