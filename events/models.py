@@ -34,6 +34,7 @@ class TicketTemplate(models.Model):
 
 class EmailConfirmation(models.Model):
     message = models.CharField(max_length=255)
+    logo = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     changed = models.DateTimeField(auto_now=True)
 
