@@ -7,7 +7,7 @@
         {% endfor %}
 
     {% endif %}
-     <a href="/home/">Volver</a>
+     <a href="{% url 'home'  %}">My Customizations</a>
     <h2>Create customization</h2>
     <form  role="form" method="post">{% csrf_token %}
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>

@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'customizations/', include('customizations.urls')),
     url('', include('social_django.urls', namespace='social')),
     url(r'^accounts/login/$', login, name='login'),
-    url(r'^accounts/logout/$', logout, name='logout'),
+    url(r'^accounts/logout/$', logout, {'next_page': '/events/'},name='logout'),
     url(r'^password_reset/$', login, name='password_reset'),
-    url(r'^home/', HomeView.as_view()),
+    url(r'^home/', HomeView.as_view(), name='home'),
 ]

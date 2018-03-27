@@ -7,33 +7,26 @@
 <body>
 
     <h3>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h3>
-    <a href="/accounts/logout/?next=/events/">Logout</a>
+    <a href="{% url 'logout'  %}">Logout</a>
 
 
-
-    </p>
-    {% for customization in Customization %}
-    <ul>
-        <p align="middle">
-            <a href=# style="text-decoration:none">
-                <img src="/static/images/plus_orange.png" width="50" height="50">
-                <br>
-                <i>Custom Tickets</i>
-            </a>
-        </p>
-        <li>id customization: <b>{{ customization.id }}</b>
-        </li>
-    </ul>
-     {% endfor %}
-     {% if customization == null %}
-     <h3>Nothing to show</h3>
-     {% endif %}
-     <br>
-     <br>
-     <br>
-     <br>
+<h1>My Customizations</h1>
+<ul>
+{% for customs in object_list %}
     <p>
-    <a href="/customizations/">Create a Customization</a>
+    <li>User: {{ customs.user }} </li>
+    <li>Logo: {{ customs.email_confirmation.logo }} </li>
+    <li>Mensaje: {{ customs.email_confirmation.message }} </li>
+    <li>Creado: {{ customs.created }} </li>
+    </p>
+{% empty %}
+    <li>No customizations yet.</li>
+{% endfor %}
+</ul>
+
+
+
+    <a href="{% url 'customizations' %}">Create a customization</a>
     </p>
 </body>
 </html>
