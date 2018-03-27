@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'social_django',
     'events',
     'mail',
+    'customizations',
 ]
 
 MIDDLEWARE = [
