@@ -1,34 +1,41 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.mixins import LoginRequiredMixin
+from events.models import Customization
+from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from eventbrite import Eventbrite
 
 
 class EventsView(LoginRequiredMixin, TemplateView):
-
     template_name = "events/events.html"
 
     def get_context_data(self, **kwargs):
         context = super(EventsView, self).get_context_data(**kwargs)
-        # access_token = self.request.user.social_auth.get(provider='eventbrite').access_token
+        '''access_token = self.request.user.social_auth.get(
+        provider='eventbrite'
+        ).access_token'''
         '''
-       If we have more than 2 users, we need to use the filter.But the filter does not work with -.access_token-
+        If we have more than 2 users,
+        we need to use the filter.
+        But the filter does not work with -.access_token-
         '''
         access_token = self.request.user.social_auth.all()[0].access_token
         eventbrite = Eventbrite(access_token)
         context['events'] = [
             event
             # Status : live, draft, canceled, started, ended, all
-            for event in eventbrite.get('/users/me/events/?status=live,draft')['events']
-
+            for event in eventbrite.get(
+                '/users/me/events/?status=live,draft'
+            )['events']
         ]
         return context
 
-    '''
 
-    Get ticket_classes, example:
+class HomeView(ListView):
+    model = Customization
 
-    '''
+    #Get ticket_classes, example:
+
     # import request
     # url = "https://www.eventbriteapi.com/v3/users/owned_events/?token=" + str(access_token)
     # "https://www.eventbriteapi.com/v3/events/" + eventID + "/ticket_classes/?token=" + access_token
