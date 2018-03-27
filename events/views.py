@@ -31,7 +31,7 @@ class EventsView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class HomeView(ListView):
+class HomeView(LoginRequiredMixin, ListView):
     model = Customization
 
     #Get ticket_classes, example:

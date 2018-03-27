@@ -5,9 +5,12 @@
     <title>Document</title>
 </head>
 <body>
-    <h3>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h3>
-    <a href="/accounts/logout/?next=/events/">Logout</a>
+    <div style="text-align: right;">
+        <h3>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h3>
+        <a href="/accounts/logout/?next=/events/">Logout</a>
+    </div>
 
+    </p>
     {% for customization in Customization %}
     <ul>
         <p align="middle">
@@ -24,5 +27,10 @@
      {% if customization == null %}
      <h3>Nothing to show</h3>
      {% endif %}
+     <br>
+     <br>
+     <br>
+     <br>
+     <button> New</button>
 </body>
 </html>
