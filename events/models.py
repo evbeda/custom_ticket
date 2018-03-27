@@ -19,7 +19,6 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
 
 
-
 class TicketType(models.Model):
     eventbrite_id = models.CharField(max_length=255, primary_key=True)
     event = models.ForeignKey(Event)
@@ -34,7 +33,7 @@ class TicketTemplate(models.Model):
 
 
 class EmailConfirmation(models.Model):
-    message = models.CharField()
+    message = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     changed = models.DateTimeField(auto_now=True)
 
