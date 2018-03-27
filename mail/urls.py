@@ -1,8 +1,8 @@
 from django.conf.urls import url
-from .views import ViewSendEmail
+from .views import send_email
 
 
 urlpatterns = [
-    url(r'^$', ViewSendEmail.as_view(), name='mail'),
+    url(r'^$', send_email, name='mail'),
 
 ]
