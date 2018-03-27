@@ -1,36 +1,30 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import logging
 from django.views.generic import FormView
 from django.core.mail import BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import EmailMessage
 from forms import FormEmailSend
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class ViewSendEmail(LoginRequiredMixin, FormView):
+class ViewSendEmail(FormView):
     form_class = FormEmailSend
     template_name = 'mail/email_send.html'
 
-    def form_valid(self, form):
-        subject = form.cleaned_data['subject']
-        message = form.cleaned_data['message']
-        from_email = form.cleaned_data['from_email']
-        to_email = form.cleaned_data['to_email']
-        emails = []
-        if ',' in to_email:
-            for email in to_email.split(','):
-                emails.append(email)
-        else:
-            emails.append(to_email)
-
-        if 'send_email' in self.request.POST:
-            send_email(subject, message, from_email, emails)
-        return HttpResponseRedirect('/')
+    def post(self, *args, **kwargs):
+        print "sending email"
+        subject = 'test'
+        message = 'hello'
+        from_email = 'edacticket@gmail.com'
+        emails = ['asaiz@eventbrite.com']
+        return send_email(subject, message, from_email, emails)
 
 
 def send_email(subject, message, from_email, emails):
+    logger = logging.getLogger(__name__)
+    logger.error('sending email')
     email = EmailMessage(
         subject,
         message,

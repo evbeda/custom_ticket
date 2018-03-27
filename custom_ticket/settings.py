@@ -26,7 +26,7 @@ SECRET_KEY = 't6id7sj_w*wt%bu+wc!g-4&(q4_9hp6-mwn+zp)5aota3n0)g+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '0.0.0.0:5000', '127.0.0.1', '.herokuapp.com']
 
 
 def get_env_variable(var_name):
@@ -199,3 +199,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
+        },
+    },
+}
