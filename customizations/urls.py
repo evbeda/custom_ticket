@@ -4,6 +4,8 @@ from customizations.views import send_mail_with_pdf, generate_pdf, PrintPdf
 
 
 urlpatterns = [
+    url(r'^$', TemplateView.as_view(
+        template_name='customizations/menu.html'), name='menu'),
     url(r'^generate-pdf/$', generate_pdf, name='generate_pdf'),
     url(r'^print-pdf/$', PrintPdf.as_view(), name='download_pdf'),
     url(r'^send_mail_with_pdf/$', send_mail_with_pdf, name='send_email_with_pdf'),
