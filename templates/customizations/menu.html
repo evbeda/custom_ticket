@@ -1,10 +1,15 @@
+{% extends 'base.html' %}
 {% block content %}
-    
-     <ul>
-        <li><a href="{% url 'customizations:create_customization'%}">Create Customization</a></li>
-        <li><a href="{% url 'customizations:generate_pdf'%}">Generate PDF</a></li>
-<!--         <li><a href="{% url 'customizations:send_email_with_pdf'%}">Send Mail</a></li>
- -->
-     </ul>
-  
+
+
+        <p>
+            <a class="btn btn-danger" href="{% url 'customizations:create_customization'%}">Create Customization</a>
+        </p>
+        <p>
+        <a class="btn btn-warning" href="{% url 'customizations:generate_pdf'%}">Generate PDF</a>
+    </p>
+        <p><a class="btn btn-success"  href="{% url 'customizations:send_email_with_pdf'%}">Send Mail</a></p>
+
+
+
 {% endblock %}

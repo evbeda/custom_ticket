@@ -1,5 +1,4 @@
-
-
+{% extends 'login_base.html' %}
 {% block content %}
 
 {% if form.errors %}
@@ -11,10 +10,16 @@
     <p>Your account doesn't have access to this page. To proceed,
     please login with an account that has access.</p>
     {% else %}
-    <p>Please login to see this page.</p>
+    <h1>Please login to see this page.</h1>
     {% endif %}
 {% endif %}
 
-<a href="{% url 'social:begin' 'eventbrite' %}">Login with Eventbrite</a>
+    <div class="row">
+    <div class="col-md-2 col-md-offset-5">
+        <a class="btn btn-lg btn-primary" href="{% url 'social:begin' 'eventbrite' %}">Login with Eventbrite</a>
+    </div>
+</div>
+
+
 
 {% endblock %}
