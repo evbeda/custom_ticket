@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from customizations.views import send_mail_with_pdf, generate_pdf, PrintPdf
-
+from .views import ViewCreateCustomization
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(
@@ -13,5 +13,6 @@ urlpatterns = [
         template_name='customizations/successfully_mail.html'), name='successfully_mail'),
     url(r'^create-customization/$', TemplateView.as_view(
         template_name='customizations/create.html'), name='create_customization'),
-
+    url(r'^$', ViewCreateCustomization.as_view(), name='customizations'),
+    url(r'/success', ViewCreateCustomization.as_view(), name='customizations'),
 ]
