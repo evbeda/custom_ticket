@@ -42,8 +42,8 @@ $ python manage.py runserver
 
 > login with Eventbrite in your localhost
 
-http://localhost:8000/accounts/login/?next=/events/
+http://localhost:8000/
 
 > Heroku app
 
-https://custom-ticket-heroku.herokuapp.com/events/
+https://custom-ticket-heroku.herokuapp.com/
