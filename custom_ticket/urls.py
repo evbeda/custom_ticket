@@ -6,7 +6,7 @@ from events.views import HomeView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', IndexView.as_view(), name='index'),
+    url(r'^$', HomeView.as_view(), name='home'),
     url(r'customizations/', include('customizations.urls', namespace='customizations')),
     url(r'events/', include('events.urls')),
     url(r'mail/', include('mail.urls')),
