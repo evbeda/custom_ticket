@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-
-    <h3>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h3>
-    <a href="{% url 'logout'  %}">Logout</a>
-
-
+{% extends 'base.html' %}
+{% block content %}
 <h1>My Customizations</h1>
 <ul>
 {% for customs in object_list %}
@@ -25,10 +15,17 @@
 </ul>
 
 
+<footer class="footer">
+      <div class="container">
+        <span class="text-muted">
+     <a href="{% url 'customizations:create_customization' %}">
+        <button type="button" class="pull-right btn btn-circle btn-danger"><span class="fa fa-plus"></span></button>
+     </a>
 
-    <a href="{% url 'customizations:create_customization' %}">Create a customization</a>
-    <!-- <a class="btn btn-primary" href="% url 'customizations:create_customization' %">Create a customization</a> -->
+        </span>
+      </div>
+    </footer>
 
-    </p>
-</body>
-</html>
+
+
+{% endblock %}

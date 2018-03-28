@@ -8,7 +8,7 @@
     <h3>Bienvenido, {{ user.first_name }} {{ user.last_name }}</h3>
     <a href="/accounts/logout/?next=/events/">Logout</a>
     {% for event in events %}
-    <ul> 
+    <ul>
         <p align="middle">
             <a href=# style="text-decoration:none">
                 <img src="/static/images/plus_orange.png" width="50" height="50">
@@ -16,11 +16,11 @@
                 <i>Custom Tickets</i>
             </a>
         </p>
-        <li>name: <b>{{ event.name.html }}</b> | 
-            start : <b>{{ event.start.local}}</b> | 
-            status:<b>{{ event.status }}</b>  
+        <li>name: <b>{{ event.name.html }}</b> |
+            start : <b>{{ event.start.local}}</b> |
+            status:<b>{{ event.status }}</b>
             <a href=#>Ver tickets</a>
-        </li> 
+        </li>
     </ul>
      {% endfor %}
 </body>
