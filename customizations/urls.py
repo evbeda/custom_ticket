@@ -13,6 +13,8 @@ urlpatterns = [
         template_name='customizations/successfully_mail.html'), name='successfully_mail'),
     url(r'^create-customization/$', TemplateView.as_view(
         template_name='customizations/create.html'), name='create_customization'),
+    url(r'^send-mail/$', TemplateView.as_view(
+        template_name='mail/email_send.html'), name='send-mail'),
     url(r'^$', ViewCreateCustomization.as_view(), name='customizations'),
-    url(r'/success', ViewCreateCustomization.as_view(), name='customizations'),
+    url(r'success', ViewCreateCustomization.as_view(), name='customizations'),
 ]

@@ -1,20 +1,9 @@
 {% block content %}
-
-    {% if form.errors %}
-        <strong>Fix the following errors.</strong>
-        {% for key, value in form.errors.items %}
-        <p>{{ key }}:{{ value.0 }}</p>
-        {% endfor %}
-
-    {% endif %}
-
-    <form role="form" method="post">{% csrf_token %}
-        <p>{{ form.to_email.label }} : {{ form.to_email }}</p>
-        <p>{{ form.from_email.label }} : {{ form.from_email }}</p>
-        <p>{{ form.message.label }} : {{ form.message }}</p>
-        <br>
-        <input type="submit" name="send_email" value="send_email">
-    </form>
+    <p>Email: {{ form.email }}</p>
+    <p>Message: {{ form.message }}</p>
+    <br>
+<!--     <input type="submit" name='customizations:send_email_with_pdf' value="send_email">
+ -->    <a href="{% url 'customizations:send_email_with_pdf' %}">Send Mail</a>
 
 {% endblock %}
 
