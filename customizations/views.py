@@ -27,6 +27,17 @@ def generate_pdf(request):
     ticket_pdf = get_pdf(request)
     return HttpResponse(ticket_pdf, content_type='application/pdf')
 
+def email_preview(request):
+    data = {
+        'today': datetime.date.today(),
+        'type': 'VIP',
+        'customer_name': 'Name ABC',
+        'order_id': 1233434,
+    }
+    ticket_pdf = PDF('customizations/send_mail.html', [data]).render()
+    # return ticket_pdf.getvalue()
+    return HttpResponse(ticket_pdf, content_type='application/pdf')
+
 
 class PrintPdf(View):
     def get(self, request, *args, **kwargs):
