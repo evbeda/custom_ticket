@@ -21,7 +21,7 @@ def generate_pdf(request):
         'order_id': 1233434,
     }
     ticket_pdf = PDF('tickets/template_default.html', [data]).render()
-    return ticket_pdf.getvalue()
+    # return ticket_pdf.getvalue()
     return HttpResponse(ticket_pdf, content_type='application/pdf')
 
 
