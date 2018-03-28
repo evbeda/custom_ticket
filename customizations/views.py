@@ -10,7 +10,7 @@ from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 from django.views.generic import View, FormView
 from events.models import Customization, TicketTemplate, EmailConfirmation
-from forms import FormCreateCustomization
+from .forms import FormCreateCustomization
 
 
 def generate_pdf(request):
@@ -64,16 +64,15 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
 
     def post(self, request, *args, **kwargs):
         is_form_valid = super(ViewCreateCustomization, self).post(request, *args, **kwargs)
-
         if is_form_valid:
             select_event = request.POST.get('select_event')
             logo = request.POST.get('logo')
             message = request.POST.get('message')
             select_ticket_template = request.POST.get('select_ticket_template')
-
             ticket = TicketTemplate.objects.create()
             email = EmailConfirmation.objects.create(
                 message=message,
+                logo=logo
             )
             Customization.objects.create(
                 user=self.request.user,
@@ -81,4 +80,4 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                 email_confirmation=email
 
             )
-            return HttpResponseRedirect('/customizations/')
+            return HttpResponseRedirect('/home/')
