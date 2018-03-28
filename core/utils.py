@@ -22,7 +22,7 @@ class SendEmail(object):
         return mark_safe(content)
 
     def send(self):
-        email = EmailMessage(self.title, self.get_content(), 'email@email.com', to=self.users)
+        email = EmailMessage(self.title, self.get_content(), 'edacticket@email.com', to=self.users)
         email.content_subtype = 'html'
         email.send()
 

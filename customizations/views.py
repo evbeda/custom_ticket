@@ -13,15 +13,18 @@ from events.models import Customization, TicketTemplate, EmailConfirmation
 from .forms import FormCreateCustomization
 
 
-def generate_pdf(request):
+def get_pdf(request):
     data = {
         'today': datetime.date.today(),
         'type': 'VIP',
         'customer_name': 'Name ABC',
         'order_id': 1233434,
     }
-    ticket_pdf = PDF('tickets/template_default.html', [data]).render()
-    # return ticket_pdf.getvalue()
+    return PDF('tickets/template_default.html', [data]).render().getvalue()
+
+
+def generate_pdf(request):
+    ticket_pdf = get_pdf(request)
     return HttpResponse(ticket_pdf, content_type='application/pdf')
 
 
@@ -48,11 +51,11 @@ def send_mail_with_pdf(request):
         'Test Send Ticket',
         content,
         'edacticket@gmail.com',
-        ['test@gmail.com']
+        ['usercticket@gmail.com']
     )
     email.content_subtype = 'html'
-    mime_type = mimetypes.guess_type('ticket_pdf.pdf')
-    email.attach('ticket_pdf', generate_pdf(request), mime_type[0])
+    pdf = get_pdf(request)
+    email.attach('ticket', pdf, 'application/pdf')
     email.send()
     return HttpResponseRedirect(r('customizations:successfully_mail'))
 
