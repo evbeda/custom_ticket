@@ -68,14 +68,14 @@ MIDDLEWARE = [
     # could not be loaded; Error importing module:
     # 'No module named social.apps.django_app.middleware'
 
-    # 'custom_ticket.middleware.SocialAuthExceptionMiddleware',
+    'custom_ticket.middleware.SocialAuthExceptionMiddleware',
 
 ]
 
 
 ROOT_URLCONF = 'custom_ticket.urls'
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/home'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -117,11 +117,11 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SOCIAL_AUTH_EVENTBRITE_KEY = get_env_variable('SOCIAL_AUTH_EVENTBRITE_KEY')
-SOCIAL_AUTH_EVENTBRITE_SECRET = get_env_variable('SOCIAL_AUTH_EVENTBRITE_SECRET')
+SOCIAL_AUTH_EVENTBRITE_SECRET = get_env_variable(
+    'SOCIAL_AUTH_EVENTBRITE_SECRET'
+)
 
 WSGI_APPLICATION = 'custom_ticket.wsgi.application'
-
-
 
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -143,14 +143,15 @@ DATABASES = {
     }
 }
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator',
+        )
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -170,8 +171,6 @@ EMAIL_PORT = int(get_env_variable('EMAIL_PORT'))
 EMAIL_HOST_USER = get_env_variable('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = get_env_variable('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = bool(get_env_variable('EMAIL_USE_TLS'))
-
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.db import models
-from django.contrib.auth import get_user_model
 import datetime
 from django.conf import settings
 
