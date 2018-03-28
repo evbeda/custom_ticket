@@ -1,12 +1,12 @@
 # coding: utf-8
-from django.core.mail import EmailMessage
-from django.http import HttpResponse
-from django.template import Context
-from django.template.loader import get_template
-from django.utils.safestring import mark_safe
+import StringIO
 
-from io import BytesIO
+from django.core.mail import EmailMessage
+from django.template import Context
+from django.template.loader import get_template, render_to_string
+from django.utils.safestring import mark_safe
 from xhtml2pdf import pisa
+from xhtml2pdf.pdf import pisaPDF
 
 
 class SendEmail(object):
@@ -30,11 +30,21 @@ class SendEmail(object):
         self.send()
 
 
-def render_to_pdf(template_src, context_dict={}):
-    template = get_template(template_src)
-    html = template.render(context_dict)
-    result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return None
+class PDF(object):
+
+    def __init__(self, template, dataset=[]):
+        self.template = template
+        self.dataset = dataset
+        self.pdf_base = pisaPDF()
+
+    def render(self):
+        for di in self.dataset:
+            page = render_to_string(self.template, di)
+            self.create_page(page)
+        return self.pdf_base
+
+    def create_page(self, page):
+        data = StringIO.StringIO(page.encode('utf-8'))
+        temp = StringIO.StringIO()
+        pdf = pisa.pisaDocument(data, temp)
+        self.pdf_base.addDocument(pdf)

@@ -11,4 +11,5 @@ urlpatterns = [
         template_name='customizations/successfully_mail.html'), name='successfully_mail'),
     url(r'^create-customization/$', TemplateView.as_view(
         template_name='customizations/create.html'), name='create_customization'),
+
 ]
