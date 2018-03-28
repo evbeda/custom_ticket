@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 from django.views.generic import View, FormView
@@ -45,7 +44,12 @@ class PrintPdf(View):
 def send_mail_with_pdf(request):
     content = get_template('customizations/send_mail.html').render()
     content = mark_safe(content)
-    email = EmailMessage('Test Send Ticket', content, 'edacticket@gmail.com', ['test@gmail.com'])
+    email = EmailMessage(
+        'Test Send Ticket',
+        content,
+        'edacticket@gmail.com',
+        ['test@gmail.com']
+    )
     email.content_subtype = 'html'
     mime_type = mimetypes.guess_type('ticket_pdf.pdf')
     email.attach('ticket_pdf', generate_pdf(request), mime_type[0])
