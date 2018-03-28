@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% block content %}
 
     {% if form.errors %}
@@ -16,7 +17,7 @@
         <p>{{ form.select_ticket_template.label }} : {{ form.select_ticket_template }}</p>
         <br>
         <a href="{% url 'home'  %}">Cancel</a>
-        <input type="submit" name="create_customization"  value="create">
+        <input type="submit" class="btn btn-success" name="create_customization"  value="Create">
     </form>
 
 
