@@ -1,19 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>My Events</h2>
+    <h2>My Events</h2>
     {% for event in events %}
-    <ul class="nav">
-
-        <li><a href=#>name: <b>{{ event.name.html }}</b> |
-            start : <b>{{ event.start.local}}</b> |
-            status:<b>{{ event.status }}</b>
-
-        </li>
-    </ul>
-     {% endfor %}
-
-
-
+        <ul class="nav">
+            <li><a href=#>name: <b>{{ event.name.html }}</b> |
+                start : <b>{{ event.start.local}}</b> |
+                status:<b>{{ event.status }}</b>
+            </li>
+        </ul>
+    {% endfor %}
 {% endblock  %}
-
-
