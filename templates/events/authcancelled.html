@@ -1,19 +1,18 @@
+{% extends 'login_base.html' %}
+{% block content %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ERROR</title>
-</head>
-<body>
-    <h3>UNICORN ERROR</h3>
-<!--     <img src="{% static 'images/unicorn_blue.gif' %}"/>
- -->    <img src="{% static 'images/error_image.png' %}" />
 
-    <h5>Try Again</h5>
-    <a href="{% url 'social:begin' 'eventbrite' %}">Login with Eventbrite</a>
 
-</body>
-</html>
 
+     <div class="row">
+    <div class="col-md-2 col-md-offset-5">
+         <h3>UNICORN ERROR</h3>
+  <img src="{% static 'images/error_image.png' %}" />
+         <h5>Please, try again.</h5>
+        <a class="btn btn-lg btn-primary" href="{% url 'social:begin' 'eventbrite' %}">Login with Eventbrite</a>
+    </div>
+</div>
+
+
+{% endblock %}

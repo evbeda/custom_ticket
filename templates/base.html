@@ -5,33 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
     <title>Theme Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap theme -->
-    <link href="https://getbootstrap.com/docs/3.3/dist/css/bootstrap-theme.min.css" rel="stylesheet">
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="https://getbootstrap.com/docs/3.3/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="https://getbootstrap.com/docs/3.3/examples/theme/theme.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="https://getbootstrap.com/docs/3.3/assets/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
    <link rel="stylesheet" href="{% static 'css/style.css' %}">
   </head>
 
@@ -52,14 +31,15 @@
           <ul class="nav navbar-nav navbar-right">
 
               <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bienvenido, {{ user.first_name }} {{ user.last_name }} <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Welcome, {{ user.first_name }} {{ user.last_name }} <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{% url 'home'  %}">My Customizations</a></li>
+                <li><a href="{% url 'events'  %}">My Events</a></li>
                 <li><a href="{% url 'customizations:create_customization'  %}">Create Customization</a></li>
                 <li><a href="{% url 'customizations:menu'  %}">Test</a></li>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Account</li>
-                <li><a href="{% url 'logout'  %}">Salir</a></li>
+                <li><a href="{% url 'logout'  %}">Logout</a></li>
               </ul>
             </li>
             </ul>
@@ -76,14 +56,9 @@
             </div>
 
 
-
-
- <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://getbootstrap.com/docs/3.3/assets/js/ie10-viewport-bug-workaround.js"></script>
+    </script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
-    </body>
         </body>
     </html>
