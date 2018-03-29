@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime
-import mimetypes
 from core.utils import PDF
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage

@@ -1,31 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>My Customizations</h1>
-<ul>
-{% for customs in object_list %}
-    <p>
-    <li>User: {{ customs.user }} </li>
-    <li>Logo: {{ customs.email_confirmation.logo }} </li>
-    <li>Mensaje: {{ customs.email_confirmation.message }} </li>
-    <li>Creado: {{ customs.created }} </li>
-    </p>
-{% empty %}
-    <li>No customizations yet.</li>
-{% endfor %}
-</ul>
-
-
-<footer class="footer">
-      <div class="container">
-        <span class="text-muted">
-     <a href="{% url 'customizations:create_customization' %}">
-        <button type="button" class="pull-right btn btn-circle btn-danger"><span class="fa fa-plus"></span></button>
-     </a>
-
-        </span>
-      </div>
-    </footer>
-
-
-
+  <h1>My Customizations</h1>
+  <ul>
+    {% for customs in object_list %}
+      <p>
+        <li>User: {{ customs.user }} </li>
+        <li>Logo: {{ customs.email_confirmation.logo }} </li>
+        <li>Mensaje: {{ customs.email_confirmation.message }} </li>
+        <li>Creado: {{ customs.created }} </li>
+      </p>
+      {% empty %}
+      <li>No customizations yet.</li>
+    {% endfor %}
+  </ul>
+  <footer class="footer">
+    <div class="container">
+      <span class="text-muted">
+        <a href="{% url 'customizations:create_customization' %}">
+          <button type="button" class="pull-right btn btn-circle btn-danger"><span class="fa fa-plus"></span></button>
+        </a>
+      </span>
+    </div>
+  </footer>
 {% endblock %}

@@ -1,14 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-
     {% if form.errors %}
         <strong>Fix the following errors.</strong>
         {% for key, value in form.errors.items %}
-        <p>{{ key }}:{{ value.0 }}</p>
+            <p>{{ key }}:{{ value.0 }}</p>
         {% endfor %}
-
     {% endif %}
-
     <h2>Create customization</h2>
     <form  role="form" method="post">{% csrf_token %}
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
@@ -19,9 +16,4 @@
         <a href="{% url 'home'  %}">Cancel</a>
         <input type="submit" class="btn btn-success" name="create_customization"  value="Create">
     </form>
-
-
-
-
-
 {% endblock %}
