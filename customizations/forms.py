@@ -30,3 +30,12 @@ class FormCreateCustomization(forms.Form):
             attrs={'class': 'form-control'}
         )
     )
+
+
+class FormSendEmailPreview(forms.Form):
+    email_send = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'email@gmail.com', 'class': 'form-control'}
+        )
+    )
