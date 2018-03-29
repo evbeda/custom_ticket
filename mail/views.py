@@ -14,7 +14,7 @@ def send_email(request):
     subject = 'test'
     message = 'hello'
     from_email = 'edacticket@gmail.com'
-    emails = ['asaiz@eventbrite.com']
+    emails = ['usercticket@gmail.com']
     return do_send_email(subject, message, from_email, emails)
 
 

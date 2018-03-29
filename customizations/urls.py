@@ -1,6 +1,11 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
-from customizations.views import send_mail_with_pdf, generate_pdf, PrintPdf, email_preview
+from customizations.views import (
+    send_mail_with_pdf,
+    generate_pdf,
+    PrintPdf,
+    email_preview,
+)
 from .views import ViewCreateCustomization
 
 urlpatterns = [
