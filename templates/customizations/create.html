@@ -1,14 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-
     {% if form.errors %}
         <strong>Fix the following errors.</strong>
         {% for key, value in form.errors.items %}
-        <p>{{ key }}:{{ value.0 }}</p>
+            <p>{{ key }}:{{ value.0 }}</p>
         {% endfor %}
-
     {% endif %}
-
     <h2>Create customization</h2>
     <form  role="form" method="post">{% csrf_token %}
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
@@ -16,12 +13,7 @@
         <p>{{ form.message.label }} : {{ form.message }}</p>
         <p>{{ form.select_ticket_template.label }} : {{ form.select_ticket_template }}</p>
         <br>
-        <a href="{% url 'home'  %}">Cancel</a>
+        <a href="{% url 'home' %}">Cancel</a>
         <input type="submit" class="btn btn-success" name="create_customization"  value="Create">
     </form>
-
-
-
-
-
 {% endblock %}

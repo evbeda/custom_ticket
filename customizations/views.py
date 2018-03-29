@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime
-import mimetypes
 from core.utils import PDF
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
@@ -26,6 +25,7 @@ def get_pdf(request):
 def generate_pdf(request):
     ticket_pdf = get_pdf(request)
     return HttpResponse(ticket_pdf, content_type='application/pdf')
+
 
 def email_preview(request):
     data = {
