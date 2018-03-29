@@ -14,7 +14,7 @@
                     <div class="content">
                         <table color="#999999" class="">
                             <tr>
-                                <td><img src="https://dxf1.com/images/jdownloads/screenshots/adidas-01.png" /></td>
+                                <td><img src="https://dxf1.com/images/jdownloads/screenshots/adidas-01.png" height="200" width="200"  /></td>
                                 <td align="right"><h6 class="collapse"></h6></td>
                             </tr>
                         </table>
@@ -39,12 +39,14 @@
                                         </h2>
                                     </p>
                                     <h2>
-                                    <p><img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F42742441%2F250099451475%2F1%2Foriginal.jpg?w=800&rect=250%2C0%2C2000%2C1000&s=741de46efd8d1af70a2ef7212147fc10" /></p>
-                                    <p class="callout">
-                                        How does Adidas create value for the different national teams and league clubs? And how do they create value for Adidas? How does Adidas share its corporate culture across the different teams?
-                                        Do you want to know the answers? Join us!
-                                        Impossible is nothing!
-                                    </p>
+                                    {% for customs in object_list %}
+                                        <p>
+                                            <i>----Mensaje Personalizada:---</i> <br><br>
+                                            <b>{{ customs.email_confirmation.message }} </b>
+                                        </p>
+                                        {% empty %}
+                                        Message Default
+                                    {% endfor %}
                                 </td>
                             </tr>
                         </table>

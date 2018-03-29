@@ -5,7 +5,8 @@ from customizations.views import (
     send_mail_with_pdf,
     generate_pdf,
     PrintPdf,
-    email_preview
+    email_preview,
+    ViewSendPreview,
 )
 
 urlpatterns = [
@@ -31,6 +32,10 @@ urlpatterns = [
         TemplateView.as_view(
             template_name='customizations/successfully_mail.html'),
         name='successfully_mail'),
+    url(r'^form-send-mail/$',
+        ViewSendPreview.as_view(
+            template_name='customizations/form_mail.html'),
+        name='form_send_mail'),
     url(
         r'^send-mail/$',
         TemplateView.as_view(
@@ -45,4 +50,8 @@ urlpatterns = [
         ViewCreateCustomization.as_view(),
         name='success_customizations'),
 
+    # url(
+    #     r'^view-email/$',
+    #     CreateBodyEmail.as_view(),
+    #     name='view-email'),
 ]

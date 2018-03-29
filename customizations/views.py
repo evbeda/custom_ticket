@@ -5,11 +5,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, render_to_response
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 from django.views.generic import View, FormView
 from events.models import Customization, TicketTemplate, EmailConfirmation
-from .forms import FormCreateCustomization
+from .forms import FormCreateCustomization, FormSendEmailPreview
 
 
 def get_pdf(request):
@@ -26,6 +27,7 @@ def generate_pdf(request):
     ticket_pdf = get_pdf(request)
     return HttpResponse(ticket_pdf, content_type='application/pdf')
 
+
 def email_preview(request):
     data = {
         'today': datetime.date.today(),
@@ -34,7 +36,6 @@ def email_preview(request):
         'order_id': 1233434,
     }
     ticket_pdf = PDF('customizations/send_mail.html', [data]).render()
-    # return ticket_pdf.getvalue()
     return HttpResponse(ticket_pdf, content_type='application/pdf')
 
 
@@ -54,7 +55,17 @@ class PrintPdf(View):
         return HttpResponse(ticket_pdf, content_type='application/pdf')
 
 
+# class CreateBodyEmail(LoginRequiredMixin, ListView):
+#     model = Customization
+#     template_name = 'customizations/send_mail.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super(ListView, self).get_context_data(**kwargs)
+#         return render_to_response(context, **kwargs)
+
+
 def send_mail_with_pdf(request):
+    # content = CreateBodyEmail()
     content = get_template('customizations/send_mail.html').render()
     content = mark_safe(content)
     email = EmailMessage(
@@ -93,4 +104,16 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                 email_confirmation=email
 
             )
+            return HttpResponseRedirect('/')
+
+
+class ViewSendPreview(LoginRequiredMixin, FormView):
+    form_class = FormSendEmailPreview
+    template_name = 'customizations/form_mail.html'
+    success_url = 'form_mail.html'
+
+    def post(self, request, *args, **kwargs):
+        is_form_valid = super(ViewSendPreview, self).post(request, *args, **kwargs)
+        if is_form_valid:
+            email_send = request.POST.get('email_send')
             return HttpResponseRedirect('/')
