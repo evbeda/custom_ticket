@@ -22,15 +22,12 @@ urlpatterns = [
     ),
     url(
         r'events/',
-        include('events.urls')
+        include('events.urls',
+                namespace='events')
     ),
     url(
         r'mail/',
         include('mail.urls')
-    ),
-    url(
-        r'customizations/',
-        include('customizations.urls')
     ),
     url(
         '',

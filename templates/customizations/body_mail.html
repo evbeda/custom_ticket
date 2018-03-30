@@ -3,7 +3,7 @@
     <head>
         <meta name="viewport" content="width=device-width" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Send Mail</title>
+        <title>Email Preview</title>
         <link rel="stylesheet" type="text/css" href="stylesheets/email.css" />
     </head>
     <body color="#FFFFFF" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
@@ -14,7 +14,9 @@
                     <div class="content">
                         <table color="#999999" class="">
                             <tr>
-                                <td><img src="https://dxf1.com/images/jdownloads/screenshots/adidas-01.png" height="200" width="200"  /></td>
+                                <td>
+                                    {{logo}}
+                                </td>
                                 <td align="right"><h6 class="collapse"></h6></td>
                             </tr>
                         </table>
@@ -39,14 +41,7 @@
                                         </h2>
                                     </p>
                                     <h2>
-                                    {% for customs in object_list %}
-                                        <p>
-                                            <i>----Mensaje Personalizada:---</i> <br><br>
-                                            <b>{{ customs.email_confirmation.message }} </b>
-                                        </p>
-                                        {% empty %}
-                                        Message Default
-                                    {% endfor %}
+                                    {{message}}
                                 </td>
                             </tr>
                         </table>

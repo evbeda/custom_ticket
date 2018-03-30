@@ -5,9 +5,11 @@
     {% for customs in object_list %}
       <p>
         <li>User: {{ customs.user }} </li>
-        <li>Logo: {{ customs.email_confirmation.logo }} </li>
-        <li>Mensaje: {{ customs.email_confirmation.message }} </li>
+        <li>Logo: {{ customs.custom_email.logo }} </li>
+        <li>Mensaje: {{ customs.custom_email.message }} </li>
         <li>Creado: {{ customs.created }} </li>
+        <li>ID: {{ customs.id }} </li>
+        <a href="{% url 'customizations:delete_customization' pk=customs.id  %}"> -> delete </a>
       </p>
       {% empty %}
       <li>No customizations yet.</li>
