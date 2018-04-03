@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Customization,TicketTemplate, EmailConfirmation
+from .models import Customization, TicketTemplate, CustomEmail
 
 admin.site.register(Customization)
 admin.site.register(TicketTemplate)
-admin.site.register(EmailConfirmation)
+admin.site.register(CustomEmail)

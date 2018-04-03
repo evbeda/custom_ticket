@@ -1,19 +1,26 @@
 
 from django import forms
 from django.core.validators import FileExtensionValidator
+from events.models import Customization
 
 
-class FormCreateCustomization(forms.Form):
+class FormCustomization(forms.ModelForm):
+
+    class Meta:
+        model = Customization
+        fields = ['select_event', 'logo', 'message', 'select_ticket_template']
+
     options_event = (('Apply All Events', 'apply_all'),)
-    select_event = forms.ChoiceField(choices=options_event,
-         widget=forms.Select(
+    select_event = forms.ChoiceField(
+        choices=options_event,
+        widget=forms.Select(
             attrs={'class': 'form-control'}
         )
     )
 
     logo = forms.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
-         widget=forms.FileInput(
+        widget=forms.FileInput(
             attrs={'class': 'form-control'}
         )
     )
@@ -25,8 +32,18 @@ class FormCreateCustomization(forms.Form):
         )
     )
     options_template = (('TEMPLATE 1', 'template_uno'),)
-    select_ticket_template = forms.ChoiceField(choices=options_template,
-         widget=forms.Select(
+    select_ticket_template = forms.ChoiceField(
+        choices=options_template,
+        widget=forms.Select(
             attrs={'class': 'form-control'}
+        )
+    )
+
+
+class FormSendEmailPreview(forms.Form):
+    email_send = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'email@gmail.com', 'class': 'form-control'}
         )
     )

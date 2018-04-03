@@ -1,61 +1,43 @@
 # -*- coding: utf-8 -*-
-import datetime
 from core.utils import PDF
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
-from django.template.loader import get_template
+from django.shortcuts import render, redirect
+from django.template.loader import get_template, render_to_string
 from django.utils.safestring import mark_safe
-from django.views.generic import View, FormView
-from events.models import Customization, TicketTemplate, EmailConfirmation
-from .forms import FormCreateCustomization
+from django.urls import reverse_lazy
+from django.views.generic import FormView, ListView, DeleteView
+from events.models import Customization, TicketTemplate, CustomEmail, TicketType
+from .forms import FormCustomization, FormSendEmailPreview
+
+# from django.contrib import messages
 
 
-def get_pdf(request):
-    data = {
-        'today': datetime.date.today(),
-        'type': 'VIP',
-        'customer_name': 'Name ABC',
-        'order_id': 1233434,
-    }
+def get_pdf_ticket(request):
+    data = TicketType.data_to_dict(1)
     return PDF('tickets/template_default.html', [data]).render().getvalue()
 
 
-def generate_pdf(request):
-    ticket_pdf = get_pdf(request)
-    return HttpResponse(ticket_pdf, content_type='application/pdf')
-
-def email_preview(request):
-    data = {
-        'today': datetime.date.today(),
-        'type': 'VIP',
-        'customer_name': 'Name ABC',
-        'order_id': 1233434,
-    }
-    ticket_pdf = PDF('customizations/send_mail.html', [data]).render()
-    # return ticket_pdf.getvalue()
+def generate_pdf_ticket(request):
+    ticket_pdf = get_pdf_ticket(request)
     return HttpResponse(ticket_pdf, content_type='application/pdf')
 
 
-class PrintPdf(View):
-    def get(self, request, *args, **kwargs):
-        ticket_pdf = generate_pdf(request)
-        if ticket_pdf:
-            response = HttpResponse(ticket_pdf, content_type='application/pdf')
-            filename = "Ticket_%s.pdf" % ("Try")
-            content = "inline; filename='%s'" % (filename)
-            download = request.GET.get("download")
-            if download:
-                content = "attachment; filename='%s'" % (filename)
-            response['Content-Disposition'] = content
-            return response
-        return HttpResponse("Not found")
-        return HttpResponse(ticket_pdf, content_type='application/pdf')
+def get_pdf_body_email(request):
+    data = CustomEmail.data_to_dict(1)
+    return PDF('customizations/body_mail.html', [data]).render().getvalue()
 
 
-def send_mail_with_pdf(request):
-    content = get_template('customizations/send_mail.html').render()
+def email_preview_pdf(request):
+    email_pdf = get_pdf_body_email(request)
+    return HttpResponse(email_pdf, content_type='application/pdf')
+
+
+def send_mail_with_ticket_pdf(request):
+    data = CustomEmail.data_to_dict(1)
+    content = render_to_string('customizations/body_mail.html', context=data)
     content = mark_safe(content)
     email = EmailMessage(
         'Test Send Ticket',
@@ -64,14 +46,28 @@ def send_mail_with_pdf(request):
         ['usercticket@gmail.com']
     )
     email.content_subtype = 'html'
-    pdf = get_pdf(request)
+    pdf = get_pdf_ticket(request)
     email.attach('ticket', pdf, 'application/pdf')
     email.send()
     return HttpResponseRedirect(r('customizations:successfully_mail'))
 
 
+class CustomizationConfig(LoginRequiredMixin):
+    model = Customization
+    form_class = FormCustomization
+    success_url = reverse_lazy('/')
+
+
+class ListCustomization(CustomizationConfig, ListView):
+    template_name = "list.html"
+    context_object_name = "customizations"
+
+    def get_queryset(self):
+        return Customization.objects.all()
+
+
 class ViewCreateCustomization(LoginRequiredMixin, FormView):
-    form_class = FormCreateCustomization
+    form_class = FormCustomization
     template_name = 'customizations/create.html'
     success_url = 'create.html'
 
@@ -83,14 +79,59 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             message = request.POST.get('message')
             select_ticket_template = request.POST.get('select_ticket_template')
             ticket = TicketTemplate.objects.create()
-            email = EmailConfirmation.objects.create(
+            email = CustomEmail.objects.create(
                 message=message,
                 logo=logo
             )
             Customization.objects.create(
                 user=self.request.user,
                 ticket_template=ticket,
-                email_confirmation=email
+                custom_email=email
 
             )
+            return HttpResponseRedirect('/')
+
+
+# class UpdateCustomization(CustomizationConfig, UpdateView):
+#     template_name = 'customizations/update.html'
+#     success_url = reverse_lazy('customizations:list')
+#     context_object_name = 'customizations'
+
+#     def get_context_data(self, **kwargs):
+#         context = super(UpdateCustomization, self).get_context_data(**kwargs)
+#         context['customization'] = self.get_object()
+#         return context
+
+#     def post(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#         customization = self.get_object()
+#         form = FormCustomization(self.request.POST, instance=customization)
+#         if form.is_valid():
+#             form.save()
+#             messages.info(request, u'Update ok!')
+#             return HttpResponseRedirect(r('customizations:list'))
+#         else:
+#             return render(request, 'customizations:update_customization', {'form': form})
+
+
+class DeleteCustomization(CustomizationConfig, DeleteView):
+    template_name = 'customizations/delete.html'
+    success_url = reverse_lazy('home')
+    context_object_name = 'customizations'
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteCustomization, self).get_context_data(**kwargs)
+        context['user'] = self.get_object().user
+        return context
+
+
+class ViewSendPreview(LoginRequiredMixin, FormView):
+    form_class = FormSendEmailPreview
+    template_name = 'customizations/form_mail.html'
+    success_url = 'form_mail.html'
+
+    def post(self, request, *args, **kwargs):
+        is_form_valid = super(ViewSendPreview, self).post(request, *args, **kwargs)
+        if is_form_valid:
+            email_send = request.POST.get('email_send')
             return HttpResponseRedirect('/')
