@@ -11,6 +11,7 @@ from forms import FormEmailSend
 
 def send_email(request):
     print "sending email"
+    print request.body
     subject = 'test'
     message = 'hello'
     from_email = 'edacticket@gmail.com'
