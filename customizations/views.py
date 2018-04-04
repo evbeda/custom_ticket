@@ -5,14 +5,12 @@ from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.template.loader import get_template, render_to_string
+from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView, DeleteView
 from events.models import Customization, TicketTemplate, CustomEmail, TicketType
 from .forms import FormCustomization, FormSendEmailPreview
-
-# from django.contrib import messages
 
 
 def get_pdf_ticket(request):
@@ -39,6 +37,24 @@ def send_mail_with_ticket_pdf(request):
     data = CustomEmail.data_to_dict(1)
     content = render_to_string('customizations/body_mail.html', context=data)
     content = mark_safe(content)
+    email = EmailMessage(
+        'Test Send Ticket',
+        content,
+        'edacticket@gmail.com',
+        ['usercticket@gmail.com']
+    )
+    email.content_subtype = 'html'
+    pdf = get_pdf_ticket(request)
+    email.attach('ticket', pdf, 'application/pdf')
+    email.send()
+    return HttpResponseRedirect(r('customizations:successfully_mail'))
+
+
+def send_mail_test(request):
+    data = CustomEmail.data_to_dict(1)
+    content = render_to_string('customizations/body_mail.html', context=data)
+    content = mark_safe(content)
+    email = GetEmailTest()
     email = EmailMessage(
         'Test Send Ticket',
         content,
@@ -125,13 +141,28 @@ class DeleteCustomization(CustomizationConfig, DeleteView):
         return context
 
 
-class ViewSendPreview(LoginRequiredMixin, FormView):
+class GetEmailTest(LoginRequiredMixin, FormView):
     form_class = FormSendEmailPreview
     template_name = 'customizations/form_mail.html'
     success_url = 'form_mail.html'
 
-    def post(self, request, *args, **kwargs):
-        is_form_valid = super(ViewSendPreview, self).post(request, *args, **kwargs)
+    def post_email(self, request, *args, **kwargs):
+        is_form_valid = super(GetEmailTest, self).post(request, *args, **kwargs)
         if is_form_valid:
             email_send = request.POST.get('email_send')
-            return HttpResponseRedirect('/')
+            return email_send
+
+    # def get_data_ticket(request):
+    #     if request.method == 'GET':
+    #         form = FormCustomization(request.GET)
+    #         if form.is_valid():
+    #             logo = form.cleaned_data['logo']
+    #             message = form.cleaned_data['message']
+    #     else:
+    #         form = FormCustomization()
+
+    #     context = {
+    #         'logo': logo,
+    #         'message': message
+    #     }
+    #     return render(request, 'customizations:form_mail', context)

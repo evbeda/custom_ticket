@@ -11,7 +11,8 @@
         <p>Send to : {{ form.email_send }}</p>
         <br>
         <a href="{% url 'home' %}">Cancel</a>
-        <a class="btn btn-success"  href="{% url 'customizations:send_email_with_pdf'%}">Send Mail Preview</a>
+        <a class="btn btn-success"  href="{% url 'customizations:send_mail_test'%}">Send Mail Preview</a>
+
 <!--         <input type="submit" class="btn btn-success" name="send_mail"  value="Create">
  -->    </form>
 {% endblock %}
