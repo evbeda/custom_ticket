@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 import logging
-from django.views.generic import FormView
+from customizations.views import get_pdf_ticket, render_to_string
 from django.core.mail import BadHeaderError
+from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import EmailMessage
-from forms import FormEmailSend
+from events.models import CustomEmail
 from custom_ticket.settings import SERVER_ACCESS_TOKEN, EMAIL_HOST_USER
 import requests
 import json
+
 
 
 def get_data(request):
@@ -20,13 +21,20 @@ def get_data(request):
         json.loads(request.body)['api_url'],  + '?token=' + access_token + '&expand=event,attendee'
     )
     # que es esto??? name = data.json()['name']
-
     print name + event
 
     event_name_text = data.json()['event']['name']
     from_email = EMAIL_HOST_USER
     emails = data.json()['email']
-    return do_send_email(event_name_text, from_email, emails)
+
+    return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
+
+
+def get_data_test(request):
+    event_name_text = 'EVENTO LALA'
+    from_email = EMAIL_HOST_USER
+    emails = ['usercticket@gmail.com']
+    return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
 
 
 def do_send_email(
@@ -48,24 +56,30 @@ def do_send_email(
     from_email='',
     emails=''
 ):
-    logger = logging.getLogger(__name__)
-    logger.error('sending email')
-    message = '--Compose message----'
 
+    # context data
+    data = CustomEmail.data_to_dict(1)
+    # body email
+    message = render_to_string('customizations/body_mail.html', context=data)
+    # compose email
     email = EmailMessage(
         event_name_text,
         message,
         from_email,
         emails,
-        reply_to=user_order_email,
+        reply_to=emails,
         headers={'Message-ID': 'foo'},
     )
-    email.attach_file('mail/tickets.png')
+    email.content_subtype = 'html'
+    pdf = get_pdf_ticket('')
+
+    # attach ticket
+    email.attach('ticket', pdf, 'application/pdf')
     try:
         email.send()
+        return HttpResponseRedirect(r('customizations:successfully_mail'))
     except BadHeaderError:
         return HttpResponse('Invalid header found.')
-    return HttpResponse('email sent')
 
 
 # old version
