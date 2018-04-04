@@ -5,10 +5,11 @@ from customizations.views import (
     send_mail_with_ticket_pdf,
     generate_pdf_ticket,
     email_preview_pdf,
-    ViewSendPreview,
+    GetEmailTest,
     # UpdateCustomization,
     DeleteCustomization,
-    ListCustomization
+    ListCustomization,
+    send_mail_test
 )
 
 urlpatterns = [
@@ -35,16 +36,22 @@ urlpatterns = [
         name='send_email_with_pdf'
     ),
     url(
+        r'^send_mail_test$',
+        send_mail_test,
+        name='send_mail_test'
+    ),
+    url(
         r'^sent-mail-success/$',
         TemplateView.as_view(
             template_name='customizations/successfully_mail.html'),
         name='successfully_mail'
     ),
-    url(r'^form-send-mail/$',
-        ViewSendPreview.as_view(
+    url(
+        r'^(?P<pk>[0-9]+)/form_send_mail$',
+        GetEmailTest.as_view(
             template_name='customizations/form_mail.html'),
         name='form_send_mail'
-        ),
+    ),
     url(
         r'^send-mail/$',
         TemplateView.as_view(

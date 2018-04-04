@@ -9,7 +9,9 @@
         <li>Mensaje: {{ customs.custom_email.message }} </li>
         <li>Creado: {{ customs.created }} </li>
         <li>ID: {{ customs.id }} </li>
-        <a href="{% url 'customizations:delete_customization' pk=customs.id  %}"> -> delete </a>
+        <a href="{% url 'customizations:delete_customization' pk=customs.id  %}"> -> delete </a> <br>
+        <a href="{% url 'customizations:form_send_mail' pk=customs.id  %}"> -> Send Email Test </a>
+
       </p>
       {% empty %}
       <li>No customizations yet.</li>

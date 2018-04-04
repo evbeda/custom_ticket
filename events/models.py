@@ -68,4 +68,4 @@ class Customization(TimeStampedModel):
     )
     name = models.CharField(max_length=255)
     ticket_template = models.ForeignKey(TicketTemplate)
-    custom_email = models.ForeignKey('CustomEmail', blank=True, null=True)
+    custom_email = models.ForeignKey(CustomEmail, blank=True, null=True)
