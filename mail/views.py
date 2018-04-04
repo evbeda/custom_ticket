@@ -17,7 +17,7 @@ def get_data(request):
     print request.body
     access_token = SERVER_ACCESS_TOKEN
     data = requests.get(
-        json.loads(request.body)['api_url'] + '?token=' + access_token
+        json.loads(request.body)['api_url'],  + '?token=' + access_token + '&expand=event,attendee'
     )
     name = data.json()['name']
     event = data.json()['event']['name']
