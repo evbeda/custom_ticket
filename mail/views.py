@@ -17,16 +17,10 @@ def get_data(request):
     print "sending email"
     print request.body
     access_token = SERVER_ACCESS_TOKEN
-    data = requests.get(
-        json.loads(request.body)['api_url'],  + '?token=' + access_token + '&expand=event,attendee'
-    )
-    # que es esto??? name = data.json()['name']
-    print name + event
-
+    data = requests.get(json.loads(request.body)['api_url'] + '?token=' + access_token + '&expand=event,attendee')
     event_name_text = data.json()['event']['name']
     from_email = EMAIL_HOST_USER
     emails = data.json()['email']
-
     return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
 
 
