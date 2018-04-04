@@ -7,16 +7,24 @@ from django.core.mail import BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import EmailMessage
 from forms import FormEmailSend
+from custom_ticket.settings import SERVER_ACCESS_TOKEN
+import requests
+import json
 
 
-def send_email(request):
+def get_data(request):
     print "sending email"
     print request.body
-    subject = 'test'
-    message = 'hello'
+    access_token = SERVER_ACCESS_TOKEN
+    data = requests.get(
+        json.loads(request.body)['api_url'],  + '?token=' + access_token + '&expand=event,attendee'
+    )
+    name = data.json()['name']
+    event = data.json()['event']['name']
+    emails = data.json()['email']
+    print name + event
     from_email = 'edacticket@gmail.com'
-    emails = ['asaiz@eventbrite.com']
-    return do_send_email(subject, message, from_email, emails)
+    return do_send_email(name, event, from_email, emails)
 
 
 def do_send_email(subject, message, from_email, emails):
