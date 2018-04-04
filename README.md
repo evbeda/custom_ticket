@@ -30,6 +30,7 @@ $ git clone https://github.com/evbeda/custom_ticket.git
 (env) $ export SOCIAL_AUTH_EVENTBRITE_SECRET=secret
 (env) $ export SOCIAL_AUTH_EVENTBRITE_KEY=key
 (env) $ export DEBUG=bool
+(env) $ export SERVER_ACCESS_TOKEN=secret
 
 ```
 
