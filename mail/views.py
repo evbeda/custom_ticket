@@ -7,26 +7,26 @@ from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import EmailMessage
 from events.models import CustomEmail
-from custom_ticket.settings import SERVER_ACCESS_TOKEN, EMAIL_HOST_USER
+from django.conf import settings
 import requests
 import json
-
 
 
 def get_data(request):
     print "sending email"
     print request.body
-    access_token = SERVER_ACCESS_TOKEN
+
+    access_token = settings.SERVER_ACCESS_TOKEN
     data = requests.get(json.loads(request.body)['api_url'] + '?token=' + access_token + '&expand=event,attendee')
     event_name_text = data.json()['event']['name']
-    from_email = EMAIL_HOST_USER
+    from_email = settings.EMAIL_HOST_USER
     emails = data.json()['email']
     return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
 
 
 def get_data_test(request):
     event_name_text = 'EVENTO LALA'
-    from_email = EMAIL_HOST_USER
+    from_email = settings.EMAIL_HOST_USER
     emails = ['usercticket@gmail.com']
     return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
 
