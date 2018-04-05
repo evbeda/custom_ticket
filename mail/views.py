@@ -15,14 +15,28 @@ import json
 def get_data(request):
     print "sending email"
     print request.body
-
     access_token = settings.SERVER_ACCESS_TOKEN
-    data = requests.get(json.loads(request.body)['api_url'] + '?token=' + access_token + '&expand=event,attendee')
+    data = requests.get(
+        json.loads(request.body)['api_url'] + '?token=' + access_token + '&expand=event,attendee'
+    )
+    user_first_name = data.json()['first_name'],
+    user_last_name = data.json()['last_name'],
+    list_attendee = data.json()['attendees']
+    attendees = []
+    # for attendee in list_attendee:
+    #     attendee_first_name =
     event_name_text = data.json()['event']['name']
     from_email = settings.EMAIL_HOST_USER
+    # attendee_first_name = data.json()['attendee']['profile']['first_name']
+    # attendee_first_name = data.json()['attendee']['profile']['last_name']
     emails = data.json()['email']
-    return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
+    return do_send_email(
 
+        event_name_text=event_name_text,
+        user_order_first_name = user_first_name,
+        user_order_last_name = user_last_name,
+        from_email=from_email, emails=emails
+    )
 
 def get_data_test(request):
     event_name_text = 'EVENTO LALA'
@@ -32,23 +46,24 @@ def get_data_test(request):
 
 
 def do_send_email(
-    attendee='',
-    cost_gross='',
+    #   Attendee : barcode, first name, last name, cost_gross, answers
+    attendee=[],
     organizer_logo='',
     event_name_text='',
     event_image='',
-    event_description='',
     event_start='',
     event_venue_location='',
+    #   reserved seating
     user_order_email='',
+    #   order_id
+    #   order_date
     user_order_first_name='',
     user_order_last_name='',
     payment_status='',
     payment_datetime='',
     ticket_class='',
-    barcode='',
     from_email='',
-    emails=''
+    emails=[]
 ):
 
     # context data
