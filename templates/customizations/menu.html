@@ -6,5 +6,6 @@
     <p>
         <a class="btn btn-warning" href="{% url 'customizations:email_preview'%}">Email Preview PDF</a>
     </p>
-    <p><a class="btn btn-success"  href="{% url 'customizations:send_email_with_pdf'%}">Send Mail Preview</a></p>
+<p><a class="btn btn-success"  href="{% url 'mails:mail'%}">Send Mail Preview - API</a></p>
+<p><a class="btn btn-success"  href="{% url 'mails:test'%}">Send Mail Preview - TEST</a></p>
 {% endblock %}

@@ -27,7 +27,8 @@ urlpatterns = [
     ),
     url(
         r'mail/',
-        include('mail.urls')
+        include('mail.urls',
+                namespace='mails')
     ),
     url(
         '',

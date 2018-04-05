@@ -13,9 +13,10 @@ from events.models import Customization, TicketTemplate, CustomEmail, TicketType
 from .forms import FormCustomization, FormSendEmailPreview
 
 
-def get_pdf_ticket(request):
+def get_pdf_ticket(self):
     data = TicketType.data_to_dict(1)
     return PDF('tickets/template_default.html', [data]).render().getvalue()
+
 
 
 def generate_pdf_ticket(request):
@@ -32,7 +33,7 @@ def email_preview_pdf(request):
     email_pdf = get_pdf_body_email(request)
     return HttpResponse(email_pdf, content_type='application/pdf')
 
-
+# not use for testing - use do_send_email in mail/views.py
 def send_mail_with_ticket_pdf(request):
     data = CustomEmail.data_to_dict(1)
     content = render_to_string('customizations/body_mail.html', context=data)
@@ -49,7 +50,7 @@ def send_mail_with_ticket_pdf(request):
     email.send()
     return HttpResponseRedirect(r('customizations:successfully_mail'))
 
-
+# not use for testing - use do_send_email in mail/views.py
 def send_mail_test(request):
     data = CustomEmail.data_to_dict(1)
     content = render_to_string('customizations/body_mail.html', context=data)
