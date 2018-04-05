@@ -10,7 +10,7 @@
         <li>Creado: {{ customs.created }} </li>
         <li>ID: {{ customs.id }} </li>
         <a href="{% url 'customizations:delete_customization' pk=customs.id  %}"> -> delete </a> <br>
-        <a href="{% url 'customizations:form_send_mail' pk=customs.id  %}"> -> Send Email Test </a>
+        <a href="{% url 'mails:form_send_mail' pk=customs.id  %}"> -> Send Email Test </a>
 
       </p>
       {% empty %}

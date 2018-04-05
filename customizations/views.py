@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import FormView, DeleteView
+from django.views.generic import FormView, DeleteView, UpdateView
 from events.models import Customization, TicketTemplate, CustomEmail
-from .forms import FormCustomization, FormSendEmailPreview
+from .forms import FormCustomization
 
 
 class CustomizationConfig(LoginRequiredMixin):
@@ -44,26 +41,25 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             return HttpResponseRedirect('/')
 
 
-# class UpdateCustomization(CustomizationConfig, UpdateView):
-#     template_name = 'customizations/update.html'
-#     success_url = reverse_lazy('customizations:list')
-#     context_object_name = 'customizations'
+class UpdateCustomization(CustomizationConfig, UpdateView):
+    template_name = 'customizations/update.html'
+    success_url = reverse_lazy('customizations:list')
+    context_object_name = 'customizations'
 
-#     def get_context_data(self, **kwargs):
-#         context = super(UpdateCustomization, self).get_context_data(**kwargs)
-#         context['customization'] = self.get_object()
-#         return context
+    def get_context_data(self, **kwargs):
+        context = super(UpdateCustomization, self).get_context_data(**kwargs)
+        context['customization'] = self.get_object()
+        return context
 
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         customization = self.get_object()
-#         form = FormCustomization(self.request.POST, instance=customization)
-#         if form.is_valid():
-#             form.save()
-#             messages.info(request, u'Update ok!')
-#             return HttpResponseRedirect(r('customizations:list'))
-#         else:
-#             return render(request, 'customizations:update_customization', {'form': form})
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        customization = self.get_object()
+        form = FormCustomization(self.request.POST, instance=customization)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(r('customizations:list'))
+        else:
+            return render(request, 'customizations:update_customization', {'form': form})
 
 
 class DeleteCustomization(CustomizationConfig, DeleteView):
@@ -75,15 +71,3 @@ class DeleteCustomization(CustomizationConfig, DeleteView):
         context = super(DeleteCustomization, self).get_context_data(**kwargs)
         context['user'] = self.get_object().user
         return context
-
-
-class GetEmailTest(LoginRequiredMixin, FormView):
-    form_class = FormSendEmailPreview
-    template_name = 'customizations/form_mail.html'
-    success_url = 'form_mail.html'
-
-    def post_email(self, request, *args, **kwargs):
-        is_form_valid = super(GetEmailTest, self).post(request, *args, **kwargs)
-        if is_form_valid:
-            email_send = request.POST.get('email_send')
-            return email_send
