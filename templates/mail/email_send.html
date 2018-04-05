@@ -2,6 +2,5 @@
     <p>Email: {{ form.email }}</p>
     <p>Message: {{ form.message }}</p>
     <br>
-    <!--     <input type="submit" name='customizations:send_email_with_pdf' value="send_email">
-    -->    <a href="{% url 'customizations:send_email_with_pdf' %}">Send Mail</a>
+    -->    <a href="{% url 'mails:send_email_with_pdf' %}">Send Mail</a>
 {% endblock %}

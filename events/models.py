@@ -3,9 +3,18 @@ from __future__ import unicode_literals
 from django.db import models
 import datetime
 from django.conf import settings
-from core.models import TimeStampedModel
-# docs model django 1.11
-# https://docs.djangoproject.com/en/1.11/topics/db/models/
+
+
+class TimeStampedModel(models.Model):
+    '''
+        An abstract base class model that provides self updating
+        ``created`` and ``modified`` fields.
+    '''
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    class Meta:
+        abstract = True
 
 
 class Event(TimeStampedModel):
@@ -34,8 +43,8 @@ class TicketType(TimeStampedModel):
         except Exception:
             return {}
         data = {
-            'message': query.message,
-            'logo': query.logo,
+            'event': query.event,
+            'name': query.name,
         }
         return data
 

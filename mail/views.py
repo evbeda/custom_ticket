@@ -1,15 +1,55 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
-import logging
-from customizations.views import get_pdf_ticket, render_to_string
-from django.core.mail import BadHeaderError
+from django.conf import settings
+from django.core.mail import BadHeaderError, EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.mail import EmailMessage
-from events.models import CustomEmail
-from django.conf import settings
-import requests
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
+from events.models import CustomEmail, TicketType
+from mail.utils import PDF
 import json
+import requests
+
+
+def get_pdf_ticket(self):
+    data = TicketType.data_to_dict(1)
+    return PDF('tickets/template_default.html', [data]).render().getvalue()
+
+
+def generate_pdf_ticket(request):
+    ticket_pdf = get_pdf_ticket(request)
+    return HttpResponse(ticket_pdf, content_type='application/pdf')
+
+
+def get_pdf_body_email(request):
+    data = CustomEmail.data_to_dict(1)
+    return PDF('customizations/body_mail.html', [data]).render().getvalue()
+
+
+def email_preview_pdf(request):
+    email_pdf = get_pdf_body_email(request)
+    return HttpResponse(email_pdf, content_type='application/pdf')
+
+# not use for testing - use do_send_email in mail/views.py
+
+
+def send_mail_with_ticket_pdf(request):
+    data = CustomEmail.data_to_dict(1)
+    content = render_to_string('customizations/body_mail.html', context=data)
+    content = mark_safe(content)
+    email = EmailMessage(
+        'Test Send Ticket',
+        content,
+        'edacticket@gmail.com',
+        ['usercticket@gmail.com']
+    )
+    email.content_subtype = 'html'
+    pdf = get_pdf_ticket(request)
+    email.attach('ticket', pdf, 'application/pdf')
+    email.send()
+    return HttpResponseRedirect(r('customizations:successfully_mail'))
 
 
 def get_data(request):
@@ -33,10 +73,11 @@ def get_data(request):
     return do_send_email(
 
         event_name_text=event_name_text,
-        user_order_first_name = user_first_name,
-        user_order_last_name = user_last_name,
+        user_order_first_name=user_first_name,
+        user_order_last_name=user_last_name,
         from_email=from_email, emails=emails
     )
+
 
 def get_data_test(request):
     event_name_text = 'EVENTO LALA'
