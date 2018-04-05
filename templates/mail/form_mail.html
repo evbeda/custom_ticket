@@ -53,6 +53,8 @@
 
 
         <br>
+        <p>Message : {{ message }}</p>
+        <p>Logo : {{ logo }}</p>
         <a href="{% url 'home' %}">Cancel</a>
         <a class="btn btn-success"  href="{% url 'mails:send_email_with_pdf'%}">Send Mail Preview</a>
 
