@@ -2,11 +2,14 @@
 
 from __future__ import unicode_literals
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import BadHeaderError, EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
+from django.views.generic import FormView
+from .forms import FormSendEmailPreview
 from events.models import CustomEmail, TicketType
 from mail.utils import PDF
 import json
@@ -25,7 +28,7 @@ def generate_pdf_ticket(request):
 
 def get_pdf_body_email(request):
     data = CustomEmail.data_to_dict(1)
-    return PDF('customizations/body_mail.html', [data]).render().getvalue()
+    return PDF('mail/body_mail.html', [data]).render().getvalue()
 
 
 def email_preview_pdf(request):
@@ -37,7 +40,7 @@ def email_preview_pdf(request):
 
 def send_mail_with_ticket_pdf(request):
     data = CustomEmail.data_to_dict(1)
-    content = render_to_string('customizations/body_mail.html', context=data)
+    content = render_to_string('mail/body_mail.html', context=data)
     content = mark_safe(content)
     email = EmailMessage(
         'Test Send Ticket',
@@ -49,7 +52,7 @@ def send_mail_with_ticket_pdf(request):
     pdf = get_pdf_ticket(request)
     email.attach('ticket', pdf, 'application/pdf')
     email.send()
-    return HttpResponseRedirect(r('customizations:successfully_mail'))
+    return HttpResponseRedirect(r('mails:successfully_mail'))
 
 
 def get_data(request):
@@ -110,7 +113,7 @@ def do_send_email(
     # context data
     data = CustomEmail.data_to_dict(1)
     # body email
-    message = render_to_string('customizations/body_mail.html', context=data)
+    message = render_to_string('mail/body_mail.html', context=data)
     # compose email
     email = EmailMessage(
         event_name_text,
@@ -127,10 +130,21 @@ def do_send_email(
     email.attach('ticket', pdf, 'application/pdf')
     try:
         email.send()
-        return HttpResponseRedirect(r('customizations:successfully_mail'))
+        return HttpResponseRedirect(r('mails:successfully_mail'))
     except BadHeaderError:
         return HttpResponse('Invalid header found.')
 
+
+class GetEmailTest(LoginRequiredMixin, FormView):
+    form_class = FormSendEmailPreview
+    template_name = 'mail/form_mail.html'
+    success_url = 'form_mail.html'
+
+    def post_email(self, request, *args, **kwargs):
+        is_form_valid = super(GetEmailTest, self).post(request, *args, **kwargs)
+        if is_form_valid:
+            email_send = request.POST.get('email_send')
+            return email_send
 
 # old version
 # def do_send_email(subject, message, from_email, emails):
