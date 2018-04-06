@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from events.models import Customization
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
+
+from customizations.models import Customization
+
 from eventbrite import Eventbrite
 
 

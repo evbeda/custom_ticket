@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form method='POST'>
+    <form action="" method="post" enctype='multipart/form-data'>
         {% csrf_token %}
-        {{ form.as_p }}
+        <p>{{ form.name.label }} : {{ form.name }}</p>
+        <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
+        <p>{{ form.logo.label }} ({{instance.custom_email.logo}}) : {{ form.logo }}</p>
+        <p>{{ form.message.label }} : {{ form.message }}</p>
+        <p>{{ form.select_design_template.label }} : {{ form.select_design_template }}</p>
+        <p>{{ form.message_ticket.label }} : {{ form.message_ticket }}</p>
+
         <input type="submit" class="btn btn-primary" value="Save">
     </form>
+
+
 {% endblock %}

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.urlresolvers import reverse as r
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView, DeleteView, UpdateView
-from events.models import Customization, TicketTemplate, CustomEmail
-from .forms import FormCustomization
+from django.views.generic import FormView, DeleteView
+
+from customizations.models import Customization, TicketTemplate, CustomEmail
+from customizations.forms import FormCustomization
 
 
 class CustomizationConfig(LoginRequiredMixin):
@@ -23,43 +23,55 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
     def post(self, request, *args, **kwargs):
         is_form_valid = super(ViewCreateCustomization, self).post(request, *args, **kwargs)
         if is_form_valid:
-            select_event = request.POST.get('select_event')
+            name = request.POST.get('name')
             logo = request.POST.get('logo')
             message = request.POST.get('message')
-            select_ticket_template = request.POST.get('select_ticket_template')
-            ticket = TicketTemplate.objects.create()
-            email = CustomEmail.objects.create(
+            select_design_template = request.POST.get('select_design_template')
+            message_ticket = request.POST.get('message_ticket')
+
+            ticket = TicketTemplate.objects.create(
+                select_design_template=select_design_template,
+                message_ticket=message_ticket
+            )
+            custom_email = CustomEmail.objects.create(
                 message=message,
                 logo=logo
             )
             Customization.objects.create(
                 user=self.request.user,
                 ticket_template=ticket,
-                custom_email=email
-
+                custom_email=custom_email,
+                name=name,
             )
             return HttpResponseRedirect('/')
 
 
-class UpdateCustomization(CustomizationConfig, UpdateView):
-    template_name = 'customizations/update.html'
-    success_url = reverse_lazy('customizations:list')
-    context_object_name = 'customizations'
+def update_customization(request, pk):
+    user = request.user
+    customization = get_object_or_404(Customization, pk=pk)
+    form = FormCustomization(initial={
+        'name': customization.name,
+        'logo': customization.custom_email.logo,
+        'message': customization.custom_email.message,
+        'select_design_template': customization.ticket_template.select_design_template,
+        'message_ticket': customization.ticket_template.message_ticket,
 
-    def get_context_data(self, **kwargs):
-        context = super(UpdateCustomization, self).get_context_data(**kwargs)
-        context['customization'] = self.get_object()
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        customization = self.get_object()
-        form = FormCustomization(self.request.POST, instance=customization)
+    })
+    if request.method == 'POST':
+        # form = FormCustomization(data=request.POST)
+        form = FormCustomization(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(r('customizations:list'))
-        else:
-            return render(request, 'customizations:update_customization', {'form': form})
+            customization.name = form.cleaned_data['name']
+            customization.custom_email.logo = form.cleaned_data['logo']
+            customization.custom_email.message = form.cleaned_data['message']
+            customization.ticket_template.select_design_template = form.cleaned_data['select_design_template']
+            customization.ticket_template.message_ticket = form.cleaned_data['message_ticket']
+            customization.save()
+            user.save()
+            return redirect('/')
+
+    context = {'form': form, 'instance': customization}
+    return render(request, 'customizations/update.html', context)
 
 
 class DeleteCustomization(CustomizationConfig, DeleteView):
