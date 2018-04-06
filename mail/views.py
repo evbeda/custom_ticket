@@ -12,6 +12,11 @@ from django.views.generic import FormView
 from .forms import FormSendEmailPreview
 from events.models import CustomEmail, TicketType
 from mail.utils import PDF
+from django.core.mail import EmailMessage
+from events.models import CustomEmail
+from django.conf import settings
+from eventbrite import Eventbrite
+import requests
 import json
 import requests
 
@@ -55,30 +60,61 @@ def send_mail_with_ticket_pdf(request):
     return HttpResponseRedirect(r('mails:successfully_mail'))
 
 
+def get_venue(venue_id):
+    # import ipdb; ipdb.set_trace()
+    access_token = settings.SERVER_ACCESS_TOKEN
+    eventbrite = Eventbrite(access_token)
+    data_venue_json = eventbrite.get('/venues/' + str(venue_id))
+    data_venue = json.loads(data_venue_json)
+    venue = data_venue['address']['address_1']
+    return venue
+
+
 def get_data(request):
     print "sending email"
     print request.body
     access_token = settings.SERVER_ACCESS_TOKEN
     data = requests.get(
-        json.loads(request.body)['api_url'] + '?token=' + access_token + '&expand=event,attendee'
+        json.loads(
+            request.body
+        )['api_url'] + '?token=' + access_token + '&expand=event,attendee'
     )
     user_first_name = data.json()['first_name'],
     user_last_name = data.json()['last_name'],
     list_attendee = data.json()['attendees']
     attendees = []
-    # for attendee in list_attendee:
-    #     attendee_first_name =
-    event_name_text = data.json()['event']['name']
+    for att in list_attendee:
+        attendee = {
+            'attendee_first_name': att['profile']['first_name'],
+            'attendee_last_name': att['profile']['last_name'],
+            'cost_gross': att['costs']['gross']['value'],
+            # 'barcode': att['barcodes']['barcode'],
+            'answers': att['answers'],
+            'ticket_class': att['ticket_class_name']
+        }
+        attendees.append(dict(attendee))
+    event_name_text = data.json()['event']['name']['html']
     from_email = settings.EMAIL_HOST_USER
-    # attendee_first_name = data.json()['attendee']['profile']['first_name']
-    # attendee_first_name = data.json()['attendee']['profile']['last_name']
+    event_start = data.json()['event']['start']['utc']
+    venue_id = data.json()['event']['venue_id']
+    venue = get_venue(str(venue_id))
     emails = data.json()['email']
-    return do_send_email(
+    order_id = data.json()['id']
+    order_created = data.json()['created']
+    order_status = data.json()['status']
 
+    return do_send_email(
+        attendees=attendees,
         event_name_text=event_name_text,
         user_order_first_name=user_first_name,
-        user_order_last_name=user_last_name,
-        from_email=from_email, emails=emails
+        user_order_lasst_name=user_last_name,
+        event_start=event_start,
+        order_id=order_id,
+        order_created=order_created,
+        order_status=order_status,
+        event_venue_location=venue,
+        from_email=from_email,
+        emails=emails
     )
 
 
@@ -90,21 +126,19 @@ def get_data_test(request):
 
 
 def do_send_email(
-    #   Attendee : barcode, first name, last name, cost_gross, answers
-    attendee=[],
+    attendees=[],
     organizer_logo='',
     event_name_text='',
-    event_image='',
     event_start='',
-    event_venue_location='',
+    event_venue_location={},
     #   reserved seating
     user_order_email='',
-    #   order_id
-    #   order_date
+    order_id='',
+    order_created='',
     user_order_first_name='',
     user_order_last_name='',
-    payment_status='',
-    payment_datetime='',
+    order_status='',
+    # payment_datetime='',
     ticket_class='',
     from_email='',
     emails=[]
