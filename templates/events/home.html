@@ -4,7 +4,6 @@
   <ul>
     {% for customs in object_list %}
       <p>
-
         <div class="w3-container">
           <div class="w3-card-4" style="width:50%;">
             <header class="w3-container w3-orange">
@@ -28,44 +27,29 @@
             </footer>
           </div>
         </div>
-
-
-
-
-
-
-
-<div class="w3-container ">
-  <div class="w3-hover-shadow w3-card" style="width:100%;">
-    <header class="w3-container w3-light-grey ">
-
-      <h1>Custom ID: {{ customs.id }}</h1>
-      <h6>Created {{ customs.created }} by  {{ customs.user }} </h6>
-    </header>
-
-    <div class="w3-container">
-      <p>
-        <ul class="nav">
-
-        <li>Logo: {{ customs.custom_email.logo }} </li>
-        <li>Message: {{ customs.custom_email.message }} </li>
-
-        </p>
-        </ul>
-    </div>
-
-    <footer class="w3-container ">
-      <br>
-      <p class="btn-group">
-  <a  href="{% url 'customizations:form_send_mail' pk=customs.id  %}"><button type="button" class="btn btn-success"> <span class="fa fa-envelope"></span> Send Email Test </button></a>
-  <a  href="{% url 'customizations:delete_customization' pk=customs.id  %}"><button type="button" class="btn btn-danger"><span class="fa fa-trash"></span> Delete  <br></button></a>
-
-</p>
-    </footer>
-  </div>
-</div>
-
->>>>>>> fix cards of customization
+        <div class="w3-container ">
+          <div class="w3-hover-shadow w3-card" style="width:100%;">
+            <header class="w3-container w3-light-grey ">
+              <h1>Custom ID: {{ customs.id }}</h1>
+              <h6>Created {{ customs.created }} by  {{ customs.user }} </h6>
+            </header>
+            <div class="w3-container">
+              <p>
+                <ul class="nav">
+                  <li>Logo: {{ customs.custom_email.logo }} </li>
+                  <li>Message: {{ customs.custom_email.message }} </li>
+                </p>
+              </ul>
+            </div>
+            <footer class="w3-container ">
+              <br>
+              <p class="btn-group">
+                <a  href="{% url 'mails:form_send_mail' pk=customs.id  %}"><button type="button" class="btn btn-success"> <span class="fa fa-envelope"></span> Send Email Test </button></a>
+                <a  href="{% url 'customizations:delete_customization' pk=customs.id  %}"><button type="button" class="btn btn-danger"><span class="fa fa-trash"></span> Delete  <br></button></a>
+              </p>
+            </footer>
+          </div>
+        </div>
       </p>
       {% empty %}
       <li>No customizations yet.</li>
