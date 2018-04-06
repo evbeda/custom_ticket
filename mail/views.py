@@ -19,6 +19,7 @@ from eventbrite import Eventbrite
 import requests
 import json
 import requests
+from django.urls import reverse
 
 
 def get_pdf_ticket(self):
@@ -118,11 +119,10 @@ def get_data(request):
     )
 
 
-def get_data_test(request):
-    event_name_text = 'EVENTO LALA'
-    from_email = settings.EMAIL_HOST_USER
-    emails = ['usercticket@gmail.com']
-    return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
+    # event_name_text = 'EVENTO LALA'
+    # from_email = settings.EMAIL_HOST_USER
+    # emails = ['usercticket@gmail.com']
+    # return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
 
 
 def do_send_email(
@@ -172,36 +172,59 @@ def do_send_email(
 class GetEmailTest(LoginRequiredMixin, FormView):
     form_class = FormSendEmailPreview
     template_name = 'mail/form_mail.html'
-    success_url = 'form_mail.html'
 
-    def post_email(self, request, *args, **kwargs):
-        is_form_valid = super(GetEmailTest, self).post(request, *args, **kwargs)
-        if is_form_valid:
-            email_send = request.POST.get('email_send')
-            return email_send
+    def form_valid(self, form):
+        print form.cleaned_data
+        attendee_barcode = form.cleaned_data['attendee_barcode']
+        attendee_first_name = form.cleaned_data['attendee_first_name']
+        attendee_last_name = form.cleaned_data['attendee_last_name']
+        organizer_message = form.cleaned_data['organizer_message']
+        organizer_logo = form.cleaned_data['organizer_logo']
+        attendee_cost_gross = form.cleaned_data['attendee_cost_gross']
+        attendee_quantity = form.cleaned_data['attendee_quantity']
+        attendee_question = form.cleaned_data['attendee_question']
+        organizer_logo = form.cleaned_data['organizer_logo']
+        order_status = form.cleaned_data['order_status']
+        order_created = form.cleaned_data['order_created']
+        ticket_class = form.cleaned_data['ticket_class']
+        event_name_text = form.cleaned_data['event_name_text']
+        event_image = form.cleaned_data['event_image']
+        event_start = form.cleaned_data['event_start']
+        event_venue_location = form.cleaned_data['event_venue_location']
+        user_order_email = form.cleaned_data['user_order_email']
+        user_order_first_name = form.cleaned_data['user_order_first_name']
+        user_order_last_name = form.cleaned_data['user_order_last_name']
+        from_email = form.cleaned_data['from_email']
+        emails = [form.cleaned_data['emails']]
+        attendees = []
+        attendee = {
+            'attendee_first_name': attendee_first_name,
+            'attendee_last_name': attendee_last_name,
+            'cost_gross': attendee_cost_gross,
+            # 'barcode': att['barcodes']['barcode'],
+            'answers': {},
+            'ticket_class': ticket_class
+        }
 
-# old version
-# def do_send_email(subject, message, from_email, emails):
-#     logger = logging.getLogger(__name__)
-#     logger.error('sending email')
-#     email = EmailMessage(
-#         subject,
-#         message,
-#         from_email,
-#         emails,
-#         # ['bcc@example.com'],
-#         reply_to=['edacticket@gmail.com'],
-#         headers={'Message-ID': 'foo'},
-#     )
-#     # email.attach('design.png', img_data, 'image/png')
-#     email.attach_file('mail/tickets.png')
-#     if subject and message and from_email:
-#         try:
-#             email.send()
-#         except BadHeaderError:
-#             return HttpResponse('Invalid header found.')
-#         return HttpResponse('email sent')
-#     else:
-#         # In reality we'd use a form class
-#         # to get proper validation errors.
-#         return HttpResponse('Make sure all fields are entered and valid.')
+        attendees.append(dict(attendee))
+        do_send_email(
+            attendees=attendees,
+            organizer_logo= organizer_logo,
+            event_name_text= event_name_text,
+            event_start= event_start,
+            event_venue_location={ event_venue_location },
+            #   reserved seating
+            user_order_email=user_order_email,
+            order_id= '1212',
+            order_created=order_created,
+            user_order_first_name=user_order_first_name,
+            user_order_last_name=user_order_last_name,
+            order_status=order_status,
+            # payment_datetime='',
+            ticket_class=ticket_class,
+            from_email=from_email,
+            emails= emails
+        )
+        # id customization
+        # args=(self.kwargs['pk'],)
+        return HttpResponseRedirect(reverse('mails:successfully_mail'))
