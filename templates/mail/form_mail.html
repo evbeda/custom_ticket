@@ -21,10 +21,13 @@
         <p>Barcode Attende : {{ form.attendee_barcode }}</p>
         <p>Name : {{ form.attendee_first_name }}</p>
         <p>Last Name : {{ form.attendee_last_name }}</p>
+
   </div>
   <div id="menu1" class="tab-pane fade">
     <h3>Ticket</h3>
-    <p>Cost Gross : {{ form.attendee_cost_gross }}</p>
+        <p>Message : {{ form.organizer_message }}</p>
+        <p>Logo : {{ form.organizer_logo }}</p>
+        <p>Cost Gross : {{ form.attendee_cost_gross }}</p>
         <p>Quantity : {{ form.attendee_quantity }}</p>
         <p>Custom Question : {{ form.attendee_question }}</p>
         <p>Organizer logo url : {{ form.organizer_logo }}</p>
@@ -51,12 +54,8 @@
 </div>
 
 
-
-        <br>
-        <p>Message : {{ message }}</p>
-        <p>Logo : {{ logo }}</p>
         <a href="{% url 'home' %}">Cancel</a>
-        <a class="btn btn-success"  href="{% url 'mails:send_email_with_pdf'%}">Send Mail Preview</a>
+        <input class="btn btn-success" type="submit" value="Send Mail Preview">
 
 <!--         <input type="submit" class="btn btn-success" name="send_mail"  value="Create">
  -->    </form>
