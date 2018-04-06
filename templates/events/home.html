@@ -22,7 +22,7 @@
             <footer class="w3-container ">
               <br>
               <p class="btn-group">
-                <a  href="{% url 'customizations:form_send_mail' pk=customs.id  %}"><button type="button" class="btn btn-success"> <span class="fa fa-envelope"></span> Send Email Test </button></a>
+                <a  href="{% url 'mails:form_send_mail' pk=customs.id  %}"><button type="button" class="btn btn-success"> <span class="fa fa-envelope"></span> Send Email Test </button></a>
                 <a  href="{% url 'customizations:delete_customization' pk=customs.id  %}"><button type="button" class="btn btn-danger"><span class="fa fa-trash"></span> Delete  <br></button></a>
               </p>
             </footer>
