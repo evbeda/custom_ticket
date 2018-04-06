@@ -8,7 +8,50 @@
     {% endif %}
     <h2>Send Email Preview</h2>
     <form  role="form" method="post">{% csrf_token %}
-        <p>Send to : {{ form.email_send }}</p>
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">Attendee</a></li>
+  <li><a data-toggle="tab" href="#menu1">Ticket</a></li>
+  <li><a data-toggle="tab" href="#menu2">Event</a></li>
+  <li><a data-toggle="tab" href="#menu3">User Order</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="home" class="tab-pane fade in active">
+    <h3>Attendee</h3>
+        <p>Barcode Attende : {{ form.attendee_barcode }}</p>
+        <p>Name : {{ form.attendee_first_name }}</p>
+        <p>Last Name : {{ form.attendee_last_name }}</p>
+  </div>
+  <div id="menu1" class="tab-pane fade">
+    <h3>Ticket</h3>
+    <p>Cost Gross : {{ form.attendee_cost_gross }}</p>
+        <p>Quantity : {{ form.attendee_quantity }}</p>
+        <p>Custom Question : {{ form.attendee_question }}</p>
+        <p>Organizer logo url : {{ form.organizer_logo }}</p>
+        <p>Order Status : {{ form.order_status }}</p>
+        <p>Order Created : {{ form.order_created }}</p>
+        <p>Ticket Class : {{ form.ticket_class }}</p>
+  </div>
+  <div id="menu2" class="tab-pane fade">
+    <h3>Event</h3>
+        <p>Event Name : {{ form.event_name_text }}</p>
+        <p>Event Image url : {{ form.event_image }}</p>
+        <p>Event Start : {{ form.event_start }}</p>
+        <p>Event Venue address : {{ form.event_venue_location }}</p>
+  </div>
+  <div id="menu3" class="tab-pane fade">
+    <h3>User Order</h3>
+        <p>User order Email : {{ form.user_order_email }}</p>
+        <p>User order name : {{ form.user_order_first_name }}</p>
+        <p>User order last name : {{ form.user_order_last_name }}</p>
+        <p>From Email : {{ form.from_email }}</p>
+        <p>Emails : {{ form.emails }}</p>
+        <p>Email Send : {{ form.email_send }}</p>
+  </div>
+</div>
+
+
+
         <br>
         <a href="{% url 'home' %}">Cancel</a>
         <a class="btn btn-success"  href="{% url 'mails:send_email_with_pdf'%}">Send Mail Preview</a>

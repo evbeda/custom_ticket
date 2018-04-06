@@ -30,7 +30,7 @@ urlpatterns = [
     ),
     url(
         r'^send-mail/$',
-        TemplateView.as_view(
+        GetEmailTest.as_view(
             template_name='mail/email_send.html'),
         name='send-mail'
     ),

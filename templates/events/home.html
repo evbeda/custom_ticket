@@ -4,13 +4,41 @@
   <ul>
     {% for customs in object_list %}
       <p>
-        <li>User: {{ customs.user }} </li>
+
+
+
+
+
+
+<div class="w3-container">
+  <div class="w3-card-4" style="width:50%;">
+    <header class="w3-container w3-orange">
+
+      <h1>Custom ID: {{ customs.id }}</h1>
+      <h6>Created {{ customs.created }} by  {{ customs.user }} </h6>
+    </header>
+
+    <div class="w3-container">
+      <p>
+        <ul class="nav">
+
         <li>Logo: {{ customs.custom_email.logo }} </li>
-        <li>Mensaje: {{ customs.custom_email.message }} </li>
-        <li>Creado: {{ customs.created }} </li>
-        <li>ID: {{ customs.id }} </li>
-        <a href="{% url 'customizations:delete_customization' pk=customs.id  %}"> -> delete </a> <br>
-        <a href="{% url 'customizations:form_send_mail' pk=customs.id  %}"> -> Send Email Test </a>
+        <li>Message: {{ customs.custom_email.message }} </li>
+
+        </p>
+        </ul>
+    </div>
+
+    <footer class="w3-container ">
+      <br>
+      <p class="btn-group">
+  <a  href="{% url 'customizations:form_send_mail' pk=customs.id  %}"><button type="button" class="btn btn-success"> <span class="fa fa-envelope"></span> Send Email Test </button></a>
+  <a  href="{% url 'customizations:delete_customization' pk=customs.id  %}"><button type="button" class="btn btn-danger"><span class="fa fa-trash"></span> Delete  <br></button></a>
+
+</p>
+    </footer>
+  </div>
+</div>
 
       </p>
       {% empty %}

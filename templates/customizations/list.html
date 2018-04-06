@@ -9,7 +9,7 @@
                 <li>Mensaje: {{ customization.custom_email.message }} </li>
                 <li>Creado: {{ customization.created }} </li>
                 <li>ID: {{ customization.id }} </li>
-                <a href="{% url 'customizations:delete_customization' pk=customization.id  %}"> -> delete </a>
+                <a class="btn btn-danger" href="{% url 'customizations:delete_customization' pk=customization.id  %}"> delete </a>
             </p>
             {% empty %}
             <li>No customizations yet.</li>
