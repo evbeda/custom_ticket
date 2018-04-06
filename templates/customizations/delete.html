@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
     <form action="" method="post">{% csrf_token %}
-        <p>Are you sure you want to delete customization number {{ object.id }}?</p>
-        <input type="submit" value="Confirm" />
+        <div class="container">
+        <h2>Are you sure you want to delete customization number {{ object.id }}?</h2>
+        </div>
+        <h2><input class="btn btn-danger" type="submit" value="Confirm" /></h2>
     </form>
+     <a  class="btn btn-primary" href="{% url 'home'   %}">Cancel</a>
 {% endblock %}
