@@ -35,15 +35,3 @@ class TicketType(TimeStampedModel):
     name = models.CharField(max_length=255)
     price = models.FloatField()
     description = models.CharField(max_length=255)
-
-    @classmethod
-    def data_to_dict(cls, id):
-        try:
-            query = TicketType.objects.get(pk=id)
-        except Exception:
-            return {}
-        data = {
-            'event': query.event,
-            'name': query.name,
-        }
-        return data
