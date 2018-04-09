@@ -7,7 +7,7 @@
         {% endfor %}
     {% endif %}
     <h2>Create customization</h2>
-    <form  role="form" method="post">{% csrf_token %}
+    <form  role="form" method="post" enctype="multipart/form-data">{% csrf_token %}
         <p>{{ form.name.label }} : {{ form.name }}</p>
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
         <p>{{ form.logo.label }} : {{ form.logo }}</p>
@@ -18,5 +18,7 @@
         <a href="{% url 'home' %}">Cancel</a>
         <input type="submit" class="btn btn-success" name="create_customization"  value="Create">
     </form>
+
+
 {% endblock %}
 
