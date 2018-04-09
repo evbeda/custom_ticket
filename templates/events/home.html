@@ -14,8 +14,21 @@
             <div class="w3-container">
               <p>
                 <ul class="nav">
-                  <li>Logo: {{ customs.custom_email.logo }} </li>
+                  <div class="col-md-4">
+    <div class="thumbnail">
+        <img src="{{ customs.custom_email.logo }}" class="img-responsive thumbnail" alt="Logo">
+        <div class="caption">
+          <p>Logo:{{ customs.custom_email.logo }}</p>
+        </div>
+    </div>
+  </div>
+
+
+                  <li> </li>
+
                   <li>Message: {{ customs.custom_email.message }} </li>
+                  <li>Message Ticket: {{ customs.ticket_template.message_ticket }} </li>
+                  <li>Design selected: {{ customs.ticket_template.select_design_template }} </li>
                 </p>
               </ul>
             </div>

@@ -4,10 +4,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DeleteView
-
+from django.conf import settings
 from customizations.models import Customization, TicketTemplate, CustomEmail
 from customizations.forms import FormCustomization
-
+from django.core.files.storage import FileSystemStorage
 
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
@@ -24,7 +24,15 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
         is_form_valid = super(ViewCreateCustomization, self).post(request, *args, **kwargs)
         if is_form_valid:
             name = request.POST.get('name')
-            logo = request.POST.get('logo')
+            # logo = request.POST.get('logo')
+
+            # image uploaded
+            myfile = request.FILES['logo']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+            logo = settings.MEDIA_URL + filename
+
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
             message_ticket = request.POST.get('message_ticket')
