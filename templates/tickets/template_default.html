@@ -1,65 +1,79 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-        <title>Title</title>
-        <style type="text/css">
-        body {
-        font-weight: 200;
-        font-size: 14px;
-        border:solid;
-        color:#f6682F;
-        background-color:#FFF;
-        border-color:black;
-        }
-        .contain {
-        padding-top:15px;
-        padding-left:10px;
-        }
-        .title {
-        padding-top:15px;
-        text-align: center;
-        font-size:28px;
-        }
-        .description {
-        text-align: center;
-        }
-        </style>
-    </head>
-    <body>
-        <div class=title>Example Ticket</div>
-        <div class=contain>
-            <b>Name:</b>  Agustin<br/>
-            <b>Class:</b>  VIP <br/>
-            <b>Date:</b> <br/>
-            <b>Place:</b> Eventbrite <br/>
-            <div class=description><b>Description</b><br/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<img src="{{organizer_logo}}"
+width="150" height="150"
+alt="Logo">
+    <div style="width:50%">
+<img src="https://ci3.googleusercontent.com/proxy/IQahZVq8RnsGGUT5P_dRhdAKB7Uk49NXr5pmKfCiQZDLTeGDLVz8CBjmzVwdqY8T6OJ_1IQ1aL7-HPiuJB_GOXXdRc1sK1cr9RnLJGGv26jp7VvAw_-j5ZMQ-NyMxNkXAOi6Rg=s0-d-e1-ft#https://cdn.evbstatic.com/s3-s3/marketing/emails/modules/ridges_top_fullx2.jpg" alt="eventbrite" height="7" border="0" style="height:7px;border:none;display:block" class="CToWUd">
+<td class="m_4623262137051836037x_grid__col" style="padding:32px 40px;background-color:#ededed">
+<table cellpadding="0" cellspacing="0" border="0" class="m_4623262137051836037x_no_text_resize" style="width:100%;margin-bottom:12px">
+<tbody>
+<tr>
+<td style="border-bottom:1px dashed #d3d3d3">
+<h2 style="color:#404040;font-weight:300;margin:0 0 12px 0;font-size:24px;line-height:30px">
+{{event_name_text}} </h2>
+</td>
+<td colspan="2" style="text-align:right;border-bottom:1px dashed #d3d3d3">
+    <img height="150" width="150" src="https://cdnqrcgde.s3-eu-west-1.amazonaws.com/wp-content/uploads/2013/11/jpeg.jpg" alt=""><br>
+<div style="color:#666666;font-weight:400;font-size:13px;line-height:18px">
+{{event_start}}</div>
+</td>
+</tr>
+<tr>
+<td colspan="3">
+<p style="color:#666666;font-weight:400;font-size:15px;line-height:21px;margin-bottom:18px">
+<br> Nro. de pedido: {{order_id}} <br>
+Estado: {{order_status}} <br>
+Información adicional: {{message_ticket}} <br>
+Dirección: {{event_venue_location_name}}<br>
+</p>
+<table cellpadding="0" cellspacing="0" border="0" style="width:100%">
+<thead>
+<tr>
+<th style="border-bottom:1px dashed #d3d3d3;text-align:left;padding-bottom:12px;padding-right:12px">
+<div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
+Nombre </div>
+</th>
+<th style="border-bottom:1px dashed #d3d3d3;text-align:left;padding-bottom:12px;padding-right:12px">
+<div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
+Tipo de Entrada </div>
+</th>
+<th style="border-bottom:1px dashed #d3d3d3;text-align:right;padding-bottom:12px;padding-right:0">
+<div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
+Cantidad </div>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:12px 0;padding-right:3px">
+<div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
+{{attendee_first_name}} {{attendee_last_name}}  </div>
+</td>
+<td style="padding:12px 0;padding-right:3px">
+<div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
+{{ticket_class}} </div>
+</td>
+<td style="text-align:right;padding:12px 0">
+<div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
+--QUANTITY--</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
 
-OrderID: {{order_id}}
-attendee_first_name: {{attendee_first_name}}<br>  
-event_name_text: {{event_name_text}}<br> 
-event_start: {{event_start}}<br> 
-event_venue_location_name: {{event_venue_location_name}}<br> 
-user_order_email: {{user_order_email}}<br> 
-order_id: {{order_id}}<br> 
-order_created: {{order_created}}<br> 
-user_order_first_name: {{user_order_first_name}}<br> 
-order_status: {{order_status}}<br> 
-ticket_class: {{ticket_class}}<br> 
-organizer_logo:{{organizer_logo}}<br> 
-                <!--What we have-->
-                MENSAGEM:  {{message}} <br>
-                LOGO:  {{logo}}<br>
-                MENSAGEM_TICKET: {{message_ticket}}<br>
+</td>
 
-                <!-- We dont have -->
-                {{ticket_class_seat}}<!--Seat 18F-->
-
-
-
-
-
-                <br/>
-            </div>
-        </div>
-    </body>
+<img src="https://ci6.googleusercontent.com/proxy/ChkWB3VCDXts8fGD_fBmRzOcAG5oJwt9sGbDs6uysurO_fiBa2BV4lrAGSNt9MvTKvqx5M4v_WcCBRHhQd8y-tQIsA_1t6ZnpR8YDXy3o1GWtyEeazTP0MixLEvW1SaAohvp3R7p3Q=s0-d-e1-ft#https://cdn.evbstatic.com/s3-s3/marketing/emails/modules/ridges_bottom_fullx2.jpg" alt="eventbrite" height="7" border="0" style="height:7px;border:none;display:block" class="CToWUd">
+</div>
+</body>
 </html>
