@@ -9,16 +9,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.views.generic import FormView
-from .forms import FormSendEmailPreview
-from events.models import CustomEmail, TicketType
+
+from customizations.models import CustomEmail
+from events.models import TicketType
+from mail.forms import FormSendEmailPreview
 from mail.utils import PDF
-from django.core.mail import EmailMessage
-from events.models import CustomEmail
-from django.conf import settings
+
 from eventbrite import Eventbrite
 import requests
 import json
-import requests
 from django.urls import reverse
 
 

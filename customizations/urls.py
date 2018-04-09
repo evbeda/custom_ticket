@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from customizations.views import (
     DeleteCustomization,
     ViewCreateCustomization,
+    update_customization,
 )
 
 urlpatterns = [
@@ -22,6 +23,11 @@ urlpatterns = [
         r'^(?P<pk>[0-9]+)/delete$',
         DeleteCustomization.as_view(),
         name='delete_customization'
+    ),
+    url(
+        r'^(?P<pk>[0-9]+)/update$',
+        update_customization,
+        name='update_customization'
     ),
 
 ]

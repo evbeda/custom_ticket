@@ -8,12 +8,15 @@
     {% endif %}
     <h2>Create customization</h2>
     <form  role="form" method="post">{% csrf_token %}
+        <p>{{ form.name.label }} : {{ form.name }}</p>
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
         <p>{{ form.logo.label }} : {{ form.logo }}</p>
         <p>{{ form.message.label }} : {{ form.message }}</p>
-        <p>{{ form.select_ticket_template.label }} : {{ form.select_ticket_template }}</p>
+        <p>{{ form.select_design_template.label }} : {{ form.select_design_template }}</p>
+        <p>{{ form.message_ticket.label }} : {{ form.message_ticket }}</p>
         <br>
         <a href="{% url 'home' %}">Cancel</a>
         <input type="submit" class="btn btn-success" name="create_customization"  value="Create">
     </form>
 {% endblock %}
+

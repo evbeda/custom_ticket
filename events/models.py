@@ -21,7 +21,7 @@ class Event(TimeStampedModel):
     # Many-to-one relationships
     # user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     eventbrite_id = models.CharField(max_length=255, primary_key=True)
-    name = models.CharField(max_length=255)
+    event_name = models.CharField(max_length=255)
     date = models.DateField(default=datetime.date.today)
     location = models.CharField(max_length=255)
 
@@ -47,34 +47,3 @@ class TicketType(TimeStampedModel):
             'name': query.name,
         }
         return data
-
-
-class TicketTemplate(TimeStampedModel):
-    name = models.CharField(max_length=255)
-
-
-class CustomEmail(TimeStampedModel):
-    message = models.CharField(max_length=255)
-    logo = models.ImageField(upload_to='logos')
-
-    @classmethod
-    def data_to_dict(cls, id):
-        try:
-            query = CustomEmail.objects.get(pk=id)
-        except Exception:
-            return {}
-        data = {
-            'message': query.message,
-            'logo': query.logo,
-        }
-        return data
-
-
-class Customization(TimeStampedModel):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
-    name = models.CharField(max_length=255)
-    ticket_template = models.ForeignKey(TicketTemplate)
-    custom_email = models.ForeignKey(CustomEmail, blank=True, null=True)
