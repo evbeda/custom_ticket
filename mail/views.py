@@ -108,6 +108,19 @@ def get_data(request):
     order_created = data.json()['created']
     order_status = data.json()['status']
 
+    print 'AHORA VAN LOS DATOS'
+    print 'AHORA VAN LOS DATOS'
+    print 'AHORA VAN LOS DATOS'
+    print user_first_name
+    print user_last_name
+    print list_attendee
+    print event_name_text
+    print venue_id
+    print venue
+    print order_id
+    print order_created
+    print order_status
+
     return do_send_email(
         attendees=attendees,
         event_name_text=event_name_text,
