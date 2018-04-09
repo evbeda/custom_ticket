@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
     <p>
-        <a class="btn btn-warning" href="{% url 'mails:generate_pdf'%}">Ticket Preview PDF</a>
-    </p>
-    <p>
-        <a class="btn btn-warning" href="{% url 'mails:email_preview'%}">Email Preview PDF</a>
     </p>
 <p><a class="btn btn-success"  href="{% url 'mails:mail'%}">Send Mail Preview - API</a></p>
-<p><a class="btn btn-success"  href="{% url 'mails:test'%}">Send Mail Preview - TEST</a></p>
+
+<a  href="{% url 'mails:form_send_mail' pk=1  %}"><button type="button" class="btn btn-success"> <span class="fa fa-envelope"></span> Send Mail Preview - TEST </button></a>
+
 {% endblock %}

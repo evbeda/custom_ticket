@@ -1,50 +1,56 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+import requests
+import json
+from eventbrite import Eventbrite
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import BadHeaderError, EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic import FormView
 
-from customizations.models import CustomEmail
-from events.models import TicketType
 from mail.forms import FormSendEmailPreview
+from mail.domain import data_to_dict_all_models
 from mail.utils import PDF
-
-from eventbrite import Eventbrite
-import requests
-import json
-from django.urls import reverse
+from django.utils.safestring import mark_safe
+from customizations.models import Customization
 
 
-def get_pdf_ticket(self):
-    data = TicketType.data_to_dict(1)
+def get_pdf_ticket(request, pk):
+    data = data_to_dict_all_models(pk)
     return PDF('tickets/template_default.html', [data]).render().getvalue()
 
 
-def generate_pdf_ticket(request):
-    ticket_pdf = get_pdf_ticket(request)
+def get_pdf_ticket_do_send_mail(request):
+    data = data_to_dict_all_models(1)
+    return PDF('tickets/template_default.html', [data]).render().getvalue()
+
+
+def generate_pdf_ticket(request, pk):
+    ticket_pdf = get_pdf_ticket(request, pk)
     return HttpResponse(ticket_pdf, content_type='application/pdf')
 
 
-def get_pdf_body_email(request):
-    data = CustomEmail.data_to_dict(1)
+def get_pdf_body_email(request, pk):
+    data = data_to_dict_all_models(pk)
     return PDF('mail/body_mail.html', [data]).render().getvalue()
 
 
-def email_preview_pdf(request):
-    email_pdf = get_pdf_body_email(request)
+def email_preview_pdf(request, pk):
+    email_pdf = get_pdf_body_email(request, pk)
     return HttpResponse(email_pdf, content_type='application/pdf')
+
 
 # not use for testing - use do_send_email in mail/views.py
 
 
-def send_mail_with_ticket_pdf(request):
-    data = CustomEmail.data_to_dict(1)
+def send_mail_with_ticket_pdf(request, pk):
+    data = data_to_dict_all_models(pk)
     content = render_to_string('mail/body_mail.html', context=data)
     content = mark_safe(content)
     email = EmailMessage(
@@ -54,14 +60,13 @@ def send_mail_with_ticket_pdf(request):
         ['usercticket@gmail.com']
     )
     email.content_subtype = 'html'
-    pdf = get_pdf_ticket(request)
+    pdf = get_pdf_ticket(request, pk)
     email.attach('ticket', pdf, 'application/pdf')
     email.send()
     return HttpResponseRedirect(r('mails:successfully_mail'))
 
 
 def get_venue(venue_id):
-    # import ipdb; ipdb.set_trace()
     access_token = settings.SERVER_ACCESS_TOKEN
     eventbrite = Eventbrite(access_token)
     data_venue_json = eventbrite.get('/venues/' + str(venue_id))
@@ -117,7 +122,6 @@ def get_data(request):
         emails=emails
     )
 
-
     # event_name_text = 'EVENTO LALA'
     # from_email = settings.EMAIL_HOST_USER
     # emails = ['usercticket@gmail.com']
@@ -140,11 +144,11 @@ def do_send_email(
     # payment_datetime='',
     ticket_class='',
     from_email='',
-    emails=[]
+    emails=[],
 ):
-
     # context data
-    data = CustomEmail.data_to_dict(1)
+    data = data_to_dict_all_models(1)
+
     # body email
     message = render_to_string('mail/body_mail.html', context=data)
     # compose email
@@ -157,7 +161,7 @@ def do_send_email(
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
-    pdf = get_pdf_ticket('')
+    pdf = get_pdf_ticket_do_send_mail('')
 
     # attach ticket
     email.attach('ticket', pdf, 'application/pdf')
@@ -182,7 +186,6 @@ class GetEmailTest(LoginRequiredMixin, FormView):
         attendee_cost_gross = form.cleaned_data['attendee_cost_gross']
         attendee_quantity = form.cleaned_data['attendee_quantity']
         attendee_question = form.cleaned_data['attendee_question']
-        organizer_logo = form.cleaned_data['organizer_logo']
         order_status = form.cleaned_data['order_status']
         order_created = form.cleaned_data['order_created']
         ticket_class = form.cleaned_data['ticket_class']
@@ -208,13 +211,13 @@ class GetEmailTest(LoginRequiredMixin, FormView):
         attendees.append(dict(attendee))
         do_send_email(
             attendees=attendees,
-            organizer_logo= organizer_logo,
-            event_name_text= event_name_text,
-            event_start= event_start,
-            event_venue_location={ event_venue_location },
+            organizer_logo=organizer_logo,
+            event_name_text=event_name_text,
+            event_start=event_start,
+            event_venue_location={event_venue_location},
             #   reserved seating
             user_order_email=user_order_email,
-            order_id= '1212',
+            order_id='1212',
             order_created=order_created,
             user_order_first_name=user_order_first_name,
             user_order_last_name=user_order_last_name,
@@ -222,8 +225,10 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             # payment_datetime='',
             ticket_class=ticket_class,
             from_email=from_email,
-            emails= emails
+            emails=emails
         )
         # id customization
         # args=(self.kwargs['pk'],)
         return HttpResponseRedirect(reverse('mails:successfully_mail'))
+
+
