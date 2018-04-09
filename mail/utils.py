@@ -9,25 +9,25 @@ from xhtml2pdf import pisa
 from xhtml2pdf.pdf import pisaPDF
 
 
-class SendEmail(object):
+# class SendEmail(object):
 
-    def __init__(self, title, context, template, users):
-        self.title = title
-        self.context = context
-        self.template = template
-        self.users = users
+#     def __init__(self, title, context, template, users):
+#         self.title = title
+#         self.context = context
+#         self.template = template
+#         self.users = users
 
-    def get_content(self):
-        content = get_template(self.template).render(Context({'context': self.context}))
-        return mark_safe(content)
+#     def get_content(self):
+#         content = get_template(self.template).render(Context({'context': self.context}))
+#         return mark_safe(content)
 
-    def send(self):
-        email = EmailMessage(self.title, self.get_content(), 'edacticket@email.com', to=self.users)
-        email.content_subtype = 'html'
-        email.send()
+#     def send(self):
+#         email = EmailMessage(self.title, self.get_content(), 'edacticket@email.com', to=self.users)
+#         email.content_subtype = 'html'
+#         email.send()
 
-    def run(self):
-        self.send()
+#     def run(self):
+#         self.send()
 
 
 class PDF(object):
