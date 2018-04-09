@@ -146,7 +146,7 @@ def do_send_email(
         'ticket_class': ticket_class,
         'from_email': from_email,
         'emails': emails,
-        'event_venue_location_name': event_venue_location.pop(),
+        'event_venue_location_name': 'Wall Street 1234',
     })
 
     data = data_to_dict_all(customization_id, data_api)
