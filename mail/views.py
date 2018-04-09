@@ -70,8 +70,7 @@ def get_venue(venue_id):
     access_token = settings.SERVER_ACCESS_TOKEN
     eventbrite = Eventbrite(access_token)
     data_venue_json = eventbrite.get('/venues/' + str(venue_id))
-    data_venue = json.loads(data_venue_json)
-    venue = data_venue['address']['address_1']
+    venue = data_venue_json['address']['address_1']
     return venue
 
 
@@ -79,13 +78,13 @@ def get_data(request):
     print "sending email"
     print request.body
     access_token = settings.SERVER_ACCESS_TOKEN
-    data = requests.get(
-        json.loads(
-            request.body
-        )['api_url'] + '?token=' + access_token + '&expand=event,attendee'
-    )
-    user_first_name = data.json()['first_name'],
-    user_last_name = data.json()['last_name'],
+    data = requests.get(json.loads(request.body)['api_url'] + '?token=' + access_token + '&expand=event,attendees')
+    print '-----------'
+    print '-----------'
+    print '-----------'
+    print data.json()
+    user_first_name = data.json()['first_name']
+    user_last_name = data.json()['last_name']
     list_attendee = data.json()['attendees']
     attendees = []
     for att in list_attendee:
@@ -107,34 +106,19 @@ def get_data(request):
     order_id = data.json()['id']
     order_created = data.json()['created']
     order_status = data.json()['status']
-
-    print 'AHORA VAN LOS DATOS'
-    print 'AHORA VAN LOS DATOS'
-    print 'AHORA VAN LOS DATOS'
-    print user_first_name
-    print user_last_name
-    print list_attendee
-    print event_name_text
-    print venue_id
-    print venue
-    print order_id
-    print order_created
-    print order_status
-
     return do_send_email(
         attendees=attendees,
         event_name_text=event_name_text,
         user_order_first_name=user_first_name,
-        user_order_lasst_name=user_last_name,
+        user_order_last_name=user_last_name,
         event_start=event_start,
         order_id=order_id,
         order_created=order_created,
         order_status=order_status,
         event_venue_location=venue,
         from_email=from_email,
-        emails=emails
+        emails=[emails]
     )
-
 
 
 def do_send_email(

@@ -11,29 +11,8 @@ from .views import get_data, get_venue
 
 class TestMails(TestCase):
     @patch(
-        'mail.views.Eventbrite.get',
-        return_value='{'
-            '"address": {'
-                '"address_1": "Test",'
-                '"address_2": null,'
-                '"city": null,'
-                '"region": null,'
-                '"postal_code": null,'
-                '"country": null,'
-                '"latitude": "45.5121",'
-                '"longitude": "-122.6771",'
-                '"localized_address_display": "Test",'
-                '"localized_area_display": null,'
-                '"localized_multi_line_address_display": ["Test"]'
-            '},'
-            '"resource_uri": "https://www.eventbriteapi.com/v3/venues/23870984/",'
-            '"id": "23870984",'
-            '"age_restriction": null,'
-            '"capacity": null,'
-            '"name": null,'
-            '"latitude": "45.5121",'
-            '"longitude": "-122.6771"'
-        '}'
+        'mail.views.get_venue',
+        return_value='address_1 Test'
     )
 
     @patch('mail.views.do_send_email')
@@ -49,45 +28,42 @@ class TestMails(TestCase):
         mock_requests.assert_called_once()
         self.assertEquals(
             mock_requests.call_args_list[0][0][0],
-            u'https://www.eventbriteapi.com/v3/orders/752327237/?token=abc&expand=event,attendee',
+            u'https://www.eventbriteapi.com/v3/orders/752327237/?token=abc&expand=event,attendees',
         )
         mock_requests.assert_called_once()
         self.assertEquals(
             mock_venue.call_args_list[0][0][0],
-            u'/venues/23870984',
+            u'23870984',
         )
         # assert send email
         mock_do_send_email.assert_called_once()
 
     @patch(
         'mail.views.Eventbrite.get',
-        return_value='{'
-            '"address": {'
-                '"address_1": "address_1 Test",'
-                '"address_2": null,'
-                '"city": null,'
-                '"region": null,'
-                '"postal_code": null,'
-                '"country": null,'
-                '"latitude": "45.5121",'
-                '"longitude": "-122.6771",'
-                '"localized_address_display": "Test",'
-                '"localized_area_display": null,'
-                '"localized_multi_line_address_display": ["Test"]'
-            '},'
-            '"resource_uri": "https://www.eventbriteapi.com/v3/venues/23870984/",'
-            '"id": "23870984",'
-            '"age_restriction": null,'
-            '"capacity": null,'
-            '"name": null,'
-            '"latitude": "45.5121",'
-            '"longitude": "-122.6771"'
-        '}'
+        return_value={
+            'address': {
+                'address_1': 'address_1 Test',
+                'address_2': 'll',
+                'city': 'll',
+                'region': 'll',
+                'postal_code': 'll',
+                'country': 'll',
+                'latitude': '5.5121',
+                'longitude': '122.6771',
+                'localized_address_display': 'est',
+                'localized_area_display': 'll',
+                'localized_multi_line_address_display': ['Test'],
+            },
+            'resource_uri': 'ttps://www.eventbriteapi.com/v3/venues/23870984/',
+            'id': '3870984',
+            'age_restriction': 'll',
+            'capacity': 'll',
+            'name': 'll',
+            'latitude': '5.5121',
+            'longitude': '122.6771',
+        }
     )
     def test_get_venue(self, mock_requests):
-        # request = MagicMock(
-        #     body='{23870984}'
-        # )
         with self.settings(SERVER_ACCESS_TOKEN='abc'):
             venue = get_venue(23870984)
             self.assertEquals(venue, "address_1 Test")
