@@ -84,8 +84,8 @@ def get_data(request):
             request.body
         )['api_url'] + '?token=' + access_token + '&expand=event,attendee'
     )
-    user_first_name = data.json()['first_name'],
-    user_last_name = data.json()['last_name'],
+    user_first_name = data.json()['first_name']
+    user_last_name = data.json()['last_name']
     list_attendee = data.json()['attendees']
     attendees = []
     for att in list_attendee:
@@ -108,6 +108,19 @@ def get_data(request):
     order_created = data.json()['created']
     order_status = data.json()['status']
 
+    print 'AHORA VAN LOS DATOS'
+    print 'AHORA VAN LOS DATOS'
+    print 'AHORA VAN LOS DATOS'
+    print user_first_name
+    print user_last_name
+    print list_attendee
+    print event_name_text
+    print venue_id
+    print venue
+    print order_id
+    print order_created
+    print order_status
+    import ipdb; ipdb.set_trace()
     return do_send_email(
         attendees=attendees,
         event_name_text=event_name_text,
