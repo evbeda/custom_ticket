@@ -29,9 +29,10 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             # image uploaded
             myfile = request.FILES['logo']
             fs = FileSystemStorage()
+            domain = request.build_absolute_uri('/')[:-1]
             filename = fs.save(myfile.name, myfile)
             uploaded_file_url = fs.url(filename)
-            logo = settings.MEDIA_URL + filename
+            logo = domain + settings.MEDIA_URL + filename
 
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
