@@ -17,7 +17,7 @@ from django.views.generic import FormView
 from mail.forms import FormSendEmailPreview
 from mail.domain import data_to_dict_all_models
 from mail.utils import PDF
-from django.utils.safestring import mark_safe
+# from django.utils.safestring import mark_safe
 
 
 def get_pdf_ticket(request, pk):
@@ -133,9 +133,14 @@ def get_data(request):
     )
 
 
+def data_to_dict_all(customization_id, data_api):
+    data_model = data_to_dict_all_models(customization_id)
+    data = dict(list(data_model.items()) + list(data_api.items()))
+    return data
+
 
 def do_send_email(
-    customization_id=1,
+    customization_id=int(1),
     attendees=[],
     organizer_logo='',
     event_name_text='',
@@ -154,8 +159,27 @@ def do_send_email(
     emails=[],
 ):
     # context data
-    data = data_to_dict_all_models(1)
+    data_api = ({
+        'customization_id': customization_id,
+        'attendees': attendees,
+        'event_venue_location': event_venue_location,
+        'event_name_text': event_name_text,
+        'event_start': event_start,
+        'event_venue_location': event_venue_location,
+        #   reserved seating
+        'user_order_email': user_order_email,
+        'order_id': order_id,
+        'order_created': order_created,
+        'user_order_first_name': user_order_first_name,
+        'user_order_last_name': user_order_last_name,
+        'order_status': order_status,
+        # payment_datetime:'',
+        'ticket_class': ticket_class,
+        'from_email': from_email,
+        'emails': emails,
+    })
 
+    data = data_to_dict_all(customization_id, data_api)
     # body email
     message = render_to_string('mail/body_mail.html', context=data)
     # compose email
@@ -168,7 +192,7 @@ def do_send_email(
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
-    pdf = get_pdf_ticket_do_send_mail('')
+    pdf = get_pdf_ticket_do_send_mail(customization_id)
 
     # attach ticket
     email.attach('ticket', pdf, 'application/pdf')
@@ -182,8 +206,6 @@ def do_send_email(
 class GetEmailTest(LoginRequiredMixin, FormView):
     form_class = FormSendEmailPreview
     template_name = 'mail/form_mail.html'
-
-    # data = data_to_dict_all_models(pk)
 
     def form_valid(self, form):
         print form.cleaned_data
@@ -219,7 +241,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
 
         attendees.append(dict(attendee))
         do_send_email(
-            customization_id= self.kwargs['pk'],
+            customization_id=self.kwargs['pk'],
             attendees=attendees,
             organizer_logo=organizer_logo,
             event_name_text=event_name_text,
@@ -237,7 +259,4 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             from_email=from_email,
             emails=emails
         )
-
-        # id customization
-        # args=(self.kwargs['pk'],)
         return HttpResponseRedirect(reverse('mails:successfully_mail'))

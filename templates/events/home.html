@@ -2,8 +2,10 @@
 {% block content %}
   <h1>My Customizations</h1>
   <ul>
+
     {% for customs in object_list %}
       <p>
+
         <div class="w3-container ">
           <div class="w3-hover-shadow w3-card" style="width:100%;">
             <header class="w3-container w3-light-grey ">
@@ -35,7 +37,9 @@
       {% empty %}
       <li>No customizations yet.</li>
     {% endfor %}
+
   </ul>
+
   <footer class="footer">
     <div class="container">
       <span class="text-muted">
