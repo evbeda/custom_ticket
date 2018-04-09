@@ -40,9 +40,6 @@
                 <a  href="{% url 'customizations:update_customization' pk=customs.id  %}"><button type="button" class="btn"></span> Update  <br></button></a>
                 <a  href="{% url 'mails:email_preview' pk=customs.id  %}"><button type="button" class="btn"></span> Preview Email PDF  <br></button></a>
                 <a  href="{% url 'mails:generate_pdf' pk=customs.id  %}"><button type="button" class="btn"></span> Preview Ticket PDF  <br></button></a>
-                <a  href="{% url 'mails:email_test' pk=customs.id  %}"><button type="button" class="btn"></span> EmailTest<br></button></a>
-
-
               </p>
             </footer>
           </div>
