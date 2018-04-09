@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-# import requests
-# import json
-# from eventbrite import Eventbrite
-# from django.conf import settings
 
 from customizations.models import Customization, CustomEmail, TicketTemplate
 from events.models import TicketType
@@ -16,8 +12,6 @@ def data_to_dict_customization(id):
     except Exception:
         return {}
     data = {
-        'message': query.custom_email.message,
-        'logo': query.custom_email.logo,
         'message_ticket': query.ticket_template.message_ticket,
     }
     return data
@@ -76,10 +70,3 @@ def data_to_dict_all_models(id):
         list(data3.items()) +
         list(data4.items()))
     return data
-
-
-# def data_model_and_api(id):
-#     data1 = get_data()
-#     data2 = data_to_dict_all_models(id)
-#     data = dict(list(data1.items()) + list(data2.items()))
-#     return data

@@ -33,40 +33,32 @@
             <b>Date:</b> <br/>
             <b>Place:</b> Eventbrite <br/>
             <div class=description><b>Description</b><br/>
-                <!--API data-->
-                {{event_name}}
-                {{event_logo}}
-                {{event_date}}
-                {{event_time_start}}
-                {{event_time_end}}
-                {{event_logo}}
-                {{event_location}}
 
-                {{attendee_name}}
-
-                {{order_id}}
-                {{order_info}}<!--Order #123. Ordered by USER_NAME on April 5, 2018 10:15-->
-                {{order_payment_status}}
-
-                {{ticket_class_name}} <!--Ticket VIP-->
-                {{ticket_class_seat}}<!--Seat 18F-->
-
-                <!--Our model-->
-                {{ticket_class_message}}
-                {{event_message}}
-
-                {{organizer_logo}}
-
+OrderID: {{order_id}}
+attendee_first_name: {{attendee_first_name}}<br>  
+event_name_text: {{event_name_text}}<br> 
+event_start: {{event_start}}<br> 
+event_venue_location_name: {{event_venue_location_name}}<br> 
+user_order_email: {{user_order_email}}<br> 
+order_id: {{order_id}}<br> 
+order_created: {{order_created}}<br> 
+user_order_first_name: {{user_order_first_name}}<br> 
+order_status: {{order_status}}<br> 
+ticket_class: {{ticket_class}}<br> 
+organizer_logo:{{organizer_logo}}<br> 
                 <!--What we have-->
                 MENSAGEM:  {{message}} <br>
                 LOGO:  {{logo}}<br>
                 MENSAGEM_TICKET: {{message_ticket}}<br>
 
+                <!-- We dont have -->
+                {{ticket_class_seat}}<!--Seat 18F-->
 
 
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur laudantium ea, ullam iusto officiis culpa, quisquam odit veritatis velit atque, similique qui sunt earum natus porro molestiae ab mollitia. Necessitatibus!
+
+
+
                 <br/>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit ab ipsam earum accusamus enim delectus nulla, accusantium quia nemo, quam qui non fuga ex ratione dolor nesciunt amet quidem ipsa.
             </div>
         </div>
     </body>
