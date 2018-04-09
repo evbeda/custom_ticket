@@ -122,13 +122,10 @@ def get_data(request):
         emails=emails
     )
 
-    # event_name_text = 'EVENTO LALA'
-    # from_email = settings.EMAIL_HOST_USER
-    # emails = ['usercticket@gmail.com']
-    # return do_send_email(event_name_text=event_name_text, from_email=from_email, emails=emails)
 
 
 def do_send_email(
+    customization_id=1,
     attendees=[],
     organizer_logo='',
     event_name_text='',
@@ -210,6 +207,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
 
         attendees.append(dict(attendee))
         do_send_email(
+            customization_id= self.kwargs['pk'],
             attendees=attendees,
             organizer_logo=organizer_logo,
             event_name_text=event_name_text,
@@ -227,8 +225,5 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             from_email=from_email,
             emails=emails
         )
-        # id customization
-        # args=(self.kwargs['pk'],)
+
         return HttpResponseRedirect(reverse('mails:successfully_mail'))
-
-
