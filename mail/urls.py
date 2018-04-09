@@ -5,7 +5,6 @@ from .views import (
     generate_pdf_ticket,
     email_preview_pdf,
     GetEmailTest,
-    send_mail_with_ticket_pdf
 )
 
 urlpatterns = [
@@ -17,11 +16,6 @@ urlpatterns = [
         r'^(?P<pk>[0-9]+)/generate_pdf_ticket$',
         generate_pdf_ticket,
         name='generate_pdf'
-    ),
-    url(
-        r'^(?P<pk>[0-9]+)/send_mail_with_ticket_pdf$',
-        send_mail_with_ticket_pdf,
-        name='email_test'
     ),
     url(
         r'^(?P<pk>[0-9]+)/email_preview_pdf$',

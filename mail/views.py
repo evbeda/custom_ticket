@@ -10,7 +10,7 @@ from django.core.mail import BadHeaderError, EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import FormView
 
@@ -18,7 +18,6 @@ from mail.forms import FormSendEmailPreview
 from mail.domain import data_to_dict_all_models
 from mail.utils import PDF
 from django.utils.safestring import mark_safe
-from customizations.models import Customization
 
 
 def get_pdf_ticket(request, pk):
@@ -47,23 +46,21 @@ def email_preview_pdf(request, pk):
 
 
 # not use for testing - use do_send_email in mail/views.py
-
-
-def send_mail_with_ticket_pdf(request, pk):
-    data = data_to_dict_all_models(pk)
-    content = render_to_string('mail/body_mail.html', context=data)
-    content = mark_safe(content)
-    email = EmailMessage(
-        'Test Send Ticket',
-        content,
-        'edacticket@gmail.com',
-        ['usercticket@gmail.com']
-    )
-    email.content_subtype = 'html'
-    pdf = get_pdf_ticket(request, pk)
-    email.attach('ticket', pdf, 'application/pdf')
-    email.send()
-    return HttpResponseRedirect(r('mails:successfully_mail'))
+# def send_mail_with_ticket_pdf(request, pk):
+#     data = data_to_dict_all_models(pk)
+#     content = render_to_string('mail/body_mail.html', context=data)
+#     content = mark_safe(content)
+#     email = EmailMessage(
+#         'Test Send Ticket',
+#         content,
+#         'edacticket@gmail.com',
+#         ['usercticket@gmail.com']
+#     )
+#     email.content_subtype = 'html'
+#     pdf = get_pdf_ticket(request, pk)
+#     email.attach('ticket', pdf, 'application/pdf')
+#     email.send()
+#     return HttpResponseRedirect(r('mails:successfully_mail'))
 
 
 def get_venue(venue_id):
@@ -170,6 +167,8 @@ class GetEmailTest(LoginRequiredMixin, FormView):
     form_class = FormSendEmailPreview
     template_name = 'mail/form_mail.html'
 
+    # data = data_to_dict_all_models(pk)
+
     def form_valid(self, form):
         print form.cleaned_data
         attendee_barcode = form.cleaned_data['attendee_barcode']
@@ -223,4 +222,6 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             emails=emails
         )
 
+        # id customization
+        # args=(self.kwargs['pk'],)
         return HttpResponseRedirect(reverse('mails:successfully_mail'))
