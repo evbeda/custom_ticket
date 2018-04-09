@@ -2,8 +2,10 @@
 {% block content %}
   <h1>My Customizations</h1>
   <ul>
+
     {% for customs in object_list %}
       <p>
+
         <div class="w3-container ">
           <div class="w3-hover-shadow w3-card" style="width:100%;">
             <header class="w3-container w3-light-grey ">
@@ -27,9 +29,6 @@
                 <a  href="{% url 'customizations:update_customization' pk=customs.id  %}"><button type="button" class="btn"></span> Update  <br></button></a>
                 <a  href="{% url 'mails:email_preview' pk=customs.id  %}"><button type="button" class="btn"></span> Preview Email PDF  <br></button></a>
                 <a  href="{% url 'mails:generate_pdf' pk=customs.id  %}"><button type="button" class="btn"></span> Preview Ticket PDF  <br></button></a>
-                <a  href="{% url 'mails:email_test' pk=customs.id  %}"><button type="button" class="btn"></span> EmailTest<br></button></a>
-
-
               </p>
             </footer>
           </div>
@@ -38,7 +37,9 @@
       {% empty %}
       <li>No customizations yet.</li>
     {% endfor %}
+
   </ul>
+
   <footer class="footer">
     <div class="container">
       <span class="text-muted">
