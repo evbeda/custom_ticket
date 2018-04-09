@@ -107,8 +107,12 @@ def get_data(request):
     order_id = data.json()['id']
     order_created = data.json()['created']
     order_status = data.json()['status']
+    # customization = Customization.objects.get(pk=1)
+    customization = Customization.objects.filter(pk=1)
+    customization_id = customization.id
 
     return do_send_email(
+        customization_id=customization_id,
         attendees=attendees,
         event_name_text=event_name_text,
         user_order_first_name=user_first_name,
