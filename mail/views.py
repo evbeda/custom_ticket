@@ -38,7 +38,7 @@ def generate_pdf_ticket(request, pk):
 
 def get_pdf_body_email(request, pk):
     data = data_to_dict_all_models(pk)
-    return PDF('mail/body_mail.html', [data]).render().getvalue()
+    return PDF('mail/body_mail_clean.html', [data]).render().getvalue()
 
 
 def email_preview_pdf(request, pk):
@@ -63,6 +63,7 @@ def get_data(request):
     print '-----------'
     print '-----------'
     print data.json()
+
     user_first_name = data.json()['first_name']
     user_last_name = data.json()['last_name']
     list_attendee = data.json()['attendees']
