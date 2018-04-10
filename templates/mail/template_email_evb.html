@@ -16,7 +16,7 @@
 <tr>
 <td width="33%" valign="middle" style="text-align:left; padding:30px 0 20px 0"><a href="http://www.eventbrite.com/?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=eb_logo" target="_blank" rel="noopener noreferrer">
     <!-- LOGO -->
-    <img data-imagetype="External" src="" width="136" height="22" border="0" alt="LOGO" style="width:136px; height:22px">
+    <img data-imagetype="External" src="{{organizer_logo}}" width="150" height="150" border="0" alt="LOGO" style="width:150px; height:150px">
     <!-- END LOGO -->
 </a></td>
 <td width="66%" valign="middle" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; text-align:right; padding-top:12px; vertical-align:middle">
@@ -40,10 +40,14 @@
 </tr>
 <tr class="">
 <td class="x_grid__col" align="" style="padding:32px 40px; border-radius:6px 6px 0 0">
-<h2 class="" style="color:#404040; font-weight:300; margin:0 0 12px 0; font-size:24px; line-height:30px">
-Hola ---USER_BUYER---, esta es tu confirmación de inscripción para el evento <a href="https://www.eventbrite.com.ar/e/encuentro-de-jovenes-emprendedores-tickets-32958532859?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=eventname&amp;ref=eemailordconf" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:#1090ba; font-weight:normal">---EVENT NAME--- </a></h2>
+<h2 class="" style="color:#404040; font-weight:300; margin:0 0 12px 0; font-size:24px; line-height:30px">Hola {{user_order_first_name}}, esta es tu confirmación de inscripción para el evento <a href="https://www.eventbrite.com.ar/e/encuentro-de-jovenes-emprendedores-tickets-32958532859?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=eventname&amp;ref=eemailordconf" target="_blank" rel="noopener noreferrer" style="text-decoration:none; color:#1090ba; font-weight:normal">{{event_name_text}}</a></h2>
 <div class="x_organized_by" style="color:#666666; font-weight:400; font-size:15px; line-height:21px; font-weight:300">
-Organizado por <a href="https://www.eventbrite.com.ar/o/los-andes-9990917269?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=orgname&amp;ref=eemailordconf" target="_blank" rel="noopener noreferrer" style="color:#999">---ORGANIZER---</a> </div>
+Organizado por <a href="https://www.eventbrite.com.ar/o/los-andes-9990917269?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=orgname&amp;ref=eemailordconf" target="_blank" rel="noopener noreferrer" style="color:#999">---ORGANIZER---</a>
+<br>
+{{message}} <br>
+{{message_ticket}}<br>
+
+ </div>
 </td>
 </tr>
 <tr>
@@ -192,13 +196,13 @@ Resumen del pedido </h2>
 </td>
 <td colspan="2" style="text-align:right; border-bottom:1px dashed #d3d3d3">
 <div class="" style="color:#666666; font-weight:400; font-size:13px; line-height:18px">
-26 de marzo de 2017 </div>
+{{order_created}}  </div>
 </td>
 </tr>
 <tr>
 <td colspan="3">
 <p class="" style="color:#666666; font-weight:400; font-size:15px; line-height:21px; margin-bottom:18px">
-N.º de pedido: --ORDER ID--- </p>
+N.º de pedido: {{order_id}}</p>
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%">
 <thead>
 <tr>
@@ -220,11 +224,11 @@ Cantidad </div>
 <tr>
 <td style="padding:12px 0; padding-right:3px">
 <div class="" style="color:#666666; font-weight:400; font-size:15px; line-height:21px">
----ATTTENDEE FULL NAME--- </div>
+{{attendee_first_name}} {{attendee_last_name}} </div>
 </td>
 <td style="padding:12px 0; padding-right:3px">
 <div class="" style="color:#666666; font-weight:400; font-size:15px; line-height:21px">
---- TICKET CLASS --- </div>
+{{ticket_class}} </div>
 </td>
 <td style="text-align:right; padding:12px 0">
 <div class="" style="color:#666666; font-weight:400; font-size:15px; line-height:21px">
@@ -259,17 +263,15 @@ Acerca de este evento </h2>
 <img data-imagetype="External" src="https://cdn.evbstatic.com/s3-s3/marketing/emails/order_confirmation/date-iconx2.png" title="fecha" alt="fecha" border="0" width="20" height="20" class="" style="width:20px; height:20px; vertical-align:-2px"> </td>
 <td width="" height="" align="" valign="" class="" colspan="1" style="">
 <div class="" style="color:#666666; font-weight:400; font-size:15px; line-height:21px">
---- FULL DATE START & END --- </div>
+{{event_start}}</div>
 </td>
 </tr>
 <tr class="" style="">
 <td width="20" height="" align="" valign="" class="" colspan="1" style="vertical-align:top; padding-right:10px">
 <img data-imagetype="External" src="https://cdn.evbstatic.com/s3-s3/marketing/emails/order_confirmation/location-pin-iconx2.png" title="fecha" alt="fecha" border="0" width="20" height="20" class="" style="width:20px; height:20px; vertical-align:-4px"> </td>
 <td width="" height="" align="" valign="" class="" colspan="1" style="padding-bottom:10px">
---VENUE ADDRESS ---<br>
---VENUE ADDRESS ---<br>
---VENUE ADDRESS ---<br>
---VENUE ADDRESS --- </td>
+{{event_venue_location_name}}<br>
+ </td>
 </tr>
 <tr class="x_hide-for-small" style="">
 <td width="20" height="" align="" valign="" class="x_hide-for-small" colspan="1" style="vertical-align:top; padding-right:10px; padding-top:10px">
@@ -453,7 +455,7 @@ Buscá eventos locales que coincidan con tus pasiones. </div>
 <tr class="">
 <td class="x_grid__col" align="" style="padding:24px 0; text-align:center">
 <div class="" style="color:#666666; font-weight:400; font-size:13px; line-height:18px; font-weight:300; padding-bottom:6px">
-<span class="" style="">Este mensaje de correo electrónico se envió a <a href="mailto:moyano.cristian@hotmail.com" target="_blank" rel="noopener noreferrer" class="" style="text-decoration:none; color:#0f90ba">--- USER BUYER EMAIL----</a> </span></div>
+<span class="" style="">Este mensaje de correo electrónico se envió a <a href="mailto:moyano.cristian@hotmail.com" target="_blank" rel="noopener noreferrer" class="" style="text-decoration:none; color:#0f90ba">{{user_order_email}}</a> </span></div>
 <div class="" style="color:#666666; font-weight:400; font-size:13px; line-height:18px; font-weight:300; padding-bottom:6px">
 <a href="http://www.eventbrite.com.ar" target="_blank" rel="noopener noreferrer" class="" style="text-decoration:none; color:#0f90ba">Eventbrite</a> | República del Líbano 981 | Godoy Cruz. CP5501 Mendoza </div>
 <div class="" style="color:#666666; font-weight:400; font-size:13px; line-height:18px; font-weight:300">
