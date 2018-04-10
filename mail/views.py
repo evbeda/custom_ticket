@@ -134,7 +134,7 @@ def do_send_email(
         'event_venue_location': event_venue_location,
         'event_name_text': event_name_text,
         'event_start': event_start,
-        #   reserved seating
+        # reserved seating
         # organizer_name
         'user_order_email': user_order_email,
         'order_id': order_id,
