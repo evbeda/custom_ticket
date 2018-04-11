@@ -8,11 +8,41 @@ from django.conf import settings
 from customizations.models import Customization, TicketTemplate, CustomEmail
 from customizations.forms import FormCustomization
 from django.core.files.storage import FileSystemStorage
+import requests
+import json
+from pprint import pprint
+
 
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
     form_class = FormCustomization
     success_url = reverse_lazy('/')
+
+
+# def create_webhook(self, token):
+#     response = requests.post(
+#         "https://www.eventbriteapi.com/v3/webhooks/",
+#         headers={
+#             "Authorization": token,
+#         },
+#         data={
+#             "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/mail/",
+#             "actions": "order.placed",
+#             "event_id": "all",
+#         },
+#         # Verify SSL certificate
+#         verify=True
+#     )
+#     pprint(response.json())
+#     return (response.json()[u'id'])
+
+
+# def get_token(self, request):
+#     import ipdb; ipdb.set_trace()
+#     token = request.user.social_auth.get(provider=request.session.get(
+#         'social_auth_last_login_backend')
+#     ).access_token
+#     return token
 
 
 class ViewCreateCustomization(LoginRequiredMixin, FormView):
@@ -37,7 +67,8 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
             message_ticket = request.POST.get('message_ticket')
-
+            token = get_token(request)
+            webhook_id = create_webhook(token)
             ticket = TicketTemplate.objects.create(
                 select_design_template=select_design_template,
                 message_ticket=message_ticket
@@ -51,7 +82,9 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                 ticket_template=ticket,
                 custom_email=custom_email,
                 name=name,
+                webhook_id=webhook_id,
             )
+
             return HttpResponseRedirect('/')
 
 
@@ -87,6 +120,17 @@ class DeleteCustomization(CustomizationConfig, DeleteView):
     template_name = 'customizations/delete.html'
     success_url = reverse_lazy('home')
     context_object_name = 'customizations'
+
+    def delete_webhook(webhook_id):
+        response = requests.delete(
+            "https://www.eventbriteapi.com/v3/webhooks/" + webhook_id + "/",
+            headers={
+                "Authorization": "Bearer YOURPERSONALOAUTHTOKEN",
+            },
+            # Verify SSL certificate
+            verify=True
+        )
+        pprint(response.json())
 
     def get_context_data(self, **kwargs):
         context = super(DeleteCustomization, self).get_context_data(**kwargs)
