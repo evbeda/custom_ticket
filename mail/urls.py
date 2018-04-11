@@ -2,9 +2,10 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 from .views import (
     get_data,
-    generate_pdf_ticket,
-    email_preview_pdf,
     GetEmailTest,
+    get_pdf_ticket,
+    email_preview_pdf
+
 )
 
 urlpatterns = [
@@ -14,7 +15,7 @@ urlpatterns = [
         name='mail'),
     url(
         r'^(?P<pk>[0-9]+)/generate_pdf_ticket$',
-        generate_pdf_ticket,
+        get_pdf_ticket,
         name='generate_pdf'
     ),
     url(
