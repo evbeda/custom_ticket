@@ -126,6 +126,7 @@ def do_send_email(
     ticket_class='',
     from_email='',
     emails=[],
+
 ):
     # context data
     data_api = ({
@@ -149,6 +150,7 @@ def do_send_email(
         'from_email': from_email,
         'emails': emails,
         'event_venue_location_name': 'Wall Street 1234',
+        'barcode': attendees[0]['barcode'],
     })
 
     data = data_to_dict_all(customization_id, data_api)
@@ -209,7 +211,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             'attendee_first_name': attendee_first_name,
             'attendee_last_name': attendee_last_name,
             'cost_gross': attendee_cost_gross,
-            # 'barcode': att['barcodes']['barcode'],
+            'barcode': attendee_barcode,
             'answers': {},
             'ticket_class': ticket_class
         }
