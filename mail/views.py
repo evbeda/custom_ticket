@@ -58,12 +58,11 @@ def get_data(request):
     print "sending email"
     print request.body
     access_token = settings.SERVER_ACCESS_TOKEN
-    data = requests.get(json.loads(request.body)['api_url'] + '?token=' + access_token + '&expand=event,attendees')
-    print '-----------'
-    print '-----------'
-    print '-----------'
-    print data.json()
-
+    data = requests.get(
+        json.loads(
+            request.body
+        )['api_url'] + '?token=' + access_token + '&expand=event,attendees'
+    )
     user_first_name = data.json()['first_name']
     user_last_name = data.json()['last_name']
     list_attendee = data.json()['attendees']
@@ -73,7 +72,7 @@ def get_data(request):
             'attendee_first_name': att['profile']['first_name'],
             'attendee_last_name': att['profile']['last_name'],
             'cost_gross': att['costs']['gross']['value'],
-            # 'barcode': att['barcodes']['barcode'],
+            'barcode': att['barcodes'][0]['barcode'],
             'answers': att['answers'],
             'ticket_class': att['ticket_class_name']
         }
@@ -152,7 +151,6 @@ def do_send_email(
         'event_venue_location_name': 'Wall Street 1234',
         'barcode': attendees[0]['barcode'],
     })
-
     data = data_to_dict_all(customization_id, data_api)
     # body email
     message = render_to_string('mail/body_mail.html', context=data)
@@ -165,8 +163,6 @@ def do_send_email(
         reply_to=emails,
         headers={'Message-ID': 'foo'},
     )
-    # import ipdb
-    # ipdb.set_trace()
     email.content_subtype = 'html'
     pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
     # attach ticket
