@@ -17,6 +17,7 @@ from django.views.generic import FormView
 from mail.forms import FormSendEmailPreview
 from mail.domain import data_to_dict_all_models
 from mail.utils import PDF
+from mail.models import CustomData
 
 
 def get_pdf_ticket(request, pk):
@@ -25,6 +26,7 @@ def get_pdf_ticket(request, pk):
         'tickets/template_default.html',
         [data]
     ).render().getvalue()
+
     return HttpResponse(pfd_ticket, content_type='application/pdf')
 
 
