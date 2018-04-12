@@ -9,6 +9,7 @@ from customizations.models import Customization, TicketTemplate, CustomEmail
 from customizations.forms import FormCustomization
 from django.core.files.storage import FileSystemStorage
 
+
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
     form_class = FormCustomization
