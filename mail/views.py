@@ -38,8 +38,11 @@ def email_preview_pdf(request, pk):
 def get_venue(venue_id):
     access_token = settings.SERVER_ACCESS_TOKEN
     eventbrite = Eventbrite(access_token)
+    # import ipdb; ipdb.set_trace()
     data_venue_json = eventbrite.get('/venues/' + str(venue_id))
-    venue = data_venue_json['address']['address_1']
+    data_venue = json.loads(data_venue_json)
+    venue = data_venue['address']['address_1']
+
     return venue
 
 
@@ -52,9 +55,14 @@ def get_data(request):
             request.body
         )['api_url'] + '?token=' + access_token + '&expand=event,attendees'
     )
-    user_first_name = data.json()['first_name']
-    user_last_name = data.json()['last_name']
-    list_attendee = data.json()['attendees']
+    return process_data(data.json())
+
+
+def process_data(data):
+    user_first_name = data['first_name'],
+    user_last_name = data['last_name'],
+    list_attendee = data['attendees']
+
     attendees = []
     for att in list_attendee:
         attendee = {
@@ -66,15 +74,16 @@ def get_data(request):
             'ticket_class': att['ticket_class_name']
         }
         attendees.append(dict(attendee))
-    event_name_text = data.json()['event']['name']['html']
+    event_name_text = data['event']['name']['html']
     from_email = settings.EMAIL_HOST_USER
-    event_start = data.json()['event']['start']['utc']
-    venue_id = data.json()['event']['venue_id']
-    venue = get_venue(str(venue_id))
-    emails = data.json()['email']
-    order_id = data.json()['id']
-    order_created = data.json()['created']
-    order_status = data.json()['status']
+    event_start = data['event']['start']['utc']
+    venue_id = data['event']['venue_id']
+    venue = get_venue(venue_id)
+    emails = data['email']
+    order_id = data['id']
+    order_created = data['created']
+    order_status = data['status']
+
     return do_send_email(
         attendees=attendees,
         event_name_text=event_name_text,
