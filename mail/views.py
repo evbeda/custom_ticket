@@ -18,12 +18,11 @@ from mail.forms import FormSendEmailPreview
 from mail.domain import data_to_dict_all_models
 from mail.utils import PDF
 
-# from django.utils.safestring import mark_safe
-
 
 def get_pdf_ticket(request, pk):
     data = data_to_dict_all_models(pk)
-    return PDF('tickets/template_default.html', [data]).render().getvalue()
+    pfd_ticket = PDF('tickets/template_default.html', [data]).render().getvalue()
+    return HttpResponse(pfd_ticket, content_type='application/pdf')
 
 
 def get_pdf_ticket_do_send_mail(request, pk):
@@ -31,19 +30,9 @@ def get_pdf_ticket_do_send_mail(request, pk):
     return PDF('tickets/template_default.html', [data]).render().getvalue()
 
 
-def generate_pdf_ticket(request, pk):
-    ticket_pdf = get_pdf_ticket(request, pk)
-    return HttpResponse(ticket_pdf, content_type='application/pdf')
-
-
-def get_pdf_body_email(request, pk):
-    data = data_to_dict_all_models(pk)
-    return PDF('mail/body_mail_clean.html', [data]).render().getvalue()
-
-
 def email_preview_pdf(request, pk):
-    email_pdf = get_pdf_body_email(request, pk)
-    return HttpResponse(email_pdf, content_type='application/pdf')
+    data = data_to_dict_all_models(pk)
+    return render(request, 'mail/body_mail.html', context=data)
 
 
 def get_venue(venue_id):
@@ -127,7 +116,6 @@ def do_send_email(
     emails=[],
 
 ):
-    # context data
     data_api = ({
         'customization_id': customization_id,
         'attendees': attendees,
@@ -152,9 +140,7 @@ def do_send_email(
         'barcode': attendees[0]['barcode'],
     })
     data = data_to_dict_all(customization_id, data_api)
-    # body email
     message = render_to_string('mail/body_mail.html', context=data)
-    # compose email
     email = EmailMessage(
         event_name_text,
         message,
@@ -165,7 +151,6 @@ def do_send_email(
     )
     email.content_subtype = 'html'
     pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
-    # attach ticket
     email.attach('ticket', pdf, 'application/pdf')
     try:
         email.send()
@@ -177,8 +162,6 @@ def do_send_email(
 class GetEmailTest(LoginRequiredMixin, FormView):
     form_class = FormSendEmailPreview
     template_name = 'mail/form_mail.html'
-
-    # data = data_to_dict_all_models(pk)
 
     def form_valid(self, form):
         print form.cleaned_data
