@@ -21,7 +21,10 @@ from mail.utils import PDF
 
 def get_pdf_ticket(request, pk):
     data = data_to_dict_all_models(pk)
-    pfd_ticket = PDF('tickets/template_default.html', [data]).render().getvalue()
+    pfd_ticket = PDF(
+        'tickets/template_default.html',
+        [data]
+    ).render().getvalue()
     return HttpResponse(pfd_ticket, content_type='application/pdf')
 
 
