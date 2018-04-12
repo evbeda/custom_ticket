@@ -1,3 +1,4 @@
+{% load static from staticfiles %}
 <div><div class="_2GXS_dv-j_RbfTokxvJ6wE allowTextSelection"><div><div class="rps_e455"><style type="text/css"><!-- .rps_e455 table
     { border-collapse: collapse; border-spacing: 0; border: 0; padding: 0; }
     .rps_e455 img
@@ -16,7 +17,8 @@
                                     <tr>
                                         <td width="33%" valign="middle" style="text-align:left; padding:30px 0 20px 0"><a href="http://www.eventbrite.com/?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=eb_logo" target="_blank" rel="noopener noreferrer">
                                             <!-- LOGO -->
-                                            <img data-imagetype="External" src="{{organizer_logo}}" width="150" height="150" border="0" alt="LOGO" style="width:150px; height:150px">
+
+                                            <img data-imagetype="External" src="{% static "{{organizer_logo}}" %}" width="150" height="150" border="0" alt="LOGO" style="width:150px; height:150px">
                                             <!-- END LOGO -->
                                         </a></td>
                                         <td width="66%" valign="middle" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; text-align:right; padding-top:12px; vertical-align:middle">
