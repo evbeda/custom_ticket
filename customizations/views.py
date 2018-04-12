@@ -8,6 +8,10 @@ from django.conf import settings
 from customizations.models import Customization, TicketTemplate, CustomEmail
 from customizations.forms import FormCustomization
 from django.core.files.storage import FileSystemStorage
+import requests
+import json
+from pprint import pprint
+
 
 
 class CustomizationConfig(LoginRequiredMixin):
@@ -20,12 +24,20 @@ def create_webhook(token):
     response = requests.post(
         "https://www.eventbriteapi.com/v3/webhooks/",
         headers={
+<<<<<<< HEAD
             "Authorization": 'Bearer ' + str(token),
+=======
+            "Authorization": token,
+>>>>>>> first steps to auto webhook
         },
         data={
             "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/mail/",
             "actions": "order.placed",
+<<<<<<< HEAD
             # "event_id": "all_events",
+=======
+            "event_id": "all",
+>>>>>>> first steps to auto webhook
         },
         # Verify SSL certificate
         verify=True
@@ -35,6 +47,10 @@ def create_webhook(token):
 
 
 def get_token(request):
+<<<<<<< HEAD
+=======
+    import ipdb; ipdb.set_trace()
+>>>>>>> first steps to auto webhook
     token = request.user.social_auth.get(provider='eventbrite').access_token
     return token
 
@@ -113,6 +129,17 @@ class DeleteCustomization(CustomizationConfig, DeleteView):
     template_name = 'customizations/delete.html'
     success_url = reverse_lazy('home')
     context_object_name = 'customizations'
+
+    def delete_webhook(webhook_id):
+        response = requests.delete(
+            "https://www.eventbriteapi.com/v3/webhooks/" + webhook_id + "/",
+            headers={
+                "Authorization": "Bearer YOURPERSONALOAUTHTOKEN",
+            },
+            # Verify SSL certificate
+            verify=True
+        )
+        pprint(response.json())
 
     def get_context_data(self, **kwargs):
         context = super(DeleteCustomization, self).get_context_data(**kwargs)
