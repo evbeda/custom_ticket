@@ -106,5 +106,8 @@ ENV/
 # mypy
 .mypy_cache/
 
+# custom ticket
+.DS_Store
+/static/media/*
 staticfiles/
 custom_ticket/static/*
