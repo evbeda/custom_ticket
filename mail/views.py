@@ -28,9 +28,9 @@ def get_pdf_ticket(request, pk):
     return HttpResponse(pfd_ticket, content_type='application/pdf')
 
 
-def get_pdf_ticket_do_send_mail(request, pk):
-    data = data_to_dict_all_models(pk)
-    return PDF('tickets/template_default.html', [data]).render().getvalue()
+# def get_pdf_ticket_do_send_mail(request, pk):
+#     data = data_to_dict_all_models(pk)
+#     return PDF('tickets/template_default.html', [data]).render().getvalue()
 
 
 def email_preview_pdf(request, pk):

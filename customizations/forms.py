@@ -24,7 +24,7 @@ class FormCustomization(forms.ModelForm):
         )
     )
 
-    logo = forms.FileField(
+    logo = forms.ImageField(
         required=False,
         validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
         widget=forms.FileInput(

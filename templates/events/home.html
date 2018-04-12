@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static from staticfiles %}
 {% block content %}
   <h1>My Customizations</h1>
   <ul>
@@ -21,6 +22,7 @@
         <img src="{{ customs.custom_email.logo }}" class="img-responsive thumbnail" alt="Logo">
         <div class="caption">
           <p>Logo:{{ customs.custom_email.logo }}</p>
+
         </div>
     </div>
   </div>
