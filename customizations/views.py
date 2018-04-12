@@ -8,7 +8,9 @@ from django.conf import settings
 from customizations.models import Customization, TicketTemplate, CustomEmail
 from customizations.forms import FormCustomization
 from django.core.files.storage import FileSystemStorage
-
+import requests
+import json
+from pprint import pprint
 
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
