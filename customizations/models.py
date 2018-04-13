@@ -32,6 +32,7 @@ class Customization(TimeStampedModel):
         on_delete=models.CASCADE,
     )
     name = models.CharField(max_length=255)
+    webhook_id = models.CharField(max_length=255, blank=True, null=True)
     ticket_template = models.ForeignKey(TicketTemplate, blank=True, null=True)
     custom_email = models.ForeignKey(CustomEmail, blank=True, null=True)
 
