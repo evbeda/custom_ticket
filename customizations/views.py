@@ -14,6 +14,7 @@ from pprint import pprint
 from eventbrite import Eventbrite
 
 
+
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
     form_class = FormCustomization
