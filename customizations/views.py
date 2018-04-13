@@ -27,7 +27,6 @@ def create_webhook(token):
         # "event_id": "all_events",
     }
     response = Eventbrite(token).post('/webhooks/', data)
-    pprint(response)
     return (response[u'id'])
 
 
