@@ -1,0 +1,343 @@
+@charset "UTF-8";
+/* ============== Browser Support ============== */
+/* ================== Colors ================== */
+/* ================ Typography ================= */
+/* ============ Heights and Widths ============= */
+/* ========== Responsive breakpoints =========== */
+/* ================= Elevations ================ */
+/* ================= Animations ================ */
+/* =================== Icons =================== */
+/* ============== Module specific ============== */
+/* ============== Accordion ============== */
+/* ============== Avatar ============== */
+/* ============== Button ============== */
+/* ============== Card ============== */
+/* ============== Event Cards ============== */
+/* ============== Form ============== */
+/* ============== Overlay ============== */
+/* ============== Reports ============== */
+/* ============== Responsive Form ============== */
+/* ============== Segmented Control ============== */
+/* ============== Ticket Types ============== */
+/* ============== Toggle / Switch ============== */
+/* ============== Browser Support ============== */
+/* ================== Colors ================== */
+/* ================ Typography ================= */
+/* ============ Heights and Widths ============= */
+/* ========== Responsive breakpoints =========== */
+/* ================= Elevations ================ */
+/* ================= Animations ================ */
+/* =================== Icons =================== */
+/* ============== Module specific ============== */
+/* ============== Accordion ============== */
+/* ============== Avatar ============== */
+/* ============== Button ============== */
+/* ============== Card ============== */
+/* ============== Event Cards ============== */
+/* ============== Form ============== */
+/* ============== Overlay ============== */
+/* ============== Reports ============== */
+/* ============== Responsive Form ============== */
+/* ============== Segmented Control ============== */
+/* ============== Ticket Types ============== */
+/* ============== Toggle / Switch ============== */
+/* ---------------------------------------------------------- */
+/*                                                            */
+/* A media query that captures:                               */
+/*                                                            */
+/* - Retina iOS devices                                       */
+/* - Retina Macs running Safari                               */
+/* - High DPI Windows PCs running IE 8 and above              */
+/* - Low DPI Windows PCs running IE, zoomed in                */
+/* - Low DPI Windows PCs and Macs running Firefox, zoomed in  */
+/* - Android hdpi devices and above                           */
+/* - Android tvdpi devices, including Google Nexus 7          */
+/* - Chrome running on high DPI Macs and PCs                  */
+/* - Opera running on high DPI Macs, PCs and mobile devices   */
+/*                                                            */
+/* Please note that that this code assumes you'll swap a      */
+/* 2× version of your images. If you'd like to supply         */
+/* finer increments, other thresholds might be appropriate.   */
+/*                                                            */
+/* A test for CSS pixel densites can be found here:           */
+/* http://bjango.com/articles/min-device-pixel-ratio/         */
+/*                                                            */
+/*                                  @marcedwards from @bjango */
+/*                                                            */
+/* ---------------------------------------------------------- */
+/* This is hacky and awesome. it should be part of mixins or something.
+   I found it once on stack overflow and couldn't find it later when I looked */
+/* XXX: test in browsers */
+/* ratio is the height divided by width in percentage form */
+/* This function is used to get the max height for multi-line ellipses
+ * We use px values for line-height in styleguide, and unitless values for line-height in core
+ * so we need to handle the possibility for both here
+ */
+.hero-image-container {
+  overflow: hidden; }
+
+.featured-events .g-cell:nth-child(3) .event-card,
+.promo-event-cards .g-cell:nth-child(3) .event-card {
+  display: none; }
+  @media only screen and (min-width: 800px) {
+    .featured-events .g-cell:nth-child(3) .event-card,
+    .promo-event-cards .g-cell:nth-child(3) .event-card {
+      display: block; } }
+
+/* Patch to show the tooltip overflow */
+.event-cards .g-cell {
+  overflow: visible; }
+
+.fb-connect-card:hover {
+  cursor: initial; }
+  .fb-connect-card:hover .fb-connect-card__logo {
+    opacity: 0.9; }
+
+.fb-connect-card div {
+  text-align: center; }
+
+.fb-connect-card .event-poster__decoration {
+  background-color: #3b5998; }
+
+.fb-connect-card .fb-connect-card__header {
+  padding: 20px 20px 0 0;
+  position: relative; }
+  .fb-connect-card .fb-connect-card__header span {
+    display: inline-block;
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 45px;
+    background: white; }
+  .fb-connect-card .fb-connect-card__header .fb-connect-card__logo {
+    -webkit-transition: opacity, 0.5s;
+    -moz-transition: opacity, 0.5s;
+    transition: opacity, 0.5s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 5px solid white;
+    box-sizing: border-box;
+    border-radius: 45px;
+    background: #3b5998; }
+  .fb-connect-card .fb-connect-card__header .ico-facebook-logo {
+    font-size: 50px;
+    line-height: 68px;
+    color: white; }
+
+.fb-connect-card .fb-connect-card__content {
+  padding: 0 20px; }
+  .fb-connect-card .fb-connect-card__content p {
+    font-size: 25px;
+    line-height: 35px;
+    color: #1a1a1a; }
+  .fb-connect-card .fb-connect-card__content img {
+    padding: 5px 0; }
+  .fb-connect-card .fb-connect-card__content .btn {
+    color: #3b5998;
+    border-color: #3b5998;
+    text-transform: uppercase; }
+    .fb-connect-card .fb-connect-card__content .btn:hover, .fb-connect-card .fb-connect-card__content .btn:focus {
+      color: white;
+      background-color: #3b5998; }
+    .fb-connect-card .fb-connect-card__content .btn.is-connected {
+      color: #3b5998; }
+
+.facebook-card {
+  background-image: url("../../../../images/home/facebook-connect-bg.png");
+  background-size: cover;
+  position: relative; }
+  .facebook-card .poster-card__header {
+    padding-bottom: 137px; }
+  .facebook-card .facebook-card__body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center; }
+    .facebook-card .facebook-card__body .facebook-card__content {
+      -webkit-transform: translateY(-50%);
+      -moz-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      -o-transform: translateY(-50%);
+      transform: translateY(-50%);
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0 20px;
+      position: relative;
+      top: 50%;
+      color: white;
+      font-size: 20px;
+      line-height: 30px;
+      font-weight: 600; }
+
+.category-card.category-music .category-card__image {
+  background-image: url("../../../../images/home/categories/220/img_category_music.jpg"); }
+  @media only screen and (max-width: 479px) {
+    .category-card.category-music .category-card__image {
+      background-image: url("../../../../images/home/categories/150/img_category_music.jpg"); } }
+
+.category-card.category-food .category-card__image {
+  background-image: url("../../../../images/home/categories/220/img_category_food.jpg"); }
+  @media only screen and (max-width: 479px) {
+    .category-card.category-food .category-card__image {
+      background-image: url("../../../../images/home/categories/150/img_category_food.jpg"); } }
+
+.category-card.category-classes .category-card__image {
+  background-image: url("../../../../images/home/categories/220/img_category_classes.jpg"); }
+  @media only screen and (max-width: 479px) {
+    .category-card.category-classes .category-card__image {
+      background-image: url("../../../../images/home/categories/150/img_category_classes.jpg"); } }
+
+.category-card.category-arts .category-card__image {
+  background-image: url("../../../../images/home/categories/220/img_category_arts.jpg"); }
+  @media only screen and (max-width: 479px) {
+    .category-card.category-arts .category-card__image {
+      background-image: url("../../../../images/home/categories/150/img_category_arts.jpg"); } }
+
+.category-card.category-parties .category-card__image {
+  background-image: url("../../../../images/home/categories/220/img_category_parties.jpg"); }
+  @media only screen and (max-width: 479px) {
+    .category-card.category-parties .category-card__image {
+      background-image: url("../../../../images/home/categories/150/img_category_parties.jpg"); } }
+
+.category-card.category-sports .category-card__image {
+  background-image: url("../../../../images/home/categories/220/img_category_sports.jpg"); }
+  @media only screen and (max-width: 479px) {
+    .category-card.category-sports .category-card__image {
+      background-image: url("../../../../images/home/categories/150/img_category_sports.jpg"); } }
+
+.category-card.category-networking .category-card__image {
+  background-image: url("../../../../images/home/categories/220/img_category_networking.jpg"); }
+  @media only screen and (max-width: 479px) {
+    .category-card.category-networking .category-card__image {
+      background-image: url("../../../../images/home/categories/150/img_category_networking.jpg"); } }
+
+@media only screen and (max-width: 799px) {
+  .event-poster .btn--target:hover, .event-poster .btn--target:focus {
+    color: #0093D7;
+    background-color: transparent;
+    border-color: #EFF2F5; } }
+
+h1.homepage-header {
+  font-weight: 200;
+  color: #F86820; }
+
+.homepage-search-card {
+  border-radius: 4px; }
+
+.search-bar-component input[type="text"],
+.search-bar-component .responsive-form__select {
+  border-radius: 0; }
+
+.search-bar-component input[type="text"] {
+  border-right: none; }
+  .search-bar-component input[type="text"]:focus {
+    border-right: 1px solid #0093D7; }
+
+.search-bar-component {
+  display: inline-block; }
+
+.search-bar-component:first-child input[type="text"] {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px; }
+
+.search-bar-component .btn {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  display: inline-block;
+  margin-top: 0; }
+
+.section-header {
+  font-size: 20px;
+  line-height: 25px;
+  font-weight: 400; }
+
+@media only screen and (min-width: 480px) {
+  .homepage-search-card {
+    background: -webkit-linear-gradient( rgba(255, 255, 255, 0.9) 0%, white 25%);
+    background: linear-gradient( rgba(255, 255, 255, 0.9) 0%, white 25%);
+    margin-top: -140px;
+    position: relative; } }
+
+@media only screen and (min-width: 800px) {
+  .hero-image-container {
+    height: 30vw; }
+  .search-bar-component {
+    width: 180px; }
+  .search-bar-component:first-child {
+    width: 260px; }
+  .search-bar-component:last-child {
+    width: 160px; }
+  .section-header {
+    font-size: 25px;
+    line-height: 30px;
+    font-weight: 200; }
+    .section-header a {
+      font-weight: 400; }
+  h1.homepage-header {
+    line-height: 60px; } }
+
+@media only screen and (min-width: 480px) and (max-width: 799px) {
+  .hero-image-container {
+    height: 40vw; }
+  .search-bar-component {
+    width: 30%; } }
+
+@media only screen and (max-width: 479px) {
+  .homepage-search-card.card.card--elevated-3 {
+    background-color: transparent;
+    box-shadow: 0 0 0 0; }
+  .search-bar-component {
+    width: 80%; }
+  .search-bar-component:last-child {
+    width: 20%; }
+  input[type="submit"] {
+    font-family: "briteicons";
+    font-size: 20px; } }
+
+.consumer-location .g-cell {
+  line-height: 44px; }
+
+.consumer-location .responsive-form.responsive-form--inline input[type="text"] {
+  display: none;
+  -webkit-appearance: none; }
+  @media only screen and (min-width: 480px) {
+    .consumer-location .responsive-form.responsive-form--inline input[type="text"] {
+      width: 300px; } }
+  @media only screen and (max-width: 479px) {
+    .consumer-location .responsive-form.responsive-form--inline input[type="text"] {
+      width: 100%; } }
+
+@media only screen and (max-width: 479px) {
+  .consumer-location .responsive-form.responsive-form--inline .autocomplete-component {
+    display: block; } }
+
+input.ui-autocomplete-input.ui-autocomplete-loading {
+  background-color: white; }
+
+.ui-autocomplete__white {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  background: white;
+  box-shadow: none;
+  border-top: 1px solid #D2D6DF; }
+  .ui-autocomplete__white .ui-menu-item {
+    background-color: white;
+    border: none; }
+    .ui-autocomplete__white .ui-menu-item a {
+      font-size: 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
+      padding: 10px 12px; }
+    .ui-autocomplete__white .ui-menu-item:hover,
+    .ui-autocomplete__white .ui-menu-item a.ui-state-hover,
+    .ui-autocomplete__white .ui-menu-item a.ui-state-focus {
+      color: white;
+      background-color: #0278b8; }
