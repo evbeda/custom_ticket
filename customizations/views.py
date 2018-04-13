@@ -5,12 +5,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DeleteView
 from django.conf import settings
-from customizations.models import Customization, TicketTemplate, CustomEmail
+from customizations.models import Customization, TicketTemplate, CustomEmail, UserWebhook
 from customizations.forms import FormCustomization
 from django.core.files.storage import FileSystemStorage
 import requests
 import json
 from pprint import pprint
+from eventbrite import Eventbrite
+
 
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
@@ -19,21 +21,14 @@ class CustomizationConfig(LoginRequiredMixin):
 
 
 def create_webhook(token):
-    response = requests.post(
-        "https://www.eventbriteapi.com/v3/webhooks/",
-        headers={
-            "Authorization": 'Bearer ' + str(token),
-        },
-        data={
-            "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/mail/",
-            "actions": "order.placed",
-            # "event_id": "all_events",
-        },
-        # Verify SSL certificate
-        verify=True
-    )
-    pprint(response.json())
-    return (response.json()[u'id'])
+    data = {
+        "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/mail/",
+        "actions": "order.placed",
+        # "event_id": "all_events",
+    }
+    response = Eventbrite(token).post('/webhooks/', data)
+    pprint(response)
+    return (response[u'id'])
 
 
 def get_token(request):
@@ -51,7 +46,6 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
         if is_form_valid:
             name = request.POST.get('name')
             # logo = request.POST.get('logo')
-
             # image uploaded
             myfile = request.FILES['logo']
             fs = FileSystemStorage()
@@ -63,8 +57,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
             message_ticket = request.POST.get('message_ticket')
-            token = get_token(request)
-            webhook_id = create_webhook(token)
+
             ticket = TicketTemplate.objects.create(
                 select_design_template=select_design_template,
                 message_ticket=message_ticket
@@ -78,8 +71,14 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                 ticket_template=ticket,
                 custom_email=custom_email,
                 name=name,
-                webhook_id=webhook_id,
             )
+            if not UserWebhook.objects.filter(user=request.user).exists():
+                token = get_token(request)
+                webhook_id = create_webhook(token)
+                UserWebhook.objects.create(
+                    user=self.request.user,
+                    webhook_id=webhook_id,
+                )
             return HttpResponseRedirect('/')
 
 
