@@ -15,9 +15,8 @@ from django.urls import reverse
 from django.views.generic import FormView
 
 from mail.forms import FormSendEmailPreview
-from mail.domain import data_to_dict_all_models
 from mail.utils import PDF
-from mail.models import CustomData
+from mail.domain import CustomData, all_data, data_to_dict_all_models
 
 
 def get_pdf_ticket(request, pk):
@@ -30,11 +29,6 @@ def get_pdf_ticket(request, pk):
     return HttpResponse(pfd_ticket, content_type='application/pdf')
 
 
-# def get_pdf_ticket_do_send_mail(request, pk):
-#     data = data_to_dict_all_models(pk)
-#     return PDF('tickets/template_default.html', [data]).render().getvalue()
-
-
 def email_preview_pdf(request, pk):
     data = data_to_dict_all_models(pk)
     return render(request, 'mail/body_mail.html', context=data)
@@ -43,7 +37,6 @@ def email_preview_pdf(request, pk):
 def get_venue(venue_id):
     access_token = settings.SERVER_ACCESS_TOKEN
     eventbrite = Eventbrite(access_token)
-    # import ipdb; ipdb.set_trace()
     data_venue_json = eventbrite.get('/venues/' + str(venue_id))
     data_venue = json.loads(data_venue_json)
     venue = data_venue['address']['address_1']
@@ -64,10 +57,7 @@ def get_data(request):
 
 
 def process_data(data):
-    user_first_name = data['first_name'],
-    user_last_name = data['last_name'],
     list_attendee = data['attendees']
-
     attendees = []
     for att in list_attendee:
         attendee = {
@@ -79,88 +69,33 @@ def process_data(data):
             'ticket_class': att['ticket_class_name']
         }
         attendees.append(dict(attendee))
-    event_name_text = data['event']['name']['html']
-    from_email = settings.EMAIL_HOST_USER
-    event_start = data['event']['start']['utc']
-    venue_id = data['event']['venue_id']
-    venue = get_venue(venue_id)
-    emails = data['email']
-    order_id = data['id']
-    order_created = data['created']
-    order_status = data['status']
-
-    return do_send_email(
+    custom_data = CustomData(
+        customization_id=1,
         attendees=attendees,
-        event_name_text=event_name_text,
-        user_order_first_name=user_first_name,
-        user_order_last_name=user_last_name,
-        event_start=event_start,
-        order_id=order_id,
-        order_created=order_created,
-        order_status=order_status,
-        event_venue_location=venue,
-        from_email=from_email,
-        emails=[emails]
+        user_first_name=data['first_name'],
+        user_last_name=data['last_name'],
+        event_name_text=data['event']['name']['html'],
+        from_email=settings.EMAIL_HOST_USER,
+        event_start=data['event']['start']['utc'],
+        venue=get_venue(data['event']['venue_id']),
+        emails=data['email'],
+        order_id=data['id'],
+        order_created=data['created'],
+        order_status=data['status'],
     )
+    return do_send_email(custom_data)
 
 
-def data_to_dict_all(customization_id, data_api):
-    data_model = data_to_dict_all_models(customization_id)
-    data = dict(list(data_model.items()) + list(data_api.items()))
-    return data
+def do_send_email(custom_data):
 
-
-def do_send_email(
-    customization_id=int(1),
-    attendees=[],
-    organizer_logo='',
-    event_name_text='',
-    event_start='',
-    event_venue_location={},
-    #   reserved seating
-    user_order_email='',
-    order_id='',
-    order_created='',
-    user_order_first_name='',
-    user_order_last_name='',
-    order_status='',
-    # payment_datetime='',
-    ticket_class='',
-    from_email='',
-    emails=[],
-
-):
-    data_api = ({
-        'customization_id': customization_id,
-        'attendees': attendees,
-        'attendee_first_name': attendees[0]['attendee_first_name'],
-        'event_venue_location': event_venue_location,
-        'event_name_text': event_name_text,
-        'event_start': event_start,
-        #   reserved seating
-        # organizer_name
-        'user_order_email': user_order_email,
-        'order_id': order_id,
-        'organizer_logo': organizer_logo,
-        'order_created': order_created,
-        'user_order_first_name': user_order_first_name,
-        'user_order_last_name': user_order_last_name,
-        'order_status': order_status,
-        # payment_datetime:'',
-        'ticket_class': ticket_class,
-        'from_email': from_email,
-        'emails': emails,
-        'event_venue_location_name': 'Wall Street 1234',
-        'barcode': attendees[0]['barcode'],
-    })
-    data = data_to_dict_all(customization_id, data_api)
+    data = all_data(custom_data)
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
-        event_name_text,
+        data['event_name_text'],
         message,
-        from_email,
-        emails,
-        reply_to=emails,
+        data['from_email'],
+        data['emails'],
+        reply_to=data['emails'],
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
@@ -210,7 +145,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
         }
 
         attendees.append(dict(attendee))
-        do_send_email(
+        custom_data = CustomData(
             customization_id=self.kwargs['pk'],
             attendees=attendees,
             organizer_logo=organizer_logo,
@@ -226,7 +161,11 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             order_status=order_status,
             # payment_datetime='',
             ticket_class=ticket_class,
+            attendee_first_name=attendee_first_name,
+            attendee_last_name=attendee_last_name,
+            barcode=attendee_barcode,
             from_email=from_email,
             emails=emails
         )
+        do_send_email(custom_data)
         return HttpResponseRedirect(reverse('mails:successfully_mail'))
