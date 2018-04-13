@@ -32,6 +32,12 @@ class TestCustomizations(TestCase):
         id_webhook = create_webhook(token)
 
         self.assertEquals(id_webhook, '646089')
+        mock_requests.assert_called_once()
+        self.assertEquals(
+            mock_requests.call_args_list[0][0][0],
+            u'/webhooks/',
+        )
+
 
     def test_get_token(self):
         pass
