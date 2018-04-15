@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
 import requests
 import json
 from eventbrite import Eventbrite
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from social_django.models import UserSocialAuth
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import BadHeaderError, EmailMessage
 from django.core.urlresolvers import reverse as r
@@ -13,6 +14,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import FormView
+from customizations.models import Customization, UserWebhook
 
 from mail.forms import FormSendEmailPreview
 from mail.utils import PDF
@@ -40,20 +42,27 @@ def get_venue(venue_id):
     data_venue_json = eventbrite.get('/venues/' + str(venue_id))
     data_venue = json.loads(data_venue_json)
     venue = data_venue['address']['address_1']
-
     return venue
 
 
 def get_data(request):
-    print "sending email"
-    print request.body
     access_token = settings.SERVER_ACCESS_TOKEN
-    data = requests.get(
-        json.loads(
-            request.body
-        )['api_url'] + '?token=' + access_token + '&expand=event,attendees'
-    )
-    return process_data(data.json())
+    config_data = json.loads(request.body)
+    if UserSocialAuth.objects.exists():
+        social_user = UserSocialAuth.objects.filter(
+            uid=config_data['config']['user_id']
+        )
+        user_request = get_user_model().objects.get(id=social_user[0].user_id)
+
+        if Customization.objects.filter(
+            user=user_request
+        ).exists():
+            data = requests.get(
+                json.loads(
+                    request.body
+                )['api_url'] + '?token=' + access_token + '&expand=event,attendees'
+            )
+            return process_data(data.json())
 
 
 def process_data(data):
@@ -78,7 +87,7 @@ def process_data(data):
         from_email=settings.EMAIL_HOST_USER,
         event_start=data['event']['start']['utc'],
         venue=get_venue(data['event']['venue_id']),
-        emails=data['email'],
+        emails=[data['email']],
         order_id=data['id'],
         order_created=data['created'],
         order_status=data['status'],
