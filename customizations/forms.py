@@ -35,7 +35,7 @@ class FormCustomization(forms.ModelForm):
     message = forms.CharField(
         required=True,
         widget=forms.Textarea(
-            attrs={'placeholder': 'message body', 'class': 'form-control'}
+            attrs={'placeholder': 'message body', 'class': 'form-control', 'rows': 6}
         )
     )
 
@@ -49,6 +49,6 @@ class FormCustomization(forms.ModelForm):
     message_ticket = forms.CharField(
         required=True,
         widget=forms.Textarea(
-            attrs={'placeholder': 'message body', 'class': 'form-control'}
+            attrs={'placeholder': 'message body', 'class': 'form-control', 'rows': 6}
         )
     )

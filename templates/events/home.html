@@ -1,6 +1,36 @@
 {% extends 'base_.html' %}
 {% load static from staticfiles %}
 {% block content %}
+<a id="skip-heading" tabindex="-1" class="is-hidden-accessible">Page Content</a>
+<div class="global-mask"></div>
+
+
+
+    <div id="content" class="clrfix">
+
+<div class="g-grid">
+
+
+
+
+<div class="js-search-bar">
+    <div class="g-group--full-width l-pad-vert-1 consumer-location">
+        <div class="g-cell g-cell-1-1 g-cell--has-overflow responsive-form responsive-form--inline l-align-center l-pad-vert-3 l-sm-pad-vert-1 l-mar-top-4 l-sm-mar-top-2">
+            <h3 class="section-header l-align-left" aria-label="Events for you in  Mendoza, Argentina">
+                <span data-automation="home-popular-events-header" aria-hidden="true">Hi {{ user.first_name }} {{ user.last_name }}, these are your </span>
+                <a href="#" class="js-consumer-location-link" >
+                    Customizations
+
+                </a>
+
+            </h3>
+            <div class="autocomplete-component l-align-left popular-autocomplete">
+                <label class="is-hidden-accessible" for="consumer-location-input-edit">Change location</label>
+                <input id="consumer-location-input-edit" name="loc" type="text" class="js-consumer-location-input" placeholder="Enter city or location" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="">
+            </div>
+        </div>
+    </div>
+</div>
   <h1>My Customizations</h1>
   <ul>
 
@@ -68,6 +98,12 @@
     {% endfor %}
 
   </ul>
+
+   <div class="g-cell g-cell-1-1 text--centered js-see-more-events-btn">
+           <a href="{% url 'customizations:create_customization'  %}" class="js-search-click-action js-d-track-link btn btn--secondary" >
+              New Customization
+            </a>
+        </div>
 
   <footer class="footer">
     <div class="container">
