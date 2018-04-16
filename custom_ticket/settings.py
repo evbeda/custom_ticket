@@ -216,3 +216,6 @@ LOGGING = {
         },
     },
 }
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
