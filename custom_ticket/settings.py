@@ -173,7 +173,7 @@ EMAIL_USE_TLS = bool(get_env_variable('EMAIL_USE_TLS'))
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'America/Argentina/Mendoza'
 
