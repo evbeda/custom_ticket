@@ -72,12 +72,12 @@
         <div class="poster-card__tags">
                 <a class="event-category" href="#" aria-label="${ mark_safe(_('Find {name} events').format(name=category.short_name)) }">{{ customs.ticket_template.select_design_template }}</a>
         </div>
-        <div class="poster-card__actions">
-          <a  class="js-share-event-card share-action" href="{% url 'mails:form_send_mail' pk=customs.id  %}">S </a>
-    <a  href="{% url 'customizations:delete_customization' pk=customs.id  %}">D</a>
-    <a  href="{% url 'customizations:update_customization' pk=customs.id  %}">U  </a>
-    <a  href="{% url 'mails:email_preview' pk=customs.id  %}">E </a>
-    <a  href="{% url 'mails:generate_pdf' pk=customs.id %}"> T </a>
+        <div style="padding-top: 10px" class="poster-card__actions">
+          <a  class="glyphicon glyphicon-envelope" title="Test mail tool" class="js-share-event-card share-action" href="{% url 'mails:form_send_mail' pk=customs.id  %}"></a>
+    <a class="glyphicon glyphicon-trash" title="Delete Customization" href="{% url 'customizations:delete_customization' pk=customs.id  %}"></a>
+    <a class="glyphicon glyphicon-pencil" title="Update Customization"  href="{% url 'customizations:update_customization' pk=customs.id  %}"></a>
+    <a class="glyphicon glyphicon-eye-open" title="Preview your mail"  href="{% url 'mails:email_preview' pk=customs.id  %}"></a>
+    <a class="glyphicon glyphicon-file" title="Generate pdf preview"  href="{% url 'mails:generate_pdf' pk=customs.id %}"></a>
 
         </div>
     </div>
