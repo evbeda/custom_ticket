@@ -29,7 +29,7 @@
 
 
     <title>
-    Title
+    Custom Ticket by Eventbrite
 </title>
 
 
@@ -63,6 +63,12 @@
 
    text-align: center;
 }
+
+.scrollable {
+  overflow-y: scroll;
+  height: 1000px;
+}
+
 </style></head>
 
 <body class="lang-en en-us  js-d-track-event-links" >
@@ -198,11 +204,13 @@
 </header>
 
 
-
+<div class="scrollable">
 <div class="container theme-showcase">
           {% block content %}
           {% endblock %}
 </div>
+</div>
+
 
 
 
