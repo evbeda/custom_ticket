@@ -91,6 +91,7 @@ def process_data(data):
         order_id=data['id'],
         order_created=data['created'],
         order_status=data['status'],
+        is_test=False,
     )
     return do_send_email(custom_data)
 
@@ -112,7 +113,11 @@ def do_send_email(custom_data):
     email.attach('ticket', pdf, 'application/pdf')
     try:
         email.send()
-        return HttpResponseRedirect(r('mails:successfully_mail'))
+        if custom_data.is_test:
+            return HttpResponseRedirect(r('mails:successfully_mail'))
+        else:
+            return HttpResponse()
+
     except BadHeaderError:
         return HttpResponse('Invalid header found.')
 
@@ -174,7 +179,8 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             attendee_last_name=attendee_last_name,
             barcode=attendee_barcode,
             from_email=from_email,
-            emails=emails
+            emails=emails,
+            is_test=True,
         )
         do_send_email(custom_data)
         return HttpResponseRedirect(reverse('mails:successfully_mail'))
