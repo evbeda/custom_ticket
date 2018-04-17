@@ -108,6 +108,7 @@ class CustomData(object):
                  user_first_name='',
                  user_last_name='',
                  venue='',
+                 is_test=False
                  ):
 
         self.customization_id = customization_id
@@ -133,3 +134,4 @@ class CustomData(object):
         self.emails = emails
         self.attendee_first_name = attendee_first_name
         self.venue = venue
+        self.is_test = is_test
