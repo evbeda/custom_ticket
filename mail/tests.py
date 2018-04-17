@@ -88,7 +88,7 @@ class TestMailsWithCostumization(TestCase):
 
     @patch(
         'mail.views.Eventbrite.get',
-        return_value=json.dumps(
+        return_value=
             {
                 'address': {
                     'address_1': 'address_1 Test',
@@ -112,11 +112,10 @@ class TestMailsWithCostumization(TestCase):
                 'longitude': '122.6771',
             }
         )
-    )
     def test_get_venue(self, mock_requests):
         with self.settings(SERVER_ACCESS_TOKEN='abc'):
             venue = get_venue('23870984')
-            self.assertEquals(venue, "address_1 Test")
+            self.assertEquals(venue['address_1'], "address_1 Test")
 
             mock_requests.assert_called_once()
             self.assertEquals(
