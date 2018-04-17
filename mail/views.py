@@ -62,6 +62,7 @@ def get_data(request):
                 )['api_url'] + '?token=' + access_token + '&expand=event,attendees'
             )
             return process_data(data.json())
+    return HttpResponse()
 
 
 def process_data(data):

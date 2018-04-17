@@ -221,6 +221,10 @@ LOGGING = {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
         },
+        'xhtml2pdf': {
+            'handlers': ['console'],
+            'level': 'DEBUG'
+        },
     },
 }
 

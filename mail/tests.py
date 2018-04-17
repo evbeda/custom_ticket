@@ -137,7 +137,7 @@ class TestMailsWithCostumization(TestCase):
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
         with self.settings(SERVER_ACCESS_TOKEN='abc'):
-            get_data(request)
+            response = get_data(request)
         sended_mails = len(mail.outbox)
         self.assertEquals(sended_mails, 1)
         email = mail.outbox[0]
@@ -145,6 +145,8 @@ class TestMailsWithCostumization(TestCase):
         to_email = email.to
         self.assertEquals(from_email, 'edacticket@gmail.com')
         self.assertEquals(to_email, [u'edacticket@gmail.com'])
+        self.assertEquals(response.status_code, 200)
+
 
 
 class TestMailWithoutCustomization(TestCase):
@@ -163,7 +165,12 @@ class TestMailWithoutCustomization(TestCase):
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
         with self.settings(SERVER_ACCESS_TOKEN='abc'):
-            get_data(request)
+            response = get_data(request)
+
         sended_mails = len(mail.outbox)
         self.assertEquals(sended_mails, 0)
+        self.assertEquals(response.status_code, 200)
+
+
+
 
