@@ -40,9 +40,8 @@ def get_venue(venue_id):
     access_token = settings.SERVER_ACCESS_TOKEN
     eventbrite = Eventbrite(access_token)
     data_venue_json = eventbrite.get('/venues/' + str(venue_id))
-    data_venue = json.loads(data_venue_json)
-    venue = data_venue['address']['address_1']
-    return venue
+    venue = data_venue_json['address']['address_1']
+    return {'address_1': venue}
 
 
 def get_data(request):
@@ -78,6 +77,7 @@ def process_data(data):
             'ticket_class': att['ticket_class_name']
         }
         attendees.append(dict(attendee))
+    venue_id = data['event']['venue_id']
     custom_data = CustomData(
         customization_id=1,
         attendees=attendees,
@@ -86,7 +86,7 @@ def process_data(data):
         event_name_text=data['event']['name']['html'],
         from_email=settings.EMAIL_HOST_USER,
         event_start=data['event']['start']['utc'],
-        venue=get_venue(data['event']['venue_id']),
+        event_venue_location=get_venue(str(venue_id)),
         emails=[data['email']],
         order_id=data['id'],
         order_created=data['created'],
