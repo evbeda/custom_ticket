@@ -62,6 +62,7 @@ def get_data(request):
                 )['api_url'] + '?token=' + access_token + '&expand=event,attendees'
             )
             return process_data(data.json())
+    return HttpResponse()
 
 
 def process_data(data):
@@ -111,6 +112,9 @@ def do_send_email(custom_data):
     email.content_subtype = 'html'
     pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
     email.attach('ticket', pdf, 'application/pdf')
+    print 'send mail'
+    print custom_data.order_id
+    print data['emails']
     try:
         email.send()
         if custom_data.is_test:
