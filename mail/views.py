@@ -111,6 +111,7 @@ def do_send_email(custom_data):
     email.content_subtype = 'html'
     pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
     email.attach('ticket', pdf, 'application/pdf')
+    print 'send mail'
     try:
         email.send()
         if custom_data.is_test:

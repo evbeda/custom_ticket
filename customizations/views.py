@@ -14,7 +14,6 @@ from pprint import pprint
 from eventbrite import Eventbrite
 
 
-
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
     form_class = FormCustomization
@@ -29,6 +28,10 @@ def create_webhook(token):
     }
     response = Eventbrite(token).post('/webhooks/', data)
     return (response[u'id'])
+
+
+# def delete_webhook(token, webhook_id):
+#     response = Eventbrite(token).delete('/webhooks/' + webhook_id + "/")
 
 
 def get_token(request):
