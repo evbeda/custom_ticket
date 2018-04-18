@@ -23,6 +23,11 @@ class TestFormCustomization(TestCase):
         form = FormCustomization(form_data)
         self.assertTrue(form.is_valid)
 
+    def test_form_false(self):
+        form_data = {}
+        form = FormCustomization(form_data)
+        self.assertTrue(form.is_valid)
+
 
 class TestCustomizationsWithNoWebhook(TestCase):
     def setUp(self):
