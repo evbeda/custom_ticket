@@ -22,6 +22,7 @@ from mail.domain import (
     CustomData,
     data_to_dict_all_models
 )
+from customizations.utils import file_exist, download
 
 
 def get_pdf_ticket(request, pk):
@@ -112,6 +113,13 @@ def process_data(data, user_id):
 def do_send_email(custom_data):
 
     data = all_data(custom_data)
+
+    if not file_exist(data['logo_path']):
+        print 'downloading...'
+        download(data['logo_url'], data['logo_name'])
+
+    print 'file exist...'
+
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
         data['event_name_text'],

@@ -108,7 +108,8 @@ ENV/
 
 # custom ticket
 /media/*
-.DS_Store
+static/media/*
+*.DS_Store
 /static/media/*
 staticfiles/
 custom_ticket/static/*
