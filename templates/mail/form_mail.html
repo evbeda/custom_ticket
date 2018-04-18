@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+
+{% extends 'base_.html' %}
 {% block content %}
     {% if form.errors %}
         <strong>Fix the following errors.</strong>
@@ -6,7 +7,11 @@
             <p>{{ key }}:{{ value.0 }}</p>
         {% endfor %}
     {% endif %}
+    <br>
+     <br>
     <h2>Send Email Preview</h2>
+     <br>
+      <br>
     <form  role="form" method="post">{% csrf_token %}
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#home">Attendee</a></li>
@@ -52,10 +57,13 @@
         <p>Email Send : {{ form.email_send }}</p>
   </div>
 </div>
-
-
-        <a href="{% url 'home' %}">Cancel</a>
+<div style="text-align: center">
+  <br>
+  <br>
+        <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
         <input class="btn btn-success" type="submit" value="Send Mail Preview">
+</div>
+
 
 <!--         <input type="submit" class="btn btn-success" name="send_mail"  value="Create">
  -->    </form>
