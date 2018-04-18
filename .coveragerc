@@ -1,7 +1,7 @@
 [run]
 source =
    custom_ticket
-   customization
+   customizations
    mail
 
 [report]
