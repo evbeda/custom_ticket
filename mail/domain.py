@@ -100,8 +100,6 @@ class CustomData(object):
                  order_status='',
                  # payment_datetime='',
                  ticket_class='',
-                 attendee_first_name='',
-                 attendee_last_name='',
                  from_email='',
                  emails=[],
                  barcode='',
@@ -127,11 +125,9 @@ class CustomData(object):
         self.user_first_name = user_first_name
         self.user_last_name = user_last_name
         self.order_status = order_status
-        self.barcode = barcode
         # payment_datetime = ''
         self.ticket_class = ticket_class
         self.from_email = from_email
         self.emails = emails
-        self.attendee_first_name = attendee_first_name
         self.venue = venue
         self.is_test = is_test

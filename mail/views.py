@@ -14,11 +14,14 @@ from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import FormView
-from customizations.models import Customization, UserWebhook
-
+from customizations.models import Customization
 from mail.forms import FormSendEmailPreview
 from mail.utils import PDF
-from mail.domain import CustomData, all_data, data_to_dict_all_models
+from mail.domain import (
+    all_data,
+    CustomData,
+    data_to_dict_all_models
+)
 
 
 def get_pdf_ticket(request, pk):
@@ -59,7 +62,10 @@ def get_data(request):
             data = requests.get(
                 json.loads(
                     request.body
-                )['api_url'] + '?token=' + access_token + '&expand=event,attendees'
+                )['api_url'] +
+                '?token=' +
+                access_token +
+                '&expand=event,attendees'
             )
             return process_data(data.json())
     return HttpResponse()
@@ -132,59 +138,40 @@ class GetEmailTest(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         print form.cleaned_data
-        attendee_barcode = form.cleaned_data['attendee_barcode']
-        attendee_first_name = form.cleaned_data['attendee_first_name']
-        attendee_last_name = form.cleaned_data['attendee_last_name']
-        organizer_message = form.cleaned_data['organizer_message']
-        organizer_logo = form.cleaned_data['organizer_logo']
-        attendee_cost_gross = form.cleaned_data['attendee_cost_gross']
-        attendee_quantity = form.cleaned_data['attendee_quantity']
-        attendee_question = form.cleaned_data['attendee_question']
-        order_status = form.cleaned_data['order_status']
-        order_created = form.cleaned_data['order_created']
-        ticket_class = form.cleaned_data['ticket_class']
-        event_name_text = form.cleaned_data['event_name_text']
-        event_image = form.cleaned_data['event_image']
-        event_start = form.cleaned_data['event_start']
-        event_venue_location = form.cleaned_data['event_venue_location']
-        user_order_email = form.cleaned_data['user_order_email']
-        user_order_first_name = form.cleaned_data['user_order_first_name']
-        user_order_last_name = form.cleaned_data['user_order_last_name']
-        from_email = form.cleaned_data['from_email']
-        emails = [form.cleaned_data['emails']]
+        # organizer_message = form.cleaned_data['organizer_message']
+        # attendee_quantity = form.cleaned_data['attendee_quantity']
+        # attendee_question = form.cleaned_data['attendee_question']
+        # event_image = form.cleaned_data['event_image']
         attendees = []
         attendee = {
-            'attendee_first_name': attendee_first_name,
-            'attendee_last_name': attendee_last_name,
-            'cost_gross': attendee_cost_gross,
-            'barcode': attendee_barcode,
+            'attendee_first_name': form.cleaned_data['attendee_first_name'],
+            'attendee_last_name': form.cleaned_data['attendee_last_name'],
+            'cost_gross': form.cleaned_data['attendee_cost_gross'],
+            'barcode': form.cleaned_data['attendee_barcode'],
             'answers': {},
-            'ticket_class': ticket_class
+            'ticket_class': form.cleaned_data['ticket_class']
         }
 
         attendees.append(dict(attendee))
         custom_data = CustomData(
             customization_id=self.kwargs['pk'],
             attendees=attendees,
-            organizer_logo=organizer_logo,
-            event_name_text=event_name_text,
-            event_start=event_start,
-            event_venue_location={event_venue_location},
+            organizer_logo=form.cleaned_data['organizer_logo'],
+            event_name_text=form.cleaned_data['event_name_text'],
+            event_start=form.cleaned_data['event_start'],
+            event_venue_location={form.cleaned_data['event_venue_location']},
             #   reserved seating
-            user_order_email=user_order_email,
+            user_order_email=form.cleaned_data['user_order_email'],
             order_id='1212',
-            order_created=order_created,
-            user_order_first_name=user_order_first_name,
-            user_order_last_name=user_order_last_name,
-            order_status=order_status,
+            order_created=form.cleaned_data['order_created'],
+            user_order_first_name=form.cleaned_data['user_order_first_name'],
+            user_order_last_name=form.cleaned_data['user_order_last_name'],
+            order_status=form.cleaned_data['order_status'],
             # payment_datetime='',
-            ticket_class=ticket_class,
-            attendee_first_name=attendee_first_name,
-            attendee_last_name=attendee_last_name,
-            barcode=attendee_barcode,
-            from_email=from_email,
-            emails=emails,
+            from_email=form.cleaned_data['from_email'],
+            emails=[form.cleaned_data['emails']],
             is_test=True,
         )
-        do_send_email(custom_data)
-        return HttpResponseRedirect(reverse('mails:successfully_mail'))
+        return do_send_email(custom_data)
+        # Fixme: double response.
+        # return HttpResponseRedirect(reverse('mails:successfully_mail'))

@@ -147,9 +147,6 @@ class TestMailsWithCostumization(TestCase):
         self.assertEquals(to_email, [u'edacticket@gmail.com'])
         self.assertEquals(response.status_code, 200)
 
-
-        self.assertEquals(response.status_code, 200)
-
     def test_do_send_mail(self):
         self.attendee = [{
             'attendee_first_name': 'Florencia',
