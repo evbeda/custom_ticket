@@ -69,11 +69,12 @@ def get_data(request):
                 access_token +
                 '&expand=event,attendees'
             )
-            return process_data(data.json())
+
+            return process_data(data.json(), social_user[0].user_id)
     return HttpResponse()
 
 
-def process_data(data):
+def process_data(data, user_id):
     list_attendee = data['attendees']
     attendees = []
     for att in list_attendee:
@@ -87,8 +88,10 @@ def process_data(data):
         }
         attendees.append(dict(attendee))
     venue_id = data['event']['venue_id']
+    customization = Customization.objects.filter(user_id=user_id)
+
     custom_data = CustomData(
-        customization_id=1,
+        customization_id=customization[0].id,
         attendees=attendees,
         user_first_name=data['first_name'],
         user_last_name=data['last_name'],
@@ -102,6 +105,7 @@ def process_data(data):
         order_status=data['status'],
         is_test=False,
     )
+
     return do_send_email(custom_data)
 
 

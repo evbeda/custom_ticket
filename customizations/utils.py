@@ -21,11 +21,9 @@ def upload_file(request, request_field):
     request_file = request.FILES[request_field]
     unique_name = get_unique_file_name(request.user, request_file.name)
     file_name_saved = fs.save(unique_name, request_file)
-    domain = request.build_absolute_uri('/')[:-1]
-
-    if settings.LOCAL_STORAGE_ENABLE:
+    if int(settings.LOCAL_STORAGE_ENABLE):
+        domain = request.build_absolute_uri('/')[:-1]
         public_url = domain + settings.MEDIA_URL + file_name_saved
-
     else:
         path_file = fs.location + '/' + file_name_saved
         file = open(path_file, 'r')
