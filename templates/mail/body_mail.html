@@ -222,20 +222,22 @@
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody>
+                                                                                        {% for attendee in attendees %}
                                                                                         <tr>
                                                                                             <td style="padding:12px 0; padding-right:3px">
                                                                                                 <div class="" style="color:#666666; font-weight:400; font-size:15px; line-height:21px">
-                                                                                                {{attendee_first_name}} {{attendee_last_name}} </div>
+                                                                                                {{attendee.attendee_first_name}} {{attendee.attendee_last_name}} </div>
                                                                                             </td>
                                                                                             <td style="padding:12px 0; padding-right:3px">
                                                                                                 <div class="" style="color:#666666; font-weight:400; font-size:15px; line-height:21px">
-                                                                                                {{ticket_class}} </div>
+                                                                                                {{attendee.ticket_class}} </div>
                                                                                             </td>
                                                                                             <td style="text-align:right; padding:12px 0">
                                                                                                 <div class="" style="color:#666666; font-weight:400; font-size:15px; line-height:21px">
                                                                                                 --- QUANTITY ---</div>
                                                                                             </td>
                                                                                         </tr>
+                                                                                         {% endfor %}
                                                                                     </tbody>
                                                                                 </table>
                                                                             </td>
