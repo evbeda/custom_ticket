@@ -4,14 +4,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, DeleteView
-from django.conf import settings
-from customizations.models import Customization, TicketTemplate, CustomEmail, UserWebhook
+from customizations.models import (
+    Customization,
+    TicketTemplate,
+    CustomEmail,
+    UserWebhook
+)
 from customizations.forms import FormCustomization
-from django.core.files.storage import FileSystemStorage
-import requests
-import json
-from pprint import pprint
 from eventbrite import Eventbrite
+from customizations.utils import upload_file
 
 
 class CustomizationConfig(LoginRequiredMixin):
@@ -45,17 +46,13 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
     success_url = 'create.html'
 
     def post(self, request, *args, **kwargs):
-        is_form_valid = super(ViewCreateCustomization, self).post(request, *args, **kwargs)
+        is_form_valid = super(ViewCreateCustomization, self).post(
+            request, *args, **kwargs)
         if is_form_valid:
             name = request.POST.get('name')
-            # logo = request.POST.get('logo')
+
             # image uploaded
-            myfile = request.FILES['logo']
-            fs = FileSystemStorage()
-            domain = request.build_absolute_uri('/')[:-1]
-            filename = fs.save(myfile.name, myfile)
-            uploaded_file_url = fs.url(filename)
-            logo = domain + settings.MEDIA_URL + filename
+            logo = upload_file(request, 'logo')
 
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
@@ -103,7 +100,8 @@ def update_customization(request, pk):
             customization.name = form.cleaned_data['name']
             customization.custom_email.logo = form.cleaned_data['logo']
             customization.custom_email.message = form.cleaned_data['message']
-            customization.ticket_template.select_design_template = form.cleaned_data['select_design_template']
+            customization.ticket_template.select_design_template = form.cleaned_data[
+                'select_design_template']
             customization.ticket_template.message_ticket = form.cleaned_data['message_ticket']
             customization.save()
             user.save()

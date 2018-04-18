@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
 from django.conf import settings
@@ -23,7 +23,7 @@ class TicketTemplate(TimeStampedModel):
 
 class CustomEmail(TimeStampedModel):
     message = models.CharField(max_length=255)
-    logo = models.ImageField(upload_to='logos')
+    logo = models.ImageField(max_length=255, upload_to='logos')
 
 
 class Customization(TimeStampedModel):
