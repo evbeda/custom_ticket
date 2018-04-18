@@ -12,6 +12,9 @@ from django.test import TestCase, RequestFactory
 from .views import create_webhook, get_token
 from django.contrib.auth.models import AnonymousUser, User
 from .forms import FormCustomization
+from customizations.utils import get_unique_file_name
+from freezegun import freeze_time
+
 
 
 class TestFormCustomization(TestCase):
@@ -27,6 +30,7 @@ class TestCustomizationsWithNoWebhook(TestCase):
             username='edacticket',
             password='12345',
             email='edacticket@gmail.com',
+            first_name='edacticket',
             is_active=True,
         )
         self.factory = RequestFactory()
@@ -65,3 +69,15 @@ class TestCustomizationsWithNoWebhook(TestCase):
         request.user = self.user
         token = get_token(request)
         self.assertEquals(token, 'HJDTUHYQ3ZVTVLMN52VZ')
+
+
+    @freeze_time("2012-01-14 03:21:34")
+    def test_get_unique_file_name(self):
+
+        request = self.factory.post('/customizations/create-customization/')
+        request.user = self.user
+        unique_name = get_unique_file_name(request, 'nombre del archivo.png')
+        self.assertEquals(
+            unique_name,
+            'edacticket-3-e4122a5c7387fc823e534bdfa600f176cef7cb27732f90323cba4b29-nombre-del-archivo.png'
+        )

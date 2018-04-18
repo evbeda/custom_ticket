@@ -12,6 +12,7 @@ django-qrcode==0.3
 dropbox==8.7.1
 enum34==1.1.6
 eventbrite==3.3.3
+freezegun==0.3.10
 funcsigs==1.0.2
 gunicorn==19.7.1
 html5lib==1.0b10
@@ -36,6 +37,7 @@ Pygments==2.2.0
 PyJWT==1.6.1
 PyPDF2==1.26.0
 python-coveralls==2.9.1
+python-dateutil==2.7.2
 python-openid==2.2.5
 python-social-auth==0.3.6
 pytz==2018.3

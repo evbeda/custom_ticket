@@ -1,4 +1,6 @@
 # Custom ticket Django App
+[![Coverage Status](https://coveralls.io/repos/github/evbeda/custom_ticket/badge.svg?branch=master)](https://coveralls.io/github/evbeda/custom_ticket?branch=master)
+[![Build Status](https://travis-ci.org/evbeda/custom_ticket.svg?branch=master)](https://travis-ci.org/evbeda/custom_ticket)
 
 As an organizer I want to be able to set a default template for both email and pdf ticket that will be automatically applied to any event created on my account.
 
