@@ -11,9 +11,17 @@ from social_django.models import UserSocialAuth
 from django.test import TestCase, RequestFactory
 from .views import create_webhook, get_token
 from django.contrib.auth.models import AnonymousUser, User
+from .forms import FormCustomization
 
 
-class TestCustomizations(TestCase):
+class TestFormCustomization(TestCase):
+    def test_form(self):
+        form_data = {'name': 'testform', 'select_event': 'apply_all', 'logo': None, 'message': 'Test', 'select_design_template': 'design_one', 'message_ticket': 'Test'}
+        form = FormCustomization(form_data)
+        self.assertTrue(form.is_valid)
+
+
+class TestCustomizationsWithNoWebhook(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username='edacticket',
@@ -25,7 +33,8 @@ class TestCustomizations(TestCase):
         self.auth = UserSocialAuth.objects.create(
             user=self.user, provider='eventbrite', uid="249759038146", extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'})
 
-
+    # @patch(
+    #     )
     # def test_post(self):
 
     @patch(
