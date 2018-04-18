@@ -1,0 +1,19 @@
+[run]
+source =
+   custom_ticket
+   customization
+   mail
+
+[report]
+exclude_lines =
+   def setUp
+   def test_
+   print
+   if __name__ == '__main__':
+
+
+[run]
+omit =
+    /events
+    /templates
+   */test*
