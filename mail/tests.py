@@ -201,7 +201,3 @@ class TestMailWithoutCustomization(TestCase):
         sended_mails = len(mail.outbox)
         self.assertEquals(sended_mails, 0)
         self.assertEquals(response.status_code, 200)
-
-
-
-

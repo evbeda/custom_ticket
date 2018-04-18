@@ -48,6 +48,8 @@ def get_venue(venue_id):
 
 
 def get_data(request):
+    print 'Here! get_data'
+    print request
     access_token = settings.SERVER_ACCESS_TOKEN
     config_data = json.loads(request.body)
     if UserSocialAuth.objects.exists():
