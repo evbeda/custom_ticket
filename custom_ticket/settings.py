@@ -123,6 +123,9 @@ SOCIAL_AUTH_EVENTBRITE_SECRET = get_env_variable('SOCIAL_AUTH_EVENTBRITE_SECRET'
 SERVER_ACCESS_TOKEN = get_env_variable('SERVER_ACCESS_TOKEN')
 
 
+DROPBOX_ACCESS_TOKEN = get_env_variable('DROPBOX_ACCESS_TOKEN')
+
+
 WSGI_APPLICATION = 'custom_ticket.wsgi.application'
 
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -165,7 +168,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Email config
-
 EMAIL_HOST = get_env_variable('EMAIL_HOST')
 EMAIL_PORT = int(get_env_variable('EMAIL_PORT'))
 EMAIL_HOST_USER = get_env_variable('EMAIL_HOST_USER')
@@ -198,7 +200,7 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/')
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 
