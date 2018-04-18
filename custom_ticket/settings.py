@@ -125,6 +125,7 @@ SERVER_ACCESS_TOKEN = get_env_variable('SERVER_ACCESS_TOKEN')
 
 DROPBOX_ACCESS_TOKEN = get_env_variable('DROPBOX_ACCESS_TOKEN')
 
+LOCAL_STORAGE_ENABLE = get_env_variable('LOCAL_STORAGE_ENABLE')
 
 WSGI_APPLICATION = 'custom_ticket.wsgi.application'
 

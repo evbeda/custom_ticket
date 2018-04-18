@@ -12,7 +12,7 @@ from django.test import TestCase, RequestFactory
 from .views import create_webhook, get_token
 from django.contrib.auth.models import AnonymousUser, User
 from .forms import FormCustomization
-from customizations.utils import get_unique_file_name
+from customizations.utils import get_unique_file_name, upload_file
 from freezegun import freeze_time
 
 
@@ -33,9 +33,10 @@ class TestCustomizationsWithNoWebhook(TestCase):
             first_name='edacticket',
             is_active=True,
         )
+        self.user_access_token = 'HJDTUHYQ3ZVTVLMN52VZ'
         self.factory = RequestFactory()
         self.auth = UserSocialAuth.objects.create(
-            user=self.user, provider='eventbrite', uid="249759038146", extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'})
+            user=self.user, provider='eventbrite', uid="249759038146", extra_data={'access_token': self.user_access_token})
 
     # @patch(
     #     )
@@ -54,8 +55,7 @@ class TestCustomizationsWithNoWebhook(TestCase):
         }
     )
     def test_create_webhook(self, mock_requests):
-        token = 'HJDTUHYQ3ZVTVLMN52VZ'
-        id_webhook = create_webhook(token)
+        id_webhook = create_webhook(self.user_access_token)
 
         self.assertEquals(id_webhook, '646089')
         mock_requests.assert_called_once()
@@ -68,7 +68,7 @@ class TestCustomizationsWithNoWebhook(TestCase):
         request = self.factory.post('/customizations/create-customization/')
         request.user = self.user
         token = get_token(request)
-        self.assertEquals(token, 'HJDTUHYQ3ZVTVLMN52VZ')
+        self.assertEquals(token, self.user_access_token)
 
 
     @freeze_time("2012-01-14 03:21:34")
@@ -76,8 +76,41 @@ class TestCustomizationsWithNoWebhook(TestCase):
 
         request = self.factory.post('/customizations/create-customization/')
         request.user = self.user
-        unique_name = get_unique_file_name(request, 'nombre del archivo.png')
+        unique_name = get_unique_file_name(request.user, 'nombre del archivo.png')
         self.assertEquals(
             unique_name,
             'edacticket-3-e4122a5c7387fc823e534bdfa600f176cef7cb27732f90323cba4b29-nombre-del-archivo.png'
         )
+
+
+# cambios de gabi
+# class ViewCreateCustomization(TestCase):
+
+#         request = self.factory.post('/customizations/create-customization/')
+#         request.user = self.user
+
+# class TestDropboxHandler(TestCase):
+#     def setUp(self):
+#         self.user = get_user_model().objects.create_user(
+#             username='edacticket',
+#             password='12345',
+#             email='edacticket@gmail.com',
+#             first_name='edacticket',
+#             is_active=True,
+#         )
+#         self.user_access_token = 'HJDTUHYQ3ZVTVLMN52VZ'
+#         self.factory = RequestFactory()
+#         self.auth = UserSocialAuth.objects.create(
+#             user=self.user, provider='eventbrite', uid="249759038146", extra_data={'access_token': self.user_access_token})
+
+#     def test_upload_file(self):
+#         request = self.factory.post('/customizations/create-customization/')
+#         request.user = self.user
+#         request_field = 'logo'
+#         request.FILES[request_field] = ''
+#         request.FILES[request_field].name = 'logo.png'
+#         shared_url = upload_file(request, request_field)
+#         self.assertEquals(
+#             shared_url,
+#             'url'
+#         )
