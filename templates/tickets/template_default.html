@@ -1,5 +1,4 @@
 {% load qr_tags %}
-{% for attendee in attendees %}
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -17,8 +16,10 @@
                                 <h2 style="color:#404040;font-weight:300;margin:0 0 12px 0;font-size:24px;line-height:30px">
                                 {{event_name_text}} </h2>
                             </td>
+                            {% for attendee in attendees %}
                             <td colspan="2" style="text-align:right;border-bottom:1px dashed #d3d3d3">
                                 {% qr_from_text attendee.barcode "m" %}
+                                {% endfor%}
                                 <div style="color:#666666;font-weight:400;font-size:13px;line-height:18px">
                                 {{event_start}}</div>
                             </td>
@@ -50,6 +51,8 @@
                                     </thead>
                                     <tbody>
                                         <tr>
+                                        {% for attendee in attendees %}
+
                                             <td style="padding:12px 0;padding-right:3px">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
                                                 {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}  </div>

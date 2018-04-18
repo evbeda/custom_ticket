@@ -24,7 +24,7 @@ def data_to_dict_custom_email(id):
         return {}
     data = {
         'message': query.message,
-        'logo': query.logo,
+        'logo': query.logo.url,
     }
     return data
 
