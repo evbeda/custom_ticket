@@ -83,14 +83,17 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
 
 
 def update_customization(request, pk):
-    user = request.user
+
     customization = get_object_or_404(Customization, pk=pk)
+    custom_email = get_object_or_404(CustomEmail, pk=pk)
+    ticket_template = get_object_or_404(TicketTemplate, pk=pk)
+
     form = FormCustomization(initial={
         'name': customization.name,
-        'logo': customization.custom_email.logo,
-        'message': customization.custom_email.message,
-        'select_design_template': customization.ticket_template.select_design_template,
-        'message_ticket': customization.ticket_template.message_ticket,
+        'logo': custom_email.logo,
+        'message': custom_email.message,
+        'select_design_template': ticket_template.select_design_template,
+        'message_ticket': ticket_template.message_ticket,
 
     })
     if request.method == 'POST':
@@ -98,13 +101,14 @@ def update_customization(request, pk):
         form = FormCustomization(request.POST, request.FILES)
         if form.is_valid():
             customization.name = form.cleaned_data['name']
-            customization.custom_email.logo = form.cleaned_data['logo']
-            customization.custom_email.message = form.cleaned_data['message']
-            customization.ticket_template.select_design_template = form.cleaned_data[
+            custom_email.logo = form.cleaned_data['logo']
+            custom_email.message = form.cleaned_data['message']
+            ticket_template.select_design_template = form.cleaned_data[
                 'select_design_template']
-            customization.ticket_template.message_ticket = form.cleaned_data['message_ticket']
+            ticket_template.message_ticket = form.cleaned_data['message_ticket']
+            custom_email.save()
+            ticket_template.save()
             customization.save()
-            user.save()
             return redirect('/')
 
     context = {'form': form, 'instance': customization}
