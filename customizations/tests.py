@@ -6,13 +6,26 @@ from mock import (
     MagicMock,
     patch,
 )
-
-
-from django.test import TestCase
-from .views import create_webhook
+from django.contrib.auth import get_user_model
+from social_django.models import UserSocialAuth
+from django.test import TestCase, RequestFactory
+from .views import create_webhook, get_token
+from django.contrib.auth.models import AnonymousUser, User
 
 
 class TestCustomizations(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username='edacticket',
+            password='12345',
+            email='edacticket@gmail.com',
+            is_active=True,
+        )
+        self.factory = RequestFactory()
+        self.auth = UserSocialAuth.objects.create(
+            user=self.user, provider='eventbrite', uid="249759038146", extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'})
+
+
     # def test_post(self):
 
     @patch(
@@ -38,6 +51,8 @@ class TestCustomizations(TestCase):
             u'/webhooks/',
         )
 
-
     def test_get_token(self):
-        pass
+        request = self.factory.post('/customizations/create-customization/')
+        request.user = self.user
+        token = get_token(request)
+        self.assertEquals(token, 'HJDTUHYQ3ZVTVLMN52VZ')
