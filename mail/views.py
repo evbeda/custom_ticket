@@ -70,7 +70,6 @@ def get_data(request):
                 access_token +
                 '&expand=event,attendees'
             )
-
             return process_data(data.json(), social_user[0].user_id)
     return HttpResponse()
 
@@ -116,9 +115,13 @@ def do_send_email(custom_data):
 
     if not file_exist(data['logo_path']):
         print 'downloading...'
-        download(data['logo_url'], data['logo_name'])
-
-    print 'file exist...'
+        if download(data['logo_url'], data['logo_name']):
+            print 'downloaded..'
+        else:
+            print "Unable to download file"
+        print 'The file now exist...'
+    else:
+        print 'file exist...'
 
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
