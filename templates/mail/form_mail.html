@@ -30,12 +30,9 @@
   </div>
   <div id="menu1" class="tab-pane fade">
     <h3>Ticket</h3>
-        <p>Message : {{ form.organizer_message }}</p>
-        <p>Logo : {{ form.organizer_logo }}</p>
         <p>Cost Gross : {{ form.attendee_cost_gross }}</p>
         <p>Quantity : {{ form.attendee_quantity }}</p>
         <p>Custom Question : {{ form.attendee_question }}</p>
-        <p>Organizer logo url : {{ form.organizer_logo }}</p>
         <p>Order Status : {{ form.order_status }}</p>
         <p>Order Created : {{ form.order_created }}</p>
         <p>Ticket Class : {{ form.ticket_class }}</p>
@@ -55,6 +52,13 @@
         <p>From Email : {{ form.from_email }}</p>
         <p>Emails : {{ form.emails }}</p>
         <p>Email Send : {{ form.email_send }}</p>
+  </div>
+  <div id="menu4" class="tab-pane fade">
+    <h3>Organier</h3>
+        <p>Name : {{ form.organizer_name }}</p>
+        <p>Email : {{ form.organizer_email }}</p>
+        <p>Logo : {{ form.organizer_logo }}</p>
+        <p>Message : {{ form.organizer_message }}</p>
   </div>
 </div>
 <div style="text-align: center">
