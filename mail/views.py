@@ -43,8 +43,25 @@ def email_preview_pdf(request, pk):
 def get_venue(token, venue_id):
     eventbrite = Eventbrite(token)
     data_venue_json = eventbrite.get('/venues/' + str(venue_id))
-    venue = data_venue_json['address']['address_1']
-    return {'address_1': venue}
+    address_1 = data_venue_json['address']['address_1']
+    address_2 = data_venue_json['address']['address_2']
+    city = data_venue_json['address']['city']
+    region = data_venue_json['address']['region']
+    country = data_venue_json['address']['country']
+    postal_code = data_venue_json['address']['postal_code']
+    latitude = data_venue_json['address']['latitude']
+    longitude = data_venue_json['address']['longitude']
+    return {
+        'address_1': address_1,
+        'address_2': address_2,
+        'city': city,
+        'region': region,
+        'region': region,
+        'country': country,
+        'postal_code': postal_code,
+        'latitude': latitude,
+        'longitude': longitude,
+    }
 
 
 def get_organizer(token, organizer_id):
@@ -137,7 +154,6 @@ def process_data(order, venue, organizer, user_id):
 def do_send_email(custom_data):
 
     data = all_data(custom_data)
-
     if not file_exist(data['logo_path']):
         print 'downloading...'
         if download(data['logo_url'], data['logo_name']):
