@@ -35,7 +35,12 @@
 <tr class="">
 <td class="x_grid__col" style="padding: 32px 40px; border-radius: 6px 6px 0 0;" align="">
 <h2 class="" style="color: #404040; font-weight: 300; margin: 0 0 12px 0; font-size: 24px; line-height: 30px;">Hola {{user_first_name}}, esta es tu confirmaci&oacute;n de inscripci&oacute;n para el evento <a style="text-decoration: none; color: #1090ba; font-weight: normal;" href="https://www.eventbrite.com.ar/e/encuentro-de-jovenes-emprendedores-tickets-32958532859?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=eventname&amp;ref=eemailordconf" target="_blank" rel="noopener noreferrer">{{event_name_text}}</a></h2>
-<div class="x_organized_by" style="color: #666666; font-weight: 300; font-size: 15px; line-height: 21px;">Organizado por <a style="color: #999;" href="https://www.eventbrite.com.ar/o/los-andes-9990917269?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=orgname&amp;ref=eemailordconf" target="_blank" rel="noopener noreferrer">---ORGANIZER---</a> <br /> Message: {{message}} <br /> Message Ticket:{{message_ticket}}</div>
+<div class="x_organized_by" style="color: #666666; font-weight: 300; font-size: 15px; line-height: 21px;">Organizado por <a style="color: #999;" href="" target="_blank" rel="noopener noreferrer">{{ organizer_name }} </a>
+    <p>Message: </p>
+    {{message}}
+    <p> Message Ticket:</p>
+    {{message_ticket}}
+</div>
 </td>
 </tr>
 <tr>
