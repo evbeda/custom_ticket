@@ -71,6 +71,30 @@ def get_organizer(token, organizer_id):
     return organizer
 
 
+def webhook_valid(user_id):
+    if UserSocialAuth.objects.exists():
+            social_user_id = get_social_user_id(user_id)
+            user_request = get_user_model().objects.get(id=social_user_id)
+
+            if Customization.objects.filter(
+                user=user_request
+            ).exists():
+                return True
+    return False
+
+
+def get_social_user_id(user_id):
+    social_user = get_social_user(user_id)
+    return social_user.user_id
+
+
+def get_social_user(user_id):
+    social_user = UserSocialAuth.objects.filter(
+        uid=user_id
+    )
+    return social_user[0]
+
+
 def get_data(request):
     # token = get_token(request)
     # order = get_order(token, )
@@ -81,39 +105,32 @@ def get_data(request):
     print 'Here! get_data'
     print request
     config_data = json.loads(request.body)
-    if UserSocialAuth.objects.exists():
-        social_user = UserSocialAuth.objects.filter(
-            uid=config_data['config']['user_id']
+    user_id = config_data['config']['user_id']
+    if webhook_valid(user_id):
+        social_user = get_social_user(user_id)
+        access_token = social_user.extra_data['access_token']
+        data = requests.get(
+            json.loads(
+                request.body
+            )['api_url'] +
+            '?token=' +
+            access_token +
+            '&expand=event,attendees'
         )
-        social_user_id = social_user[0].user_id
-        user_request = get_user_model().objects.get(id=social_user_id)
-
-        if Customization.objects.filter(
-            user=user_request
-        ).exists():
-            access_token = social_user[0].extra_data['access_token']
-            data = requests.get(
-                json.loads(
-                    request.body
-                )['api_url'] +
-                '?token=' +
-                access_token +
-                '&expand=event,attendees'
-            )
-            venue = get_venue(
-                token=access_token,
-                venue_id=data.json()['event']['venue_id']
-            )
-            organizer = get_organizer(
-                token=access_token,
-                organizer_id=data.json()['event']['organizer_id']
-            )
-            return process_data(
-                order=data.json(),
-                venue=venue,
-                organizer=organizer,
-                user_id=social_user_id
-            )
+        venue = get_venue(
+            token=access_token,
+            venue_id=data.json()['event']['venue_id']
+        )
+        organizer = get_organizer(
+            token=access_token,
+            organizer_id=data.json()['event']['organizer_id']
+        )
+        return process_data(
+            order=data.json(),
+            venue=venue,
+            organizer=organizer,
+            user_id=get_social_user_id(user_id)
+        )
     return HttpResponse()
 
 
