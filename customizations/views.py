@@ -11,33 +11,14 @@ from customizations.models import (
     UserWebhook
 )
 from customizations.forms import FormCustomization
-from eventbrite import Eventbrite
 from customizations.utils import upload_file,file_exist,download
+from customizations.utils import create_webhook, get_token
 
 
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
     form_class = FormCustomization
     success_url = reverse_lazy('/')
-
-
-def create_webhook(token):
-    data = {
-        "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/mail/",
-        "actions": "order.placed",
-        # "event_id": "all_events",
-    }
-    response = Eventbrite(token).post('/webhooks/', data)
-    return (response[u'id'])
-
-
-# def delete_webhook(token, webhook_id):
-#     response = Eventbrite(token).delete('/webhooks/' + webhook_id + "/")
-
-
-def get_token(request):
-    token = request.user.social_auth.get(provider='eventbrite').access_token
-    return token
 
 
 class ViewCreateCustomization(LoginRequiredMixin, FormView):
@@ -77,7 +58,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                 name=name,
             )
             if not UserWebhook.objects.filter(user=request.user).exists():
-                token = get_token(request)
+                token = get_token(request.user)
                 webhook_id = create_webhook(token)
                 UserWebhook.objects.create(
                     user=self.request.user,

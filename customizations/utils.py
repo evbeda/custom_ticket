@@ -3,6 +3,8 @@ import hashlib
 import time
 from urllib2 import urlopen
 import os.path
+
+from eventbrite import Eventbrite
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
@@ -75,3 +77,22 @@ def upload_file_dropbox(path_file, file_name_saved):
     url, dl = link.split('?')
     public_url = url + '?dl=1'
     return public_url
+
+
+def create_webhook(token):
+    data = {
+        "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/mail/",
+        "actions": "order.placed",
+        # "event_id": "all_events",
+    }
+    response = Eventbrite(token).post('/webhooks/', data)
+    return (response[u'id'])
+
+
+# def delete_webhook(token, webhook_id):
+#     response = Eventbrite(token).delete('/webhooks/' + webhook_id + "/")
+
+
+def get_token(user):
+    token = user.social_auth.get(provider='eventbrite').access_token
+    return token

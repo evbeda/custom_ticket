@@ -6,15 +6,14 @@ from mock import (
     MagicMock,
     patch,
 )
+from .utils import create_webhook, get_token
 from django.contrib.auth import get_user_model
 from social_django.models import UserSocialAuth
 from django.test import TestCase, RequestFactory
-from .views import create_webhook, get_token
 from django.contrib.auth.models import AnonymousUser, User
 from .forms import FormCustomization
 from customizations.utils import get_unique_file_name, upload_file
 from freezegun import freeze_time
-
 
 
 class TestFormCustomization(TestCase):
@@ -41,14 +40,19 @@ class TestCustomizationsWithNoWebhook(TestCase):
         self.user_access_token = 'HJDTUHYQ3ZVTVLMN52VZ'
         self.factory = RequestFactory()
         self.auth = UserSocialAuth.objects.create(
-            user=self.user, provider='eventbrite', uid="249759038146", extra_data={'access_token': self.user_access_token})
+
+            user=self.user,
+            provider='eventbrite',
+            uid="249759038146",
+            extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'}
+        )
 
     # @patch(
     #     )
     # def test_post(self):
 
     @patch(
-        'customizations.views.Eventbrite.post',
+        'customizations.utils.Eventbrite.post',
         return_value={
             u'user_id': u'249759038146',
             u'created': u'2018-04-13T07:19:38Z',
@@ -60,8 +64,8 @@ class TestCustomizationsWithNoWebhook(TestCase):
         }
     )
     def test_create_webhook(self, mock_requests):
-        id_webhook = create_webhook(self.user_access_token)
-
+        token = 'HJDTUHYQ3ZVTVLMN52VZ'
+        id_webhook = create_webhook(token)
         self.assertEquals(id_webhook, '646089')
         mock_requests.assert_called_once()
         self.assertEquals(
@@ -72,7 +76,7 @@ class TestCustomizationsWithNoWebhook(TestCase):
     def test_get_token(self):
         request = self.factory.post('/customizations/create-customization/')
         request.user = self.user
-        token = get_token(request)
+        token = get_token(request.user)
         self.assertEquals(token, self.user_access_token)
 
 
@@ -119,3 +123,4 @@ class TestCustomizationsWithNoWebhook(TestCase):
 #             shared_url,
 #             'url'
 #         )
+

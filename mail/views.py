@@ -40,28 +40,34 @@ def email_preview_pdf(request, pk):
     return render(request, 'mail/body_mail.html', context=data)
 
 
-def get_venue(venue_id):
-    access_token = settings.SERVER_ACCESS_TOKEN
-    eventbrite = Eventbrite(access_token)
+def get_venue(token, venue_id):
+    eventbrite = Eventbrite(token)
     data_venue_json = eventbrite.get('/venues/' + str(venue_id))
     venue = data_venue_json['address']['address_1']
     return {'address_1': venue}
 
 
 def get_data(request):
+    # token = get_token(request)
+    # order = get_order(token, )
+    # venue = get_venue(token, )
+    # organizer = get_blah(...)
+    # process_data(order, venue, organizer)
+
     print 'Here! get_data'
     print request
-    access_token = settings.SERVER_ACCESS_TOKEN
     config_data = json.loads(request.body)
     if UserSocialAuth.objects.exists():
         social_user = UserSocialAuth.objects.filter(
             uid=config_data['config']['user_id']
         )
-        user_request = get_user_model().objects.get(id=social_user[0].user_id)
+        social_user_id = social_user[0].user_id
+        user_request = get_user_model().objects.get(id=social_user_id)
 
         if Customization.objects.filter(
             user=user_request
         ).exists():
+            access_token = social_user[0].extra_data['access_token']
             data = requests.get(
                 json.loads(
                     request.body
@@ -70,12 +76,20 @@ def get_data(request):
                 access_token +
                 '&expand=event,attendees'
             )
-            return process_data(data.json(), social_user[0].user_id)
+            venue = get_venue(
+                token=access_token,
+                venue_id=data.json()['event']['venue_id']
+            )
+            return process_data(
+                order=data.json(),
+                venue=venue,
+                user_id=social_user_id
+            )
     return HttpResponse()
 
 
-def process_data(data, user_id):
-    list_attendee = data['attendees']
+def process_data(order, venue, user_id):
+    list_attendee = order['attendees']
     attendees = []
     for att in list_attendee:
         attendee = {
@@ -87,25 +101,22 @@ def process_data(data, user_id):
             'ticket_class': att['ticket_class_name']
         }
         attendees.append(dict(attendee))
-    venue_id = data['event']['venue_id']
     customization = Customization.objects.filter(user_id=user_id)
-
     custom_data = CustomData(
         customization_id=customization[0].id,
         attendees=attendees,
-        user_first_name=data['first_name'],
-        user_last_name=data['last_name'],
-        event_name_text=data['event']['name']['html'],
+        user_first_name=order['first_name'],
+        user_last_name=order['last_name'],
+        event_name_text=order['event']['name']['html'],
         from_email=settings.EMAIL_HOST_USER,
-        event_start=data['event']['start']['utc'],
-        event_venue_location=get_venue(str(venue_id)),
-        emails=[data['email']],
-        order_id=data['id'],
-        order_created=data['created'],
-        order_status=data['status'],
+        event_start=order['event']['start']['utc'],
+        event_venue_location=venue,
+        emails=[order['email']],
+        order_id=order['id'],
+        order_created=order['created'],
+        order_status=order['status'],
         is_test=False,
     )
-
     return do_send_email(custom_data)
 
 
