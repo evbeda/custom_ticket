@@ -24,6 +24,10 @@ class TicketTemplate(TimeStampedModel):
 class CustomEmail(TimeStampedModel):
     message = models.CharField(max_length=255)
     logo = models.ImageField(max_length=255, upload_to='logos')
+    logo_local = models.CharField(max_length=255)
+    logo_path = models.CharField(max_length=255)
+    logo_name = models.CharField(max_length=255)
+    logo_url = models.CharField(max_length=255)
 
 
 class Customization(TimeStampedModel):

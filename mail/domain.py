@@ -25,7 +25,13 @@ def data_to_dict_custom_email(id):
     data = {
         'message': query.message,
         'logo': query.logo.url,
+        'logo_local': query.logo_local,
+        'logo_path': query.logo_path,
+        'logo_name': query.logo_name,
+        'logo_url': query.logo_url,
+
     }
+
     return data
 
 

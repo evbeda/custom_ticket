@@ -12,7 +12,7 @@ from customizations.models import (
 )
 from customizations.forms import FormCustomization
 from eventbrite import Eventbrite
-from customizations.utils import upload_file
+from customizations.utils import upload_file,file_exist,download
 
 
 class CustomizationConfig(LoginRequiredMixin):
@@ -52,7 +52,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             name = request.POST.get('name')
 
             # image uploaded
-            logo = upload_file(request, 'logo')
+            links = upload_file(request, 'logo')
 
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
@@ -64,7 +64,11 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             )
             custom_email = CustomEmail.objects.create(
                 message=message,
-                logo=logo
+                logo=links['dropbox'],
+                logo_local=links['local'],
+                logo_path=links['path'],
+                logo_name=links['name'],
+                logo_url=links['dropbox']
             )
             Customization.objects.create(
                 user=self.request.user,

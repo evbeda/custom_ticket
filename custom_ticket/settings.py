@@ -125,7 +125,7 @@ SERVER_ACCESS_TOKEN = get_env_variable('SERVER_ACCESS_TOKEN')
 
 DROPBOX_ACCESS_TOKEN = get_env_variable('DROPBOX_ACCESS_TOKEN')
 
-LOCAL_STORAGE_ENABLE = get_env_variable('LOCAL_STORAGE_ENABLE')
+# LOCAL_STORAGE_ENABLE = get_env_variable('LOCAL_STORAGE_ENABLE')
 
 WSGI_APPLICATION = 'custom_ticket.wsgi.application'
 
@@ -201,7 +201,7 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 
