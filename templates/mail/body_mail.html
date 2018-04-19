@@ -239,11 +239,17 @@
 <td class="" style="vertical-align: top; padding-right: 10px;" colspan="1" align="" valign="" width="20" height=""><img class="" style="width: 20px; height: 20px; vertical-align: -2px;" title="fecha" src="https://cdn.evbstatic.com/s3-s3/marketing/emails/order_confirmation/date-iconx2.png" alt="fecha" width="20" height="20" border="0" data-imagetype="External" /></td>
 <td class="" colspan="1" align="" valign="" width="" height="">
 <div class="" style="color: #666666; font-weight: 400; font-size: 15px; line-height: 21px;">{{event_start}}</div>
+
 </td>
 </tr>
 <tr class="">
 <td class="" style="vertical-align: top; padding-right: 10px;" colspan="1" align="" valign="" width="20" height=""><img class="" style="width: 20px; height: 20px; vertical-align: -4px;" title="fecha" src="https://cdn.evbstatic.com/s3-s3/marketing/emails/order_confirmation/location-pin-iconx2.png" alt="fecha" width="20" height="20" border="0" data-imagetype="External" /></td>
-<td class="" style="padding-bottom: 10px;" colspan="1" align="" valign="" width="" height="">{{event_venue_location_name}}</td>
+
+<td class="" style="padding-bottom: 10px;" colspan="1" align="" valign="" width="" height="">{{event_venue_location.address_1|default_if_none:""}}| {{event_venue_location.address_2|default_if_none:""}} </td>
+
+ {{event_venue_location.address_1|default_if_none:""}} |{{event_venue_location.postal_code|default_if_none:""}}
+{{event_venue_location.city|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}
+{{event_venue_location.region|default_if_none:""}}<br>
 </tr>
 <tr class="x_hide-for-small">
 <td class="x_hide-for-small" style="vertical-align: top; padding-right: 10px; padding-top: 10px;" colspan="1" align="" valign="" width="20" height=""><img class="" style="width: 20px; height: 20px; vertical-align: -2px;" title="fecha" src="https://cdn.evbstatic.com/s3-s3/marketing/emails/order_confirmation/add-calendar-iconx2.png" alt="fecha" width="20" height="20" border="0" data-imagetype="External" /></td>
