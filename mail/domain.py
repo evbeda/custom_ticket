@@ -139,5 +139,4 @@ class CustomData(object):
         self.ticket_class = ticket_class
         self.from_email = from_email
         self.emails = emails
-        self.venue = venue
         self.is_test = is_test

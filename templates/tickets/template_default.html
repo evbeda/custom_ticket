@@ -1,4 +1,6 @@
 {% load qr_tags %}
+                                        {% for attendee in attendees %}
+
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -31,7 +33,10 @@
                                     <br> Nro. de pedido: {{order_id}} <br>
                                     Estado: {{order_status}} <br>
                                     Información adicional: {{message_ticket}} <br>
-                                    Dirección: {{event_venue_location_name}}<br>
+                                    Location:<br>
+                                    {{event_venue_location.address_1|default_if_none:""}} | {{event_venue_location.address_2|default_if_none:""}} |{{event_venue_location.postal_code|default_if_none:"" }}<br>
+                                    {{event_venue_location.city|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}<br>
+                                    {{event_venue_location.region|default_if_none:""}}<br>
                                 </p>
                                 <table cellpadding="0" cellspacing="0" border="0" style="width:100%">
                                     <thead>
@@ -52,7 +57,6 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                        {% for attendee in attendees %}
 
                                             <td style="padding:12px 0;padding-right:3px">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
@@ -78,5 +82,5 @@
         </div>
         <div style="display:block; page-break-before:always;"></div>
     </body>
-</html>
+</html> 
 {% endfor %}
