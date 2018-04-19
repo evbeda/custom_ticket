@@ -156,6 +156,27 @@ class FormSendEmailPreview(forms.Form):
             }
         )
     )
+
+    organizer_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'value': 'Massive producer',
+                'placeholder': 'Organizer name',
+                'class': 'form-control'
+            }
+        )
+    )
+    organizer_email = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'value': 'massiveproducer@masive.com',
+                'placeholder': 'Organizer email',
+                'class': 'form-control'
+            }
+        )
+    )
     #   reserved seating
     user_order_email = forms.CharField(
         required=True,

@@ -97,6 +97,8 @@ class CustomData(object):
                  event_name_text='',
                  event_start='',
                  event_venue_location={},
+                 organizer_name='',
+                 organizer_email='',
                  #   reserved seating
                  user_order_email='',
                  order_id='',
@@ -122,6 +124,8 @@ class CustomData(object):
         self.event_start = event_start
         # self.event_end = event_end
         self.event_venue_location = event_venue_location
+        self.organizer_name = organizer_name
+        self.organizer_email = organizer_email
         #   reserved seating
         self.user_order_email = user_order_email
         self.order_id = order_id

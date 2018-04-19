@@ -47,6 +47,13 @@ def get_venue(token, venue_id):
     return {'address_1': venue}
 
 
+def get_organizer(token, organizer_id):
+    eventbrite = Eventbrite(token)
+    data_organizer_json = eventbrite.get('/organizers/' + str(organizer_id))
+    organizer = data_organizer_json['name']
+    return organizer
+
+
 def get_data(request):
     # token = get_token(request)
     # order = get_order(token, )
@@ -80,15 +87,20 @@ def get_data(request):
                 token=access_token,
                 venue_id=data.json()['event']['venue_id']
             )
+            organizer = get_organizer(
+                token=access_token,
+                organizer_id=data.json()['event']['organizer_id']
+            )
             return process_data(
                 order=data.json(),
                 venue=venue,
+                organizer=organizer,
                 user_id=social_user_id
             )
     return HttpResponse()
 
 
-def process_data(order, venue, user_id):
+def process_data(order, venue, organizer, user_id):
     list_attendee = order['attendees']
     attendees = []
     for att in list_attendee:
@@ -111,6 +123,8 @@ def process_data(order, venue, user_id):
         from_email=settings.EMAIL_HOST_USER,
         event_start=order['event']['start']['utc'],
         event_venue_location=venue,
+        organizer_name=organizer,
+        organizer_email='',
         emails=[order['email']],
         order_id=order['id'],
         order_created=order['created'],
@@ -188,6 +202,8 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             event_name_text=form.cleaned_data['event_name_text'],
             event_start=form.cleaned_data['event_start'],
             event_venue_location={form.cleaned_data['event_venue_location']},
+            organizer_name={form.cleaned_data['organizer_name']},
+            organizer_email={form.cleaned_data['organizer_email']},
             #   reserved seating
             user_order_email=form.cleaned_data['user_order_email'],
             order_id='1212',

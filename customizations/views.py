@@ -21,6 +21,11 @@ class CustomizationConfig(LoginRequiredMixin):
     success_url = reverse_lazy('/')
 
 
+
+# def delete_webhook(token, webhook_id):
+#     Eventbrite(token).delete('/webhooks/' + webhook_id + "/")
+
+
 class ViewCreateCustomization(LoginRequiredMixin, FormView):
     form_class = FormCustomization
     template_name = 'customizations/create.html'
@@ -106,6 +111,11 @@ class DeleteCustomization(CustomizationConfig, DeleteView):
     context_object_name = 'customizations'
 
     def get_context_data(self, **kwargs):
+        # if Customization.objects.filter().count() == 1:
+        #     webhook_id = UserWebhook.models.filter(user=self.request.user).webhook_id
+        #     token = get_token(request)
+        #     delete_webhook(token, webhook_id)
         context = super(DeleteCustomization, self).get_context_data(**kwargs)
         context['user'] = self.get_object().user
+
         return context
