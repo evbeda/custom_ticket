@@ -19,10 +19,8 @@
                                 <h2 style="color:#404040;font-weight:300;margin:0 0 12px 0;font-size:24px;line-height:30px">
                                 {{event_name_text}} </h2>
                             </td>
-                            {% for attendee in attendees %}
                             <td colspan="2" style="text-align:right;border-bottom:1px dashed #d3d3d3">
                                 {% qr_from_text attendee.barcode "m" %}
-                                {% endfor%}
                                 <div style="color:#666666;font-weight:400;font-size:13px;line-height:18px">
                                 {{event_start}}</div>
                             </td>
