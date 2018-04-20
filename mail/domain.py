@@ -78,6 +78,46 @@ def data_to_dict_all_models(id):
     return data_all_models
 
 
+def data_fake(id):
+    data_models = data_to_dict_all_models(id)
+    fake = {'attendees': [{u'answers': [],
+                           u'attendee_first_name': u'James',
+                           u'attendee_last_name': u'Arthur',
+                           u'barcode': u'752327237937711035001',
+                           u'cost_gross': 0,
+                           u'ticket_class': u'Ticket Vip'}],
+            # 'customization_id': 1,
+            'emails': [u'testmail@mail.com'],
+            'event_name_text': u'Live Experiences',
+            'event_start': u'2018-05-01T22:00:00Z',
+            'event_venue_location': {u'address_1': u'Main St',
+                                     u'address_2': u'2nd Floor',
+                                     u'city': u'San Francisco',
+                                     u'country': u'USA',
+                                     u'latitude': u'-32.9845957',
+                                     u'longitude': u'-68.78505459999997',
+                                     u'postal_code': None,
+                                     u'region': u'Bay Area'},
+            'from_email': 'test@mail.com',
+            'is_test': False,
+            'order_created': u'2018-04-03T18:35:46Z',
+            'order_id': u'752327237',
+            'order_status': u'placed',
+            'organizer_logo': u'',
+            u'select_design_template': u'DESIGN 1',
+            'ticket_class': u'',
+            'user_first_name': u'Ana',
+            'user_last_name': u'Campbell',
+            'user_order_email': u'ana@email.com',
+            'user_order_first_name': u'Ana',
+            'user_order_last_name': u'Campbell'}
+    data_fake = dict(
+        list(data_models.items()) +
+        list(fake.items())
+    )
+    return data_fake
+
+
 def all_data(custom_data):
     data_api = custom_data.__dict__
     data_models = data_to_dict_all_models(custom_data.customization_id)
