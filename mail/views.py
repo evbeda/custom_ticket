@@ -12,7 +12,6 @@ from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.shortcuts import render
-from django.urls import reverse
 from django.views.generic import FormView
 from customizations.models import Customization
 from mail.forms import FormSendEmailPreview
@@ -71,16 +70,26 @@ def get_organizer(token, organizer_id):
     return organizer
 
 
-def webhook_valid(user_id):
+def webhook_available_to_process(user_id):
     if UserSocialAuth.objects.exists():
+        if social_user_exists(user_id):
             social_user_id = get_social_user_id(user_id)
             user_request = get_user_model().objects.get(id=social_user_id)
-
             if Customization.objects.filter(
                 user=user_request
             ).exists():
                 return True
     return False
+
+
+def social_user_exists(user_id):
+    social_user = UserSocialAuth.objects.filter(
+        uid=user_id
+    )
+    if len(social_user) == 0:
+        return False
+    else:
+        return True
 
 
 def get_social_user_id(user_id):
@@ -96,17 +105,11 @@ def get_social_user(user_id):
 
 
 def get_data(request):
-    # token = get_token(request)
-    # order = get_order(token, )
-    # venue = get_venue(token, )
-    # organizer = get_blah(...)
-    # process_data(order, venue, organizer)
-
     print 'Here! get_data'
     print request
     config_data = json.loads(request.body)
     user_id = config_data['config']['user_id']
-    if webhook_valid(user_id):
+    if webhook_available_to_process(user_id):
         social_user = get_social_user(user_id)
         access_token = social_user.extra_data['access_token']
         data = requests.get(
@@ -171,15 +174,16 @@ def process_data(order, venue, organizer, user_id):
 def do_send_email(custom_data):
 
     data = all_data(custom_data)
-    if not file_exist(data['logo_path']):
-        print 'downloading...'
-        if download(data['logo_url'], data['logo_name']):
-            print 'downloaded..'
-        else:
-            print "Unable to download file"
-        print 'The file now exist...'
-    else:
-        print 'file exist...'
+    # import ipdb; ipdb.set_trace()
+    # if not file_exist(data['logo_path']):
+    #     print 'downloading...'
+    #     if download(data['logo_url'], data['logo_name']):
+    #         print 'downloaded..'
+    #     else:
+    #         print "Unable to download file"
+    #     print 'The file now exist...'
+    # else:
+    #     print 'file exist...'
 
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
