@@ -80,8 +80,8 @@
             <a  class="glyphicon glyphicon-envelope" title="Test mail tool" class="js-share-event-card share-action" href="{% url 'mails:form_send_mail' pk=customs.id  %}"></a>
       <a class="glyphicon glyphicon-trash" title="Delete Customization" href="{% url 'customizations:delete_customization' pk=customs.id  %}"></a>
       <a class="glyphicon glyphicon-pencil" title="Update Customization"  href="{% url 'customizations:update_customization' pk=customs.id  %}"></a>
-      <a class="glyphicon glyphicon-eye-open" title="Preview your mail"  href="{% url 'mails:email_preview' pk=customs.id  %}"></a>
-      <a class="glyphicon glyphicon-file" title="Generate pdf preview"  href="{% url 'mails:generate_pdf' pk=customs.id %}"></a>
+      <a class="glyphicon glyphicon-eye-open" title="Preview your mail"  href="{% url 'mails:email_preview' pk=customs.id  %}"target="_blank"></a>
+      <a class="glyphicon glyphicon-file" title="Generate pdf preview"  href="{% url 'mails:generate_pdf' pk=customs.id %}"target="_blank"></a>
 
           </div>
       </div>

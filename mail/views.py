@@ -19,19 +19,16 @@ from mail.utils import PDF
 from mail.domain import (
     all_data,
     CustomData,
-    data_to_dict_all_models
+    data_to_dict_all_models,
+    data_fake
 )
 from customizations.utils import file_exist, download
 
 
 def get_pdf_ticket(request, pk):
-    data = data_to_dict_all_models(pk)
-    pfd_ticket = PDF(
-        'tickets/template_default.html',
-        [data]
-    ).render().getvalue()
-
-    return HttpResponse(pfd_ticket, content_type='application/pdf')
+    data = data_fake(pk)
+    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+    return HttpResponse(pdf, content_type='application/pdf')
 
 
 def email_preview_pdf(request, pk):
@@ -174,7 +171,6 @@ def process_data(order, venue, organizer, user_id):
 def do_send_email(custom_data):
 
     data = all_data(custom_data)
-    # import ipdb; ipdb.set_trace()
     # if not file_exist(data['logo_path']):
     #     print 'downloading...'
     #     if download(data['logo_url'], data['logo_name']):
