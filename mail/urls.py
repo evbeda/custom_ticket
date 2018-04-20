@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from .views import (
-    get_data,
+    accept_webhook,
     GetEmailTest,
     get_pdf_ticket,
     email_preview_pdf
@@ -11,7 +11,7 @@ from .views import (
 urlpatterns = [
     url(
         r'^mail/',
-        get_data,
+        accept_webhook,
         name='mail'),
     url(
         r'^(?P<pk>[0-9]+)/generate_pdf_ticket$',

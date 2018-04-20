@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 import requests
 import json
+import threading
 from eventbrite import Eventbrite
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -15,7 +16,10 @@ from django.shortcuts import render
 from django.views.generic import FormView
 from customizations.models import Customization
 from mail.forms import FormSendEmailPreview
-from mail.utils import PDF
+from mail.utils import (
+    async,
+    PDF,
+)
 from mail.domain import (
     all_data,
     CustomData,
@@ -101,17 +105,24 @@ def get_social_user(user_id):
     return social_user[0]
 
 
-def get_data(request):
+def accept_webhook(request):
+    print "accepting webhook"
+    threading.Thread(target=get_data, args=(request.body,)).start()
+    print "responding webhook"
+    return HttpResponse()
+
+
+def get_data(body):
     print 'Here! get_data'
-    print request
-    config_data = json.loads(request.body)
+    print body
+    config_data = json.loads(body)
     user_id = config_data['config']['user_id']
     if webhook_available_to_process(user_id):
         social_user = get_social_user(user_id)
         access_token = social_user.extra_data['access_token']
         data = requests.get(
             json.loads(
-                request.body
+                body
             )['api_url'] +
             '?token=' +
             access_token +
@@ -171,15 +182,16 @@ def process_data(order, venue, organizer, user_id):
 def do_send_email(custom_data):
 
     data = all_data(custom_data)
-    # if not file_exist(data['logo_path']):
-    #     print 'downloading...'
-    #     if download(data['logo_url'], data['logo_name']):
-    #         print 'downloaded..'
-    #     else:
-    #         print "Unable to download file"
-    #     print 'The file now exist...'
-    # else:
-    #     print 'file exist...'
+    # import ipdb; ipdb.set_trace()
+    if not file_exist(data['logo_path']):
+        print 'downloading...'
+        if download(data['logo_url'], data['logo_name']):
+            print 'downloaded..'
+        else:
+            print "Unable to download file"
+        print 'The file now exist...'
+    else:
+        print 'file exist...'
 
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
