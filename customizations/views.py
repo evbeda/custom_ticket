@@ -12,18 +12,13 @@ from customizations.models import (
 )
 from customizations.forms import FormCustomization
 from customizations.utils import upload_file,file_exist,download
-from customizations.utils import create_webhook, get_token
+from customizations.utils import create_webhook, get_token, delete_webhook
 
 
 class CustomizationConfig(LoginRequiredMixin):
     model = Customization
     form_class = FormCustomization
     success_url = reverse_lazy('/')
-
-
-
-# def delete_webhook(token, webhook_id):
-#     Eventbrite(token).delete('/webhooks/' + webhook_id + "/")
 
 
 class ViewCreateCustomization(LoginRequiredMixin, FormView):
@@ -37,9 +32,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
         if is_form_valid:
             name = request.POST.get('name')
 
-            # image uploaded
             links = upload_file(request, 'logo')
-
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
             message_ticket = request.POST.get('message_ticket')
@@ -111,10 +104,10 @@ class DeleteCustomization(CustomizationConfig, DeleteView):
     context_object_name = 'customizations'
 
     def get_context_data(self, **kwargs):
-        # if Customization.objects.filter().count() == 1:
-        #     webhook_id = UserWebhook.models.filter(user=self.request.user).webhook_id
-        #     token = get_token(request)
-        #     delete_webhook(token, webhook_id)
+        if Customization.objects.filter().count() == 1:
+            webhook_id = UserWebhook.objects.filter(user=self.request.user)[0].webhook_id
+            token = get_token(self.request.user)
+            delete_webhook(token, webhook_id)
         context = super(DeleteCustomization, self).get_context_data(**kwargs)
         context['user'] = self.get_object().user
 
