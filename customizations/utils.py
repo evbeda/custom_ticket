@@ -3,7 +3,7 @@ import hashlib
 import time
 from urllib2 import urlopen
 import os.path
-
+from django.http import HttpResponseRedirect
 from eventbrite import Eventbrite
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -89,8 +89,9 @@ def create_webhook(token):
     return (response[u'id'])
 
 
-# def delete_webhook(token, webhook_id):
-#     response = Eventbrite(token).delete('/webhooks/' + webhook_id + "/")
+def delete_webhook(token, webhook_id):
+    Eventbrite(token).delete('/webhooks/' + webhook_id + "/")
+    return HttpResponseRedirect('/')
 
 
 def get_token(user):

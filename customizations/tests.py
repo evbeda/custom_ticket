@@ -6,29 +6,19 @@ from mock import (
     MagicMock,
     patch,
 )
-from .utils import create_webhook, get_token
+from .utils import create_webhook, get_token, delete_webhook
 from django.contrib.auth import get_user_model
 from social_django.models import UserSocialAuth
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import AnonymousUser, User
 from .forms import FormCustomization
-from customizations.utils import get_unique_file_name, upload_file
+from .utils import get_unique_file_name, upload_file
 from freezegun import freeze_time
+from .models import UserWebhook
+from .views import ViewCreateCustomization
 
 
-class TestFormCustomization(TestCase):
-    def test_form(self):
-        form_data = {'name': 'testform', 'select_event': 'apply_all', 'logo': None, 'message': 'Test', 'select_design_template': 'design_one', 'message_ticket': 'Test'}
-        form = FormCustomization(form_data)
-        self.assertTrue(form.is_valid)
-
-    def test_form_false(self):
-        form_data = {}
-        form = FormCustomization(form_data)
-        self.assertTrue(form.is_valid)
-
-
-class TestCustomizationsWithNoWebhook(TestCase):
+class TestBase(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username='edacticket',
@@ -36,20 +26,58 @@ class TestCustomizationsWithNoWebhook(TestCase):
             email='edacticket@gmail.com',
             first_name='edacticket',
             is_active=True,
+            is_staff=True,
+            is_superuser=True
         )
+        self.user.set_password('hello')
+        self.user.save()
         self.user_access_token = 'HJDTUHYQ3ZVTVLMN52VZ'
         self.factory = RequestFactory()
         self.auth = UserSocialAuth.objects.create(
-
             user=self.user,
             provider='eventbrite',
             uid="249759038146",
             extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'}
         )
+        login = self.client.login(username='edacticket', password='hello')
+        return login
 
-    # @patch(
+
+class IndexViewTest(TestBase):
+
+    def setUp(self):
+        super(IndexViewTest, self).setUp()
+
+    # def test_homepage(self):
+    #     response = self.client.get('/')
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_no_customizations(self):
+    #     response = self.client.get('/')
+    #     self.assertContains(response, "You don't have any customization created yet")
+
+    # @patch('customizations.utils.get_token', return_value='HJDTUHYQ3ZVTVLMN52VZ')
+    # @patch('customizations.utils.create_webhook', return_value='646089')
+    # @patch('customizations.utils.upload_file', return_value={'path': u'/Users/asaiz/eventbrite/custom_ticket/static/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'local': u'http://localhost:8000/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'name': u'EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'dropbox': u'https://www.dropbox.com/s/2h44xdq9x6466ip/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png?dl=1'})
+    # def test_post(self, mock_upload_file, mock_webhook, mock_token):
+    #     request = MagicMock(
+    #         POST={
+    #             u'name': [u'prueba'],
+    #             u'select_event': [u'Apply All Events'],
+    #             u'message_ticket': [u'prueba ticket'],
+    #             u'create_customization': [u'Create'],
+    #             u'select_design_template': [u'DESIGN 1'],
+    #             u'csrfmiddlewaretoken': [u'b7wtBfWYFKGkxNxDPrwS8WLZxv001isUjKBrCvrjg9ZibLSKaru2ozuuaS3JMOi1'],
+    #             u'message': [u'prueba mensaje']},
+    #         FILES={u'logo': ['adidas-2-sticker-logo-1.jpg']}
     #     )
-    # def test_post(self):
+    #     response = self.client.post('/customizations/create-customization/'.format(
+    #     ), request, follow=True)
+
+    #     mock_token.assert_called_once()
+    #     mock_webhook.assert_called_once()
+    #     mock_upload_file.assert_called_once()
+    #     self.assertEquals(200, response.status_code)
 
     @patch(
         'customizations.utils.Eventbrite.post',
@@ -79,10 +107,8 @@ class TestCustomizationsWithNoWebhook(TestCase):
         token = get_token(request.user)
         self.assertEquals(token, self.user_access_token)
 
-
     @freeze_time("2012-01-14 03:21:34")
     def test_get_unique_file_name(self):
-
         request = self.factory.post('/customizations/create-customization/')
         request.user = self.user
         unique_name = get_unique_file_name(request.user, 'nombre del archivo.png')
@@ -90,6 +116,58 @@ class TestCustomizationsWithNoWebhook(TestCase):
             unique_name,
             'edacticket-3-e4122a5c7387fc823e534bdfa600f176cef7cb27732f90323cba4b29-nombre-del-archivo.png'
         )
+
+
+class TestFormCustomization(TestCase):
+    def test_form(self):
+        form_data = {'name': 'testform', 'select_event': 'Apply to All', 'logo': None, 'message': 'Test', 'select_design_template': 'Default Design', 'message_ticket': 'Test'}
+        form = FormCustomization(form_data)
+        self.assertTrue(form.is_valid)
+
+    def test_form_false(self):
+        form_data = {}
+        form = FormCustomization(form_data)
+        self.assertTrue(form.is_valid)
+
+
+class TestCustomizationsWithWebhook(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username='edacticket',
+            password='12345',
+            email='edacticket@gmail.com',
+            first_name='edacticket',
+            is_active=True,
+        )
+        self.user_access_token = 'HJDTUHYQ3ZVTVLMN52VZ'
+        self.factory = RequestFactory()
+        self.auth = UserSocialAuth.objects.create(
+
+            user=self.user,
+            provider='eventbrite',
+            uid="249759038146",
+            extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'}
+        )
+        self.webhook = UserWebhook.objects.create(
+            user=self.user,
+            webhook_id='646089'
+        )
+
+    @patch('customizations.utils.get_token', return_value='HJDTUHYQ3ZVTVLMN52VZ')
+    @patch('customizations.utils.create_webhook', return_value='646089')
+    def test_post(self, mock_webhook, mock_token):
+        request = self.factory.post('/customizations/create-customization/')
+        request.user = self.user
+        mock_token.assert_not_called()
+        mock_webhook.assert_not_called()
+
+    def test_delete_webhook(self):
+        token = 'HJDTUHYQ3ZVTVLMN52VZ'
+        webhook_id = '646089'
+        response = delete_webhook(token, webhook_id)
+        self.assertEquals(response.status_code, 302)
+
+
 
 
 # cambios de gabi

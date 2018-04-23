@@ -16,7 +16,7 @@ class FormCustomization(forms.ModelForm):
             attrs={'placeholder': 'name', 'class': 'form-control'}
         )
     )
-    options_event = (('Apply All Events', 'apply_all'),)
+    options_event = (('Apply All Events', 'Apply to All'),)
     select_event = forms.ChoiceField(
         choices=options_event,
         widget=forms.Select(
@@ -25,7 +25,7 @@ class FormCustomization(forms.ModelForm):
     )
 
     logo = forms.ImageField(
-        required=False,
+        required=True,
         validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
         widget=forms.FileInput(
             attrs={'class': 'form-control'}
@@ -39,7 +39,7 @@ class FormCustomization(forms.ModelForm):
         )
     )
 
-    options_design = (('DESIGN 1', 'design_one'),)
+    options_design = (('DESIGN 1', 'Default Design'),)
     select_design_template = forms.ChoiceField(
         choices=options_design,
         widget=forms.Select(
