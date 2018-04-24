@@ -36,10 +36,11 @@
 <td class="x_grid__col" style="padding: 32px 40px; border-radius: 6px 6px 0 0;" align="">
 <h2 class="" style="color: #404040; font-weight: 300; margin: 0 0 12px 0; font-size: 24px; line-height: 30px;">Hola {{user_first_name}}, esta es tu confirmaci&oacute;n de inscripci&oacute;n para el evento <a style="text-decoration: none; color: #1090ba; font-weight: normal;" href="https://www.eventbrite.com.ar/e/encuentro-de-jovenes-emprendedores-tickets-32958532859?utm_source=eb_email&amp;utm_medium=email&amp;utm_campaign=order_confirmation_email&amp;utm_term=eventname&amp;ref=eemailordconf" target="_blank" rel="noopener noreferrer">{{event_name_text}}</a></h2>
 <div class="x_organized_by" style="color: #666666; font-weight: 300; font-size: 15px; line-height: 21px;">Organizado por <a style="color: #999;" href="" target="_blank" rel="noopener noreferrer">{{ organizer_name }} </a>
-    <p>Message: </p>
+
     {{message}}
-    <p> Message Ticket:</p>
+    <p>
     {{message_ticket}}
+    </p>
 </div>
 </td>
 </tr>
@@ -247,11 +248,19 @@
 <tr class="">
 <td class="" style="vertical-align: top; padding-right: 10px;" colspan="1" align="" valign="" width="20" height=""><img class="" style="width: 20px; height: 20px; vertical-align: -4px;" title="fecha" src="https://cdn.evbstatic.com/s3-s3/marketing/emails/order_confirmation/location-pin-iconx2.png" alt="fecha" width="20" height="20" border="0" data-imagetype="External" /></td>
 
-<td class="" style="padding-bottom: 10px;" colspan="1" align="" valign="" width="" height="">{{event_venue_location.address_1|default_if_none:""}}| {{event_venue_location.address_2|default_if_none:""}} </td>
+<td class="" style="padding-bottom: 10px;" colspan="1" align="" valign="" width="" height="">
 
- {{event_venue_location.address_1|default_if_none:""}} |{{event_venue_location.postal_code|default_if_none:""}}
-{{event_venue_location.city|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}
-{{event_venue_location.region|default_if_none:""}}<br>
+
+{{event_venue_location.address_1|default_if_none:""}} <br>
+{{event_venue_location.address_2|default_if_none:""}} <br>
+
+{{event_venue_location.city|default_if_none:""}} <br>
+{{event_venue_location.region|default_if_none:""}} {{event_venue_location.postal_code|default_if_none:""}} <br>
+{{event_venue_location.country|default_if_none:""}} <br>
+
+
+
+</td>
 </tr>
 <tr class="x_hide-for-small">
 <td class="x_hide-for-small" style="vertical-align: top; padding-right: 10px; padding-top: 10px;" colspan="1" align="" valign="" width="20" height=""><img class="" style="width: 20px; height: 20px; vertical-align: -2px;" title="fecha" src="https://cdn.evbstatic.com/s3-s3/marketing/emails/order_confirmation/add-calendar-iconx2.png" alt="fecha" width="20" height="20" border="0" data-imagetype="External" /></td>
