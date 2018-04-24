@@ -11,7 +11,7 @@ from customizations.models import (
     UserWebhook
 )
 from customizations.forms import FormCustomization
-from customizations.utils import upload_file,file_exist,download
+from customizations.utils import upload_file
 from customizations.utils import create_webhook, get_token, delete_webhook
 
 
@@ -29,10 +29,11 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
     def post(self, request, *args, **kwargs):
         is_form_valid = super(ViewCreateCustomization, self).post(
             request, *args, **kwargs)
-        if is_form_valid:
+        links = upload_file(request, 'logo')
+
+        if is_form_valid and bool(links):
             name = request.POST.get('name')
 
-            links = upload_file(request, 'logo')
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
             message_ticket = request.POST.get('message_ticket')
@@ -63,6 +64,11 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                     webhook_id=webhook_id,
                 )
             return HttpResponseRedirect('/')
+        else:
+            form = FormCustomization()
+            return render(request, self.template_name, {
+                'form': form}
+            )
 
 
 def update_customization(request, pk):

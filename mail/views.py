@@ -28,7 +28,7 @@ from mail.domain import (
     data_to_dict_all_models,
     data_fake
 )
-from customizations.utils import file_exist, download
+from customizations.utils import process_logo
 
 
 def get_pdf_ticket(request, pk):
@@ -191,16 +191,8 @@ def process_data(order, venue, organizer, user_id):
 def do_send_email(custom_data):
 
     data = all_data(custom_data)
-    # import ipdb; ipdb.set_trace()
-    if not file_exist(data['logo_path']):
-        print 'downloading...'
-        if download(data['logo_url'], data['logo_name']):
-            print 'downloaded..'
-        else:
-            print "Unable to download file"
-        print 'The file now exist...'
-    else:
-        print 'file exist...'
+
+    process_logo(data['logo_path'], data['logo_url'], data['logo_name'])
 
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(

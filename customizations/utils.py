@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from eventbrite import Eventbrite
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from PIL import Image
 
 
 def get_unique_file_name(user, file_name):
@@ -33,34 +34,68 @@ def download(url, file_name):
         return False
 
 
-def file_exist(path):
-    return os.path.exists(path)
+def valid_image_format(path):
+    valid_format = ['PNG', 'JPEG']
+    try:
+        im = Image.open(path)
+        im.close()
+        return im.format in valid_format
+    except IOError:
+        return False
+
+
+def image_exist(path):
+    if valid_image_format(path):
+        return os.path.exists(path)
+    else:
+        return False
+
+
+def process_logo(logo_path, logo_url, logo_name):
+    if not image_exist(logo_path):
+        print 'downloading...'
+        if download(logo_url, logo_name):
+            print 'Downloaded. The file now exist...'
+            return True
+        else:
+            print "Unable to download file"
+            return False
+    else:
+        print 'file exist...'
+        return True
+
+
+def save_file(name, file):
+    fs = FileSystemStorage()
+    fs.name = fs.save(name, file)
+    return fs
 
 
 def upload_file(request, request_field):
-
-    public_url = {}
-    fs = FileSystemStorage()
+    valid_type = ['image/png', 'image/jpeg']
     request_file = request.FILES[request_field]
+    public_url = {}
+    if request_file.content_type in valid_type:
+        unique_name = get_unique_file_name(request.user, request_file.name)
+        domain = request.build_absolute_uri('/')[:-1]
+        fs = save_file(unique_name, request_file)
 
-    unique_name = get_unique_file_name(request.user, request_file.name)
+        public_url['name'] = unique_name
+        path_file = fs.location + '/' + fs.name
+        public_url['path'] = path_file
 
-    public_url['name'] = unique_name
-    file_name_saved = fs.save(unique_name, request_file)
+        # local
+        public_url['local'] = get_file_local(domain, fs.name)
 
-    path_file = fs.location + '/' + file_name_saved
-    public_url['path'] = path_file
-    # local
-    domain = request.build_absolute_uri('/')[:-1]
-    public_url['local'] = upload_file_local(domain, file_name_saved)
+        # dropbox
+        public_url['dropbox'] = upload_file_dropbox(path_file, fs.name)
 
-    # dropbox
-    public_url['dropbox'] = upload_file_dropbox(path_file, file_name_saved)
-
-    return public_url
+        return public_url
+    else:
+        return public_url
 
 
-def upload_file_local(domain, file_name_saved):
+def get_file_local(domain, file_name_saved):
     public_url = domain + settings.MEDIA_URL + file_name_saved
     return public_url
 
