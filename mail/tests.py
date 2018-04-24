@@ -240,6 +240,7 @@ class TestMailsWithCostumization(TestBase):
         mock_data.assert_called_once()
         mock_venue.assert_called_once()
 
+    @patch('customizations.utils.download', return_value=True)
     @patch(
         'mail.views.requests.get',
         return_value=MagicMock(
@@ -250,7 +251,7 @@ class TestMailsWithCostumization(TestBase):
     )
     @patch('mail.views.get_venue', return_value='address_1 Test')
     @patch('mail.views.get_organizer', return_value='agustin')
-    def test_integration_data_send_mail(self, mock_organizer, mock_venue, mock_requests):
+    def test_integration_data_send_mail(self, mock_organizer, mock_venue, mock_requests, mock_download):
         request = MagicMock(
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
@@ -264,8 +265,8 @@ class TestMailsWithCostumization(TestBase):
         self.assertEquals(to_email, [u'edacticket@gmail.com'])
         self.assertEquals(response.status_code, 200)
 
-
-    def test_do_send_mail(self):
+    @patch('customizations.utils.download', return_value=True)
+    def test_do_send_mail(self, mock_download):
         self.attendee = [{
             'attendee_first_name': 'Florencia',
             'attendee_last_name': 'Carabelli',
@@ -303,7 +304,8 @@ class TestMailsWithCostumization(TestBase):
 
 class TestMailWithoutCustomization(TestCase):
 
-    def test_integration_data_send_mail(self):
+    @patch('customizations.utils.download', return_value=True)
+    def test_integration_data_send_mail(self, mock_download):
 
         request = MagicMock(
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
