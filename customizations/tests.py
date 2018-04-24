@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+from io import BytesIO
 import json
 from mock import (
     MagicMock,
@@ -8,6 +8,7 @@ from mock import (
 )
 from .utils import create_webhook, get_token, delete_webhook
 from django.contrib.auth import get_user_model
+from django.test.utils import override_settings
 from social_django.models import UserSocialAuth
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import AnonymousUser, User
@@ -43,41 +44,45 @@ class TestBase(TestCase):
         return login
 
 
+@override_settings(STATICFILES_STORAGE=None)
 class IndexViewTest(TestBase):
 
     def setUp(self):
         super(IndexViewTest, self).setUp()
 
-    # def test_homepage(self):
-    #     response = self.client.get('/')
-    #     self.assertEqual(response.status_code, 200)
+    def test_homepage(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
 
-    # def test_no_customizations(self):
-    #     response = self.client.get('/')
-    #     self.assertContains(response, "You don't have any customization created yet")
+    def test_no_customizations(self):
+        response = self.client.get('/')
+        self.assertContains(response, "You don't have any customization created yet")
 
-    # @patch('customizations.utils.get_token', return_value='HJDTUHYQ3ZVTVLMN52VZ')
-    # @patch('customizations.utils.create_webhook', return_value='646089')
-    # @patch('customizations.utils.upload_file', return_value={'path': u'/Users/asaiz/eventbrite/custom_ticket/static/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'local': u'http://localhost:8000/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'name': u'EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'dropbox': u'https://www.dropbox.com/s/2h44xdq9x6466ip/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png?dl=1'})
-    # def test_post(self, mock_upload_file, mock_webhook, mock_token):
-    #     request = MagicMock(
-    #         POST={
-    #             u'name': [u'prueba'],
-    #             u'select_event': [u'Apply All Events'],
-    #             u'message_ticket': [u'prueba ticket'],
-    #             u'create_customization': [u'Create'],
-    #             u'select_design_template': [u'DESIGN 1'],
-    #             u'csrfmiddlewaretoken': [u'b7wtBfWYFKGkxNxDPrwS8WLZxv001isUjKBrCvrjg9ZibLSKaru2ozuuaS3JMOi1'],
-    #             u'message': [u'prueba mensaje']},
-    #         FILES={u'logo': ['adidas-2-sticker-logo-1.jpg']}
-    #     )
-    #     response = self.client.post('/customizations/create-customization/'.format(
-    #     ), request, follow=True)
+    @patch('customizations.views.get_token', return_value='HJDTUHYQ3ZVTVLMN52VZ')
+    @patch('customizations.views.create_webhook', return_value='646089')
+    @patch('customizations.views.upload_file', return_value={'path': u'/Users/asaiz/eventbrite/custom_ticket/static/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'local': u'http://localhost:8000/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'name': u'EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'dropbox': u'https://www.dropbox.com/s/2h44xdq9x6466ip/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png?dl=1'})
+    def test_post(self, mock_upload_file, mock_webhook, mock_token):
+        img = BytesIO(b'mybinarydata')
+        img.name = 'myimage.jpg'
+        response = self.client.post(
+            '/customizations/create-customization/',
+            data={
+                u'name': [u'prueba'],
+                u'select_event': [u'Apply All Events'],
+                u'message_ticket': [u'prueba ticket'],
+                u'create_customization': [u'Create'],
+                u'select_design_template': [u'DESIGN 1'],
+                u'csrfmiddlewaretoken': [u'b7wtBfWYFKGkxNxDPrwS8WLZxv001isUjKBrCvrjg9ZibLSKaru2ozuuaS3JMOi1'],
+                u'message': [u'prueba mensaje'],
+                'logo': img,
+            },
+            follow=True,
+        )
 
-    #     mock_token.assert_called_once()
-    #     mock_webhook.assert_called_once()
-    #     mock_upload_file.assert_called_once()
-    #     self.assertEquals(200, response.status_code)
+        mock_token.assert_called_once()
+        mock_webhook.assert_called_once()
+        mock_upload_file.assert_called_once()
+        self.assertEquals(200, response.status_code)
 
     @patch(
         'customizations.utils.Eventbrite.post',
