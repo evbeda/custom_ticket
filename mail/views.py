@@ -16,6 +16,8 @@ from django.shortcuts import render
 from django.views.generic import FormView
 from customizations.models import Customization
 from mail.forms import FormSendEmailPreview
+import datetime
+import time
 from mail.utils import (
     async,
     PDF,
@@ -159,6 +161,13 @@ def process_data(order, venue, organizer, user_id):
         }
         attendees.append(dict(attendee))
     customization = Customization.objects.filter(user_id=user_id)
+
+    date_start = datetime.datetime(
+        *time.strptime(order['event']['start']['local'],
+                       "%Y-%m-%dT%H:%M:%S")[:6]
+    )
+    format_date_start = date_start.strftime("%d/%m/%y %I:%M%p")
+
     custom_data = CustomData(
         customization_id=customization[0].id,
         attendees=attendees,
@@ -166,7 +175,7 @@ def process_data(order, venue, organizer, user_id):
         user_last_name=order['last_name'],
         event_name_text=order['event']['name']['html'],
         from_email=settings.EMAIL_HOST_USER,
-        event_start=order['event']['start']['utc'],
+        event_start=format_date_start,
         event_venue_location=venue,
         organizer_name=organizer,
         organizer_email='',
