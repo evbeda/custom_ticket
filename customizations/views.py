@@ -104,8 +104,8 @@ class DeleteCustomization(CustomizationConfig, DeleteView):
     context_object_name = 'customizations'
 
     def get_context_data(self, **kwargs):
-        if Customization.objects.filter().count() == 1:
-            webhook_id = UserWebhook.objects.filter(user=self.request.user)[0].webhook_id
+        if Customization.objects.filter(user=self.request.user).count() == 1:
+            webhook_id = UserWebhook.objects.get(user=self.request.user).webhook_id
             token = get_token(self.request.user)
             delete_webhook(token, webhook_id)
         context = super(DeleteCustomization, self).get_context_data(**kwargs)
