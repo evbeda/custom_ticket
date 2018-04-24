@@ -1,0 +1,191 @@
+{% load static %}
+{% load qr_tags %}
+{% for attendee in attendees %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<style>
+
+.qr-code{
+    width: 250px;
+    text-align: center;
+}
+.eb{
+    width: 100px;
+    text-align: center;
+}
+table {
+
+    font-family: arial, sans-serif;
+    width: 100%;
+}
+
+td, th {
+    text-align: left;
+    padding: 8px;
+}
+
+hr.line {
+  border: 0;
+  border-bottom: 1px dashed #ccc;
+  background: #999;
+}
+.logo {
+text-align: center;
+float: left;
+padding: 10px;
+width: 250px;
+}
+
+</style>
+<body >
+<!-- - - - -  - - - - - - - - HEADER - - - - - - - - - - - - - -->
+<table>
+  <tr >
+    <th style="background: #f9f9f9;font-weight: bold;">
+     <span style="font-size: 22px;color: #2eb724;">TICKET</span>
+     <span style="font-size: 22px;"> ROAR</span>
+    </th>
+
+    <th style="text-align: right;font-weight: normal;background: #f9f9f9;width: 300px;font-size: 16px;color:#878685;">
+         <span style="font-size: 14px;">
+          Order #{{order_id}}
+         </span>
+         <!-- <span style="font-size: 14px;">
+           <br>Status {{order_status}}
+         </span>
+
+         <span style="font-size: 14px;">
+           <br>Type <b>
+            {{attendee.ticket_class}}
+            </b>
+         </span> -->
+    </th>
+  </tr>
+</table>
+<!-- - - - -  - - - - - - - - END HEADER - - - - - - - - - - - - - -->
+
+<!-- - - - -  - - - - - - - - EVENT NAME - - - - - - - - - - - - - -->
+<table>
+  <tr>
+
+    <th style="background: #f9f9f9;color: #515150;font-weight: normal;">
+        <span style="font-size: 42px;">{{event_name_text}}</span>
+
+    </th>
+    <th style="background: #f9f9f9;width: 80px">
+
+    </th>
+
+  </tr>
+</table>
+<!-- - - - -  - - - - - - - - END EVENT NAME - - - - - - - - - - - - - -->
+<table>
+ <td style="background: #f9f9f9;color: #001b47;">
+  <hr>
+  <br>
+  <br>
+  <br>
+    </td>
+</table>
+<!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
+<table>
+
+  <tr>
+
+    <td style="background: #f9f9f9;color: #001b47;text-align: left;">
+        <p>
+       <span style="font-size: 16px; color:#ff6c0a;">LOCATION<br></span>
+       <span style="font-size: 16px;color:#878685;">
+        <br>
+        {{event_venue_location.address_1|default_if_none:""}}, {{event_venue_location.address_2|default_if_none:""}} - {{event_venue_location.postal_code|default_if_none:"" }}
+        {{event_venue_location.city|default_if_none:""}}, {{event_venue_location.country|default_if_none:""}}
+        {{event_venue_location.region|default_if_none:""}}
+         </p>
+         </span>
+
+        <p>
+        <span style="font-size: 16px; color:#ff6c0a;">DATE+TIME<br></span>
+        <span style="font-size: 16px;color:#878685;">
+          <br>
+        {{event_start}}
+        </p>
+        </span>
+
+        <p>
+        <span style="font-size: 16px; color:#ff6c0a;">GUEST<br></span>
+          <span style="font-size: 16px;color:#878685;">
+            <br>
+         {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}
+         </p>
+        </span>
+
+    </td>
+    <td  style="width: 300px;background: #f9f9f9;color: #001b47;text-align: center;">
+      <div class="qr-code">
+            {% qr_from_text attendee.barcode "m" %}
+        </div>
+        <div class="eb">
+        <img src="{% static 'custom_ticket/images/powered_by_eventbrite.png' %}" alt="powered_by_eventbrite">
+        </div>
+    </td>
+  </tr>
+</table>
+<!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
+<table>
+ <td style="background: #f9f9f9;color: #001b47;">
+  <br>
+  <br>
+  <br>
+  <hr>
+    </td>
+</table>
+<!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
+<table>
+  <tr>
+    <td style="background: #f9f9f9;color: #001b47;">
+      <div class="logo">
+        <img  style="padding: 10px;" src="{{ logo_url }}" alt="LOGO" border="0" >
+        </div>
+
+    </td>
+
+    <td style="background: #f9f9f9;color: #878685; text-align: left;">
+                <span style="font-size: 16px;color:#000;font-weight: bold;">
+                 Let´s Play Football
+                </span>
+                <br><br>
+                <span style="font-size: 14px;color:#878685;">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, iure iusto facere porro earum, atque officiis eius dolore, nemo saepe dicta placeat quo! Reprehenderit laudantium eaque, distinctio omnis eum nulla.
+
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, iure iusto facere porro earum, atque officiis eius dolore, nemo saepe dicta placeat quo! Reprehenderit laudantium eaque, distinctio omnis eum nulla.
+
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, iure iusto facere porro earum, atque officiis eius dolore.
+                   {{message_ticket}}
+                  </span>
+                  <br><br>
+                  Share your Football stories with: <br>
+                  <span style="font-size: 14px;color:#4286f4;">
+                    #LETSPLAYFOOTBALL
+                  </span>
+    </td>
+
+  </tr>
+
+</table>
+<!-- - - - -  - - - - - - - - END FOOTER - - - - - - - - - - - - - -->
+
+
+</body>
+</html>
+<style>
+table {
+
+}
+</style>
+<div style="display:block; page-break-before:always;"></div>
+{% endfor %}
