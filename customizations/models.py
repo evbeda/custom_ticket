@@ -47,3 +47,12 @@ class UserWebhook(models.Model):
         on_delete=models.CASCADE,
         unique=True,
     )
+
+
+class TicketSequence(models.Model):
+    event_id = models.BigIntegerField(blank=True, null=True)
+    ticket_type_id = models.BigIntegerField(blank=True, null=True)
+    event_sequence = models.IntegerField(blank=True, null=True)
+    ticket_type_sequence = models.IntegerField(blank=True, null=True)
+    customization = models.ForeignKey(Customization, blank=True)
+
