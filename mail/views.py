@@ -33,7 +33,7 @@ from customizations.utils import file_exist, download
 
 def get_pdf_ticket(request, pk):
     data = data_fake(pk)
-    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+    pdf = PDF('tickets/hero_design.html', [data]).render().getvalue()
     return HttpResponse(pdf, content_type='application/pdf')
 
 
@@ -212,7 +212,7 @@ def do_send_email(custom_data):
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
-    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+    pdf = PDF('tickets/hero_design.html', [data]).render().getvalue()
     email.attach('ticket', pdf, 'application/pdf')
     print 'send mail'
     print custom_data.order_id
