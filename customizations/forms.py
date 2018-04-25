@@ -71,17 +71,6 @@ class FormCustomization(forms.ModelForm):
         )
     )
 
-    additional_info = forms.CharField(
-        required=False,
-        widget=forms.Textarea(
-            attrs={
-                'placeholder': 'addiional info here',
-                'class': 'form-control',
-                'rows': 6
-            }
-        )
-    )
-
     footer_description = forms.CharField(
         required=False,
         widget=forms.TextInput(
