@@ -14,7 +14,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.views.generic import FormView
-from customizations.models import Customization
+from customizations.models import (
+    Customization,
+    TicketSequence,
+)
 from mail.forms import FormSendEmailPreview
 import datetime
 import time
@@ -117,6 +120,7 @@ def accept_webhook(request):
 def get_data(body):
     print 'Here! get_data'
     print body
+    # import ipdb; ipdb.set_trace()
     config_data = json.loads(body)
     user_id = config_data['config']['user_id']
     if webhook_available_to_process(user_id):
@@ -147,8 +151,43 @@ def get_data(body):
     return HttpResponse()
 
 
+def register_ticket(attendee, customization):
+
+    event_sequence = TicketSequence.objects.filter(
+        event_id=attendee['event_id']
+    ).count()
+
+    ticket_type_sequence = TicketSequence.objects.filter(
+        ticket_type_id=attendee['ticket_class_id']
+    ).count()
+
+    TicketSequence.objects.create(
+        event_id=attendee['event_id'],
+        ticket_type_id=attendee['ticket_class_id'],
+        barcode=str(attendee['barcode']),
+        event_sequence=event_sequence + 1,
+        ticket_type_sequence=ticket_type_sequence + 1,
+        customization=customization,
+    )
+
+
+def get_ticket_sequence(barcode):
+    event_sequence = TicketSequence.objects.get(
+        barcode=barcode
+    ).event_sequence
+
+    ticket_type_sequence = TicketSequence.objects.get(
+        barcode=barcode
+    ).ticket_type_sequence
+
+    return {
+        'event_sequence': event_sequence,
+        'ticket_type_sequence': ticket_type_sequence,
+    }
+
 def process_data(order, venue, organizer, user_id):
     list_attendee = order['attendees']
+    customization = Customization.objects.filter(user_id=user_id)
     attendees = []
     for att in list_attendee:
         attendee = {
@@ -157,10 +196,12 @@ def process_data(order, venue, organizer, user_id):
             'cost_gross': att['costs']['gross']['value'],
             'barcode': att['barcodes'][0]['barcode'],
             'answers': att['answers'],
-            'ticket_class': att['ticket_class_name']
+            'ticket_class': att['ticket_class_name'],
+            'ticket_class_id': att['ticket_class_id'],
+            'event_id': att['event_id']
         }
+        register_ticket(attendee, customization[0])
         attendees.append(dict(attendee))
-    customization = Customization.objects.filter(user_id=user_id)
 
     date_start = datetime.datetime(
         *time.strptime(order['event']['start']['local'],
@@ -169,7 +210,7 @@ def process_data(order, venue, organizer, user_id):
     format_date_start = date_start.strftime("%d/%m/%y %I:%M%p")
 
     custom_data = CustomData(
-        customization_id=customization[0].id,
+        customization=customization[0],
         attendees=attendees,
         user_first_name=order['first_name'],
         user_last_name=order['last_name'],
