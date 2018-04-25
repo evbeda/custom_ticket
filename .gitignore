@@ -9,6 +9,7 @@ __pycache__/
 *.pyc
 db.sqlite3
 myvenv
+virtual
 __pycache__
 local_settings.py
 
