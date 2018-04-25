@@ -164,13 +164,28 @@ def register_ticket(attendee, customization):
     TicketSequence.objects.create(
         event_id=attendee['event_id'],
         ticket_type_id=attendee['ticket_class_id'],
+        barcode=str(attendee['barcode']),
         event_sequence=event_sequence + 1,
         ticket_type_sequence=ticket_type_sequence + 1,
         customization=customization,
     )
 
+
+def get_ticket_sequence(barcode):
+    event_sequence = TicketSequence.objects.get(
+        barcode=barcode
+    ).event_sequence
+
+    ticket_type_sequence = TicketSequence.objects.get(
+        barcode=barcode
+    ).ticket_type_sequence
+
+    return {
+        'event_sequence': event_sequence,
+        'ticket_type_sequence': ticket_type_sequence,
+    }
+
 def process_data(order, venue, organizer, user_id):
-    # import ipdb; ipdb.set_trace() 
     list_attendee = order['attendees']
     customization = Customization.objects.filter(user_id=user_id)
     attendees = []
@@ -185,8 +200,8 @@ def process_data(order, venue, organizer, user_id):
             'ticket_class_id': att['ticket_class_id'],
             'event_id': att['event_id']
         }
-        attendees.append(dict(attendee))
         register_ticket(attendee, customization[0])
+        attendees.append(dict(attendee))
 
     date_start = datetime.datetime(
         *time.strptime(order['event']['start']['local'],
@@ -195,7 +210,7 @@ def process_data(order, venue, organizer, user_id):
     format_date_start = date_start.strftime("%d/%m/%y %I:%M%p")
 
     custom_data = CustomData(
-        customization_id=customization[0].id,
+        customization=customization[0],
         attendees=attendees,
         user_first_name=order['first_name'],
         user_last_name=order['last_name'],

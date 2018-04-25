@@ -120,7 +120,7 @@ def data_fake(id):
 
 def all_data(custom_data):
     data_api = custom_data.__dict__
-    data_models = data_to_dict_all_models(custom_data.customization_id)
+    data_models = data_to_dict_all_models(custom_data.customization.id)
     all_data = dict(
         list(data_api.items()) +
         list(data_models.items())
@@ -131,7 +131,7 @@ def all_data(custom_data):
 class CustomData(object):
 
     def __init__(self,
-                 customization_id=0,
+                 customization=Customization(),
                  attendees=[],
                  organizer_logo='',
                  event_name_text='',
@@ -154,10 +154,10 @@ class CustomData(object):
                  user_first_name='',
                  user_last_name='',
                  venue='',
-                 is_test=False
+                 is_test=False,
                  ):
 
-        self.customization_id = customization_id
+        self.customization = customization
         self.attendees = attendees
         self.organizer_logo = organizer_logo
         self.event_name_text = event_name_text
