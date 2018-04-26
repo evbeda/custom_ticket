@@ -2,6 +2,8 @@
 import StringIO
 
 from django.template.loader import render_to_string
+from multiprocessing import Pool
+
 from xhtml2pdf import pisa
 from xhtml2pdf.pdf import pisaPDF
 
@@ -24,10 +26,6 @@ class PDF(object):
         temp = StringIO.StringIO()
         pdf = pisa.pisaDocument(data, temp)
         self.pdf_base.addDocument(pdf)
-
-
-from inspect import getmodule
-from multiprocessing import Pool
 
 
 def async(decorated):

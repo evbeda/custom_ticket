@@ -12,6 +12,7 @@
     <form style="padding-left: 50px" role="form" method="post" enctype="multipart/form-data">{% csrf_token %}
         <p>{{ form.name.label }} : {{ form.name }}</p>
         <br/>
+        <p>{{ form.pdf_ticket_attach.label }} : {{ form.pdf_ticket_attach }}</p>
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
         <br/>
         <p>{{ form.logo.label }} : {{ form.logo }}</p>
@@ -31,6 +32,9 @@
         {{ form.show_ticket_type_price.label }} : {{ form.show_ticket_type_price }}
         <br/>
         {{ form.double_ticket.label }} : {{ form.double_ticket }}
+
+        <p>{{ form.image_partner.label }} : {{ form.image_partner }}</p>
+        <br>
         <div style="text-align: center">
         <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
         <input type="submit" class="btn btn-success" name="create_customization"  value="Create"/>

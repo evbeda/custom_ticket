@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import datetime
 import requests
 import json
 import threading
+import time
+
 from eventbrite import Eventbrite
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -14,24 +17,23 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.views.generic import FormView
+
 from customizations.models import (
     Customization,
     TicketSequence,
 )
-from mail.forms import FormSendEmailPreview
-import datetime
-import time
-from mail.utils import (
-    async,
-    PDF,
-)
+from customizations.utils import image_exist, download
 from mail.domain import (
     all_data,
     CustomData,
-    data_to_dict_all_models,
     data_fake
 )
 from customizations.utils import process_logo
+from mail.forms import FormSendEmailPreview
+
+from mail.utils import (
+    PDF,
+)
 
 
 def get_pdf_ticket(request, pk):
@@ -41,7 +43,7 @@ def get_pdf_ticket(request, pk):
 
 
 def email_preview_pdf(request, pk):
-    data = data_to_dict_all_models(pk)
+    data = data_fake(pk)
     return render(request, 'mail/body_mail.html', context=data)
 
 
@@ -180,6 +182,7 @@ def get_event_sequence(barcode):
         'event_sequence': event_sequence,
     }
 
+
 def get_ticket_type_sequence(barcode):
 
     ticket_type_sequence = TicketSequence.objects.get(
@@ -190,7 +193,9 @@ def get_ticket_type_sequence(barcode):
         'ticket_type_sequence': ticket_type_sequence,
     }
 
+
 def process_data(order, venue, organizer, user_id):
+
     list_attendee = order['attendees']
     customization = Customization.objects.select_related(
         'ticket_template'
@@ -242,7 +247,15 @@ def do_send_email(custom_data):
     data = all_data(custom_data)
 
     process_logo(data['logo_path'], data['logo_url'], data['logo_name'])
-
+    if not image_exist(data['logo_path']):
+        print 'downloading...'
+        if download(data['logo_url'], data['logo_name']):
+            print 'downloaded..'
+        else:
+            print "Unable to download file"
+        print 'The file now exist...'
+    else:
+        print 'file exist...'
     if custom_data.customization.ticket_template.show_ticket_type_sequence:
         for attendee in custom_data.attendees:
             attendee['ticket_type_sequence'] = get_ticket_type_sequence(
@@ -265,8 +278,11 @@ def do_send_email(custom_data):
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
-    pdf = PDF('tickets/hero_design.html', [data]).render().getvalue()
-    email.attach('ticket', pdf, 'application/pdf')
+    if data['pdf_ticket_attach'] is True:
+        pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+        email.attach('ticket', pdf, 'application/pdf')
+    else:
+        pass
     print 'send mail'
     print custom_data.order_id
     print data['emails']
@@ -304,11 +320,14 @@ class GetEmailTest(LoginRequiredMixin, FormView):
         customization = Customization.objects.get(pk=self.kwargs['pk'])
 
         attendees.append(dict(attendee))
-        import ipdb; ipdb.set_trace()
+        import ipdb
+        ipdb.set_trace()
         custom_data = CustomData(
             customization=customization,
             attendees=attendees,
+            customization_id=self.kwargs['pk'],
             organizer_logo=form.cleaned_data['organizer_logo'],
+            pdf_ticket_attach=form.cleaned_data['pdf_ticket_attach'],
             event_name_text=form.cleaned_data['event_name_text'],
             event_start=form.cleaned_data['event_start'],
             event_venue_location={form.cleaned_data['event_venue_location']},

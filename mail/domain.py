@@ -158,6 +158,7 @@ class CustomData(object):
                  venue='',
                  is_test=False,
                  footer_description='',
+                 pdf_ticket_attach='',
                  ):
 
         self.customization = customization
@@ -184,3 +185,4 @@ class CustomData(object):
         self.emails = emails
         self.is_test = is_test
         self.footer_description = footer_description
+        self.pdf_ticket_attach = pdf_ticket_attach
