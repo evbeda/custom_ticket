@@ -171,23 +171,30 @@ def register_ticket(attendee, customization):
     )
 
 
-def get_ticket_sequence(barcode):
+def get_event_sequence(barcode):
     event_sequence = TicketSequence.objects.get(
         barcode=barcode
     ).event_sequence
+
+    return {
+        'event_sequence': event_sequence,
+    }
+
+def get_ticket_type_sequence(barcode):
 
     ticket_type_sequence = TicketSequence.objects.get(
         barcode=barcode
     ).ticket_type_sequence
 
     return {
-        'event_sequence': event_sequence,
         'ticket_type_sequence': ticket_type_sequence,
     }
 
 def process_data(order, venue, organizer, user_id):
     list_attendee = order['attendees']
-    customization = Customization.objects.filter(user_id=user_id)
+    customization = Customization.objects.select.related(
+        'ticket_template'
+    ).filter(user_id=user_id)
     attendees = []
     for att in list_attendee:
         attendee = {
@@ -243,6 +250,18 @@ def do_send_email(custom_data):
     else:
         print 'file exist...'
 
+    if custom_data.customization.ticket_template.show_ticket_type_sequence:
+        for attendee in custom_data.attendees:
+            attendee['ticket_type_sequence'] = get_ticket_type_sequence(
+                attendee['barcode']
+            )
+
+    if custom_data.customization.ticket_template.show_event_sequence:
+        for attendee in custom_data.attendees:
+            attendee['event_sequence'] = get_event_sequence(
+                attendee['barcode']
+            )
+
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
         data['event_name_text'],
@@ -289,9 +308,11 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             'ticket_class': form.cleaned_data['ticket_class']
         }
 
+        customization = Customization.objects.get(pk=self.kwargs['pk'])
+
         attendees.append(dict(attendee))
         custom_data = CustomData(
-            customization_id=self.kwargs['pk'],
+            customization=customization,
             attendees=attendees,
             organizer_logo=form.cleaned_data['organizer_logo'],
             event_name_text=form.cleaned_data['event_name_text'],
