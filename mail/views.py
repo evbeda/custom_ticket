@@ -312,7 +312,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
         customization = Customization.objects.get(pk=self.kwargs['pk'])
 
         attendees.append(dict(attendee))
-        import ipdb; ipdb.set_trace()
+
         custom_data = CustomData(
             customization=customization,
             attendees=attendees,
