@@ -16,7 +16,7 @@
 }
 
 .qr-code{
-    width: 100px;
+    width: 250px;
     text-align: center;
 }
 .eb{
@@ -43,7 +43,7 @@ hr.line {
 .logo {
 text-align: center;
 float: left;
-width: 250px;
+width: 180px;
 }
 
 </style>
@@ -51,12 +51,12 @@ width: 250px;
 <!-- - - - -  - - - - - - - - HEADER - - - - - - - - - - - - - -->
 <table>
   <tr >
-    <th style="background: #f9f9f9;font-weight: bold;">
-     <span style="font-size: 18px;color: #2eb724;">TICKET</span>
-     <span style="font-size: 18px;"> ROAR</span>
+    <th style="background: white; font-weight: bold;">
+     <span style="font-size: 22px; color: red;">AUTO</span>
+     <span style="font-size: 22px; color: black;">ENTRADA</span>
     </th>
 
-    <th style="text-align: right;font-weight: normal;background: #f9f9f9;width: 300px;font-size: 16px;color:#878685;">
+    <th style="text-align: right;font-weight: normal;width: 300px;font-size: 16px;color:#878685;">
          <span style="font-size: 14px;">
           Order #{{order_id}}
           {% if attendee.ticket_type_sequence %}
@@ -65,9 +65,8 @@ width: 250px;
           {% if attendee.event_sequence %}
               Event Sequence  #{{ attendee.event_sequence }}
           {% endif %}
-          {% if customization.ticket_template.show_ticket_type_price %}
-              Price {{ attendee.cost_gross }}
-          {% endif %}
+
+
          </span>
          <!-- <span style="font-size: 14px;">
            <br>Status {{order_status}}
@@ -87,26 +86,26 @@ width: 250px;
 <table>
   <tr>
 
-    <th style="background: #f9f9f9;color: #515150;font-weight: normal;">
+    <th style="color: #515150;font-weight: normal;">
         <span style="font-size: 24px;">{{event_name_text}}</span>
     </th>
-    <th style="background: #f9f9f9;width: 80px">
+    <th style="width: 80px">
 
     </th>
 
   </tr>
 </table>
 <!-- - - - -  - - - - - - - - END EVENT NAME - - - - - - - - - - - - - -->
-<!-- <table> -->
-<!--  <td style="background: #f9f9f9;color: #001b47;"> -->
-<!--   <hr> -->
-<!--   <br> -->
-<!--     </td> -->
-<!-- </table> -->
+<table>
+ <td style="color: #001b47;">
+  <hr>
+  <br>
+    </td>
+</table>
 <!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
 <table>
   <tr>
-    <td style="background: #f9f9f9;color: #001b47;text-align: left;">
+    <td style="color: #001b47;text-align: left;">
         <p>
        <span style="font-size: 16px; color:#ff6c0a;">LOCATION<br></span>
        <span style="font-size: 16px;color:#878685;">
@@ -117,7 +116,7 @@ width: 250px;
          </span>
 
         <p>
-        <span style="font-size: 16px; color:#ff6c0a;">DATE+TIME<br></span>
+        <span style="font-size: 16px; color:#ff6c0a;">DATE<br></span>
         <span style="font-size: 16px;color:#878685;">
         {{event_start}}
         </p>
@@ -130,8 +129,17 @@ width: 250px;
          </p>
         </span>
 
+        <span style="font-size: 16px; color:#ff6c0a;">TICKET TYPE<br></span>
+          <span style="font-size: 16px;color:#878685;">
+         {{attendee.ticket_class}}
+         {% if customization.ticket_template.show_ticket_type_price %}
+              {{ attendee.cost_gross }}
+          {% endif %}
+         </p>
+        </span>
+
     </td>
-    <td  style="width: 150px;background: #f9f9f9;color: #001b47;text-align: center;">
+    <td  style="width: 250px;background: #f9f9f9;color: #001b47;text-align: center;">
       <div class="qr-code">
             {% qr_from_text attendee.barcode "s" %}
         </div>
@@ -149,14 +157,14 @@ width: 250px;
 <!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
 <table>
   <tr>
-    <td style="background: #f9f9f9;color: #001b47;">
+    <td style="color: #001b47;">
       <div class="logo">
         <img src="{{ logo_url }}" alt="LOGO" border="0" >
         </div>
 
     </td>
 
-    <td style="background: #f9f9f9;color: #878685; text-align: left;">
+    <td style="color: #878685; text-align: left;">
                 <span style="font-size: 14px;color:#878685;">
                   {{message_ticket}}
                 </span>
@@ -173,12 +181,12 @@ width: 250px;
 <!-- - - - -  - - - - - - - - HEADER - - - - - - - - - - - - - -->
 <table>
   <tr >
-    <th style="background: #f9f9f9;font-weight: bold;">
-     <span style="font-size: 18px;color: #2eb724;">TICKET</span>
-     <span style="font-size: 18px;"> ROAR</span>
+    <th style="font-weight: bold;">
+     <span style="font-size: 22px; color: red;">AUTO</span>
+     <span style="font-size: 22px; color: black;">ENTRADA</span>
     </th>
 
-    <th style="text-align: right;font-weight: normal;background: #f9f9f9;width: 300px;font-size: 16px;color:#878685;">
+    <th style="text-align: right;font-weight: normal;width: 300px;font-size: 16px;color:#878685;">
          <span style="font-size: 14px;">
           Order #{{order_id}}
           {% if attendee.ticket_type_sequence %}
@@ -186,9 +194,6 @@ width: 250px;
           {% endif %}
           {% if attendee.event_sequence %}
               Event Sequence  #{{ attendee.event_sequence }}
-          {% endif %}
-          {% if customization.ticket_template.show_ticket_type_price %}
-              Price {{ attendee.cost_gross }}
           {% endif %}
          </span>
          <!-- <span style="font-size: 14px;">
@@ -209,10 +214,10 @@ width: 250px;
 <table>
   <tr>
 
-    <th style="background: #f9f9f9;color: #515150;font-weight: normal;">
+    <th style="color: #515150;font-weight: normal;">
         <span style="font-size: 24px;">{{event_name_text}}</span>
     </th>
-    <th style="background: #f9f9f9;width: 80px">
+    <th style="width: 80px">
 
     </th>
 
@@ -220,7 +225,7 @@ width: 250px;
 </table>
 <!-- - - - -  - - - - - - - - END EVENT NAME - - - - - - - - - - - - - -->
 <table>
- <td style="background: #f9f9f9;color: #001b47;">
+ <td style="color: #001b47;">
   <hr>
   <br>
     </td>
@@ -228,7 +233,7 @@ width: 250px;
 <!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
 <table>
   <tr>
-    <td style="background: #f9f9f9;color: #001b47;text-align: left;">
+    <td style="color: #001b47;text-align: left;">
         <p>
        <span style="font-size: 16px; color:#ff6c0a;">LOCATION<br></span>
        <span style="font-size: 16px;color:#878685;">
@@ -240,22 +245,30 @@ width: 250px;
 
         <p>
         <br/>
-        <span style="font-size: 16px; color:#ff6c0a;">DATE+TIME<br></span>
+        <span style="font-size: 16px; color:#ff6c0a;">DATE<br></span>
         <span style="font-size: 16px;color:#878685;">
         {{event_start}}
         </p>
         </span>
 
         <p>
-        <br/>
         <span style="font-size: 16px; color:#ff6c0a;">GUEST<br></span>
           <span style="font-size: 16px;color:#878685;">
          {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}
          </p>
         </span>
 
+        <span style="font-size: 16px; color:#ff6c0a;">TICKET TYPE<br></span>
+          <span style="font-size: 16px;color:#878685;">
+         {{attendee.ticket_class}}
+         {% if customization.ticket_template.show_ticket_type_price %}
+              {{ attendee.cost_gross }}
+          {% endif %}
+         </p>
+        </span>
+
     </td>
-    <td  style="width: 150px;background: #f9f9f9;color: #001b47;text-align: center;">
+    <td  style="width: 250px;color: #001b47;text-align: center;">
       <div class="qr-code">
             {% qr_from_text attendee.barcode "s" %}
         </div>
@@ -265,6 +278,7 @@ width: 250px;
     </td>
   </tr>
 </table>
+
 <!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
 <!-- <table> -->
 <!--  <td style="background: #f9f9f9;color: #001b47;"> -->
@@ -275,14 +289,14 @@ width: 250px;
 <!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
 <table>
   <tr>
-    <td style="background: #f9f9f9;color: #001b47;">
+    <td style="color: #001b47;">
       <div class="logo">
         <img src="{{ logo_url }}" alt="LOGO" border="0" >
         </div>
 
     </td>
 
-    <td style="background: #f9f9f9;color: #878685; text-align: left;">
+    <td style="color: #878685; text-align: left;">
                 <span style="font-size: 14px;color:#878685;">
                   {{message_ticket}}
                 </span>
