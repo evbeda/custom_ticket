@@ -11,7 +11,7 @@
 <style>
 
 .qr-code{
-    width: 250px;
+    width: 100px;
     text-align: center;
 }
 .eb{
@@ -43,6 +43,128 @@ width: 250px;
 
 </style>
 <body >
+<!-- - - - -  - - - - - - - - HEADER - - - - - - - - - - - - - -->
+<table>
+  <tr >
+    <th style="background: #f9f9f9;font-weight: bold;">
+     <span style="font-size: 18px;color: #2eb724;">TICKET</span>
+     <span style="font-size: 18px;"> ROAR</span>
+    </th>
+
+    <th style="text-align: right;font-weight: normal;background: #f9f9f9;width: 300px;font-size: 16px;color:#878685;">
+         <span style="font-size: 14px;">
+          Order #{{order_id}}
+          {% if attendee.ticket_type_sequence %}
+              TicketType Sequence  #{{ attendee.ticket_type_sequence }}
+          {% endif %}
+          {% if attendee.event_sequence %}
+              Event Sequence  #{{ attendee.event_sequence }}
+          {% endif %}
+          {% if customization.ticket_template.show_ticket_type_price %}
+              Price {{ attendee.cost_gross }}
+          {% endif %}
+         </span>
+         <!-- <span style="font-size: 14px;">
+           <br>Status {{order_status}}
+         </span>
+
+         <span style="font-size: 14px;">
+           <br>Type <b>
+            {{attendee.ticket_class}}
+            </b>
+         </span> -->
+    </th>
+  </tr>
+</table>
+<!-- - - - -  - - - - - - - - END HEADER - - - - - - - - - - - - - -->
+
+<!-- - - - -  - - - - - - - - EVENT NAME - - - - - - - - - - - - - -->
+<table>
+  <tr>
+
+    <th style="background: #f9f9f9;color: #515150;font-weight: normal;">
+        <span style="font-size: 24px;">{{event_name_text}}</span>
+    </th>
+    <th style="background: #f9f9f9;width: 80px">
+
+    </th>
+
+  </tr>
+</table>
+<!-- - - - -  - - - - - - - - END EVENT NAME - - - - - - - - - - - - - -->
+<!-- <table> -->
+<!--  <td style="background: #f9f9f9;color: #001b47;"> -->
+<!--   <hr> -->
+<!--   <br> -->
+<!--     </td> -->
+<!-- </table> -->
+<!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
+<table>
+  <tr>
+    <td style="background: #f9f9f9;color: #001b47;text-align: left;">
+        <p>
+       <span style="font-size: 16px; color:#ff6c0a;">LOCATION<br></span>
+       <span style="font-size: 16px;color:#878685;">
+        {{event_venue_location.address_1|default_if_none:""}}, {{event_venue_location.address_2|default_if_none:""}} - {{event_venue_location.postal_code|default_if_none:"" }}
+        {{event_venue_location.city|default_if_none:""}}, {{event_venue_location.country|default_if_none:""}}
+        {{event_venue_location.region|default_if_none:""}}
+         </p>
+         </span>
+
+        <p>
+        <span style="font-size: 16px; color:#ff6c0a;">DATE+TIME<br></span>
+        <span style="font-size: 16px;color:#878685;">
+        {{event_start}}
+        </p>
+        </span>
+
+        <p>
+        <span style="font-size: 16px; color:#ff6c0a;">GUEST<br></span>
+          <span style="font-size: 16px;color:#878685;">
+         {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}
+         </p>
+        </span>
+
+    </td>
+    <td  style="width: 150px;background: #f9f9f9;color: #001b47;text-align: center;">
+      <div class="qr-code">
+            {% qr_from_text attendee.barcode "s" %}
+        </div>
+        <div class="eb">
+        <img src="{% static 'custom_ticket/images/powered_by_eventbrite.png' %}" alt="powered_by_eventbrite">
+        </div>
+    </td>
+  </tr>
+</table>
+<!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
+<!-- <table> -->
+<!--  <td style="background: #f9f9f9;color: #001b47;"> -->
+<!--     </td> -->
+<!-- </table> -->
+<!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
+<table>
+  <tr>
+    <td style="background: #f9f9f9;color: #001b47;">
+      <div class="logo">
+        <img src="{{ logo_url }}" alt="LOGO" border="0" >
+        </div>
+
+    </td>
+
+    <td style="background: #f9f9f9;color: #878685; text-align: left;">
+                <span style="font-size: 14px;color:#878685;">
+                  {{message_ticket}}
+                </span>
+    </td>
+  </tr>
+</table>
+<span>
+  {{footer_description}}
+</span>
+<!-- - - - -  - - - - - - - - END FOOTER - - - - - - - - - - - - - -->
+
+
+{% if customization.ticket_template.double_ticket %}
 <!-- - - - -  - - - - - - - - HEADER - - - - - - - - - - - - - -->
 <table>
   <tr >
@@ -128,9 +250,9 @@ width: 250px;
         </span>
 
     </td>
-    <td  style="width: 300px;background: #f9f9f9;color: #001b47;text-align: center;">
+    <td  style="width: 150px;background: #f9f9f9;color: #001b47;text-align: center;">
       <div class="qr-code">
-            {% qr_from_text attendee.barcode "m" %}
+            {% qr_from_text attendee.barcode "s" %}
         </div>
         <div class="eb">
         <img src="{% static 'custom_ticket/images/powered_by_eventbrite.png' %}" alt="powered_by_eventbrite">
@@ -139,12 +261,12 @@ width: 250px;
   </tr>
 </table>
 <!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
-<table>
- <td style="background: #f9f9f9;color: #001b47;">
-  <br>
-  <hr>
-    </td>
-</table>
+<!-- <table> -->
+<!--  <td style="background: #f9f9f9;color: #001b47;"> -->
+<!--   <br> -->
+<!--   <hr> -->
+<!--     </td> -->
+<!-- </table> -->
 <!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
 <table>
   <tr>
@@ -156,11 +278,9 @@ width: 250px;
     </td>
 
     <td style="background: #f9f9f9;color: #878685; text-align: left;">
-                <br><br>
                 <span style="font-size: 14px;color:#878685;">
                   {{message_ticket}}
                 </span>
-                <br><br>
     </td>
   </tr>
 </table>
@@ -178,4 +298,5 @@ table {
 }
 </style>
 <div style="display:block; page-break-before:always;"></div>
+{% endif %}
 {% endfor %}
