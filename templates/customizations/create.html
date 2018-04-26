@@ -11,7 +11,11 @@
     <br/>
     <form style="padding-left: 50px" role="form" method="post" enctype="multipart/form-data">{% csrf_token %}
         <p>{{ form.name.label }} : {{ form.name }}</p>
+<<<<<<< HEAD
         <br/>
+=======
+        <p>{{ form.pdf_ticket_attach.label }} : {{ form.pdf_ticket_attach }}</p>
+>>>>>>>  add new image partner and pdf attach bool
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
         <br/>
         <p>{{ form.logo.label }} : {{ form.logo }}</p>
@@ -21,6 +25,7 @@
         <p>{{ form.select_design_template.label }} : {{ form.select_design_template }}</p>
         <br/>
         <p>{{ form.message_ticket.label }} : {{ form.message_ticket }}</p>
+<<<<<<< HEAD
         <br/>
         {{ form.additional_info.label }} : {{ form.additional_info }}
         <br/>
@@ -31,6 +36,10 @@
         {{ form.show_ticket_type_sequence.label }} : {{ form.show_ticket_type_sequence }}
         <br/>
         {{ form.show_ticket_type_price.label }} : {{ form.show_ticket_type_price }}
+=======
+        <p>{{ form.image_partner.label }} : {{ form.image_partner }}</p>
+        <br>
+>>>>>>>  add new image partner and pdf attach bool
         <div style="text-align: center">
         <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
         <input type="submit" class="btn btn-success" name="create_customization"  value="Create"/>

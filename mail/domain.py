@@ -154,7 +154,9 @@ class CustomData(object):
                  user_first_name='',
                  user_last_name='',
                  venue='',
-                 is_test=False
+                 is_test=False,
+                 pdf_ticket_attach='',
+
                  ):
 
         self.customization_id = customization_id
@@ -180,3 +182,4 @@ class CustomData(object):
         self.from_email = from_email
         self.emails = emails
         self.is_test = is_test
+        self.pdf_ticket_attach = pdf_ticket_attach

@@ -8,14 +8,11 @@ class FormCustomization(forms.ModelForm):
 
     class Meta:
         model = Customization
-        fields = [
-            'name',
-            'select_event',
-            'logo',
-            'message',
-            'select_design_template',
-            'message_ticket',
-        ]
+
+        fields = ['name', 'select_event', 'logo', 'message',
+                  'select_design_template', 'message_ticket',
+                  'image_partner', 'pdf_ticket_attach'
+                  ]
 
     name = forms.CharField(
         required=True,
@@ -71,6 +68,9 @@ class FormCustomization(forms.ModelForm):
         )
     )
 
+
+<< << << < HEAD
+
     additional_info = forms.CharField(
         required=False,
         widget=forms.Textarea(
@@ -107,3 +107,19 @@ class FormCustomization(forms.ModelForm):
         required=False,
         label="Show price of ticket purchased",
     )
+== == == =
+    image_partner = forms.ImageField(
+        required=False,
+        validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
+        widget=forms.FileInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    TRUE_FALSE_CHOICES = (
+        (True, 'Yes'),
+        (False, 'No')
+    )
+
+    pdf_ticket_attach = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="PDF Ticket Attach",
+                                          initial='', widget=forms.Select(), required=True)
+>>>>>> >  add new image partner and pdf attach bool

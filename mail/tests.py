@@ -44,8 +44,6 @@ class TestBase(TestCase):
             uid="249759038146",
             extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'}
         )
-        # import ipdb; ipdb.set_trace()
-
         self.custom_email = CustomEmail.objects.create(
             logo='https://www.dropbox.com/s/1z832sik1oudeht/EDAc-3-40871c64b344c9650cc713492de322d5e08c896f26395a9b1e2fb16a-logo-ex-7.png?dl=1',
             message='message email',
