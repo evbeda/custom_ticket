@@ -96,3 +96,8 @@ class FormCustomization(forms.ModelForm):
         required=False,
         label="Show price of ticket purchased",
     )
+
+    double_ticket = forms.BooleanField(
+        required=False,
+        label="Double Ticket",
+    )
