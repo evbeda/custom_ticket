@@ -46,7 +46,7 @@ class FormCustomization(forms.ModelForm):
         required=True,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'message body',
+                'placeholder': 'You can put here the email message.',
                 'class': 'form-control',
                 'rows': 6
             }
@@ -64,7 +64,7 @@ class FormCustomization(forms.ModelForm):
         required=True,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'message body',
+                'placeholder': 'You can put here the ticket message',
                 'class': 'form-control',
                 'rows': 6
             }
