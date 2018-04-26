@@ -240,6 +240,7 @@ from domain import CustomData
 #         mock_data.assert_called_once()
 #         mock_venue.assert_called_once()
 
+
 #     @patch(
 #         'mail.views.requests.get',
 #         return_value=MagicMock(
@@ -304,6 +305,7 @@ from domain import CustomData
 # class TestMailWithoutCustomization(TestCase):
 
 #     def test_integration_data_send_mail(self):
+
 
 #         request = MagicMock(
 #             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'

@@ -2,9 +2,13 @@
 from __future__ import unicode_literals
 from io import BytesIO
 import json
+import shutil
+import tempfile
 from mock import (
     MagicMock,
     patch,
+    Mock,
+    mock_open,
 )
 from .utils import create_webhook, get_token, delete_webhook
 from django.contrib.auth import get_user_model
@@ -13,10 +17,18 @@ from social_django.models import UserSocialAuth
 from django.test import TestCase, RequestFactory
 from django.contrib.auth.models import AnonymousUser, User
 from .forms import FormCustomization
-from .utils import get_unique_file_name, upload_file
+from .utils import (
+    get_unique_file_name,
+    upload_file,
+    image_exist,
+    valid_image_format,
+    download,
+)
 from freezegun import freeze_time
 from .models import UserWebhook
 from .views import ViewCreateCustomization
+from PIL import Image
+from os import path
 
 
 # class TestBase(TestCase):
@@ -173,37 +185,47 @@ from .views import ViewCreateCustomization
 #         self.assertEquals(response.status_code, 302)
 
 
+class TestDropboxHandler(TestCase):
+    def setUp(self):
+        self.files = [Mock(filename='image.png')]
+        self.rq = RequestFactory()
+        # Create a temporary directory
+        self.test_dir = tempfile.mkdtemp()
 
+        temp_file = tempfile.NamedTemporaryFile()
+        size = (200, 200)
+        color = (255, 0, 0, 0)
+        image = Image.new("RGBA", size, color)
+        image.save(temp_file, 'png')
+        self.temp_image = temp_file
 
-# cambios de gabi
-# class ViewCreateCustomization(TestCase):
+    def tearDown(self):
+        # Remove the directory after the test
+        shutil.rmtree(self.test_dir)
 
-#         request = self.factory.post('/customizations/create-customization/')
-#         request.user = self.user
+    def test_image_exist(self):
+        self.assertEquals(image_exist(self.temp_image.name), True)
 
-# class TestDropboxHandler(TestCase):
-#     def setUp(self):
-#         self.user = get_user_model().objects.create_user(
-#             username='edacticket',
-#             password='12345',
-#             email='edacticket@gmail.com',
-#             first_name='edacticket',
-#             is_active=True,
-#         )
-#         self.user_access_token = 'HJDTUHYQ3ZVTVLMN52VZ'
-#         self.factory = RequestFactory()
-#         self.auth = UserSocialAuth.objects.create(
-#             user=self.user, provider='eventbrite', uid="249759038146", extra_data={'access_token': self.user_access_token})
+    def test_image_no_exist(self):
+        path = "error.png"
+        self.assertEquals(image_exist(path), False)
 
-#     def test_upload_file(self):
-#         request = self.factory.post('/customizations/create-customization/')
-#         request.user = self.user
-#         request_field = 'logo'
-#         request.FILES[request_field] = ''
-#         request.FILES[request_field].name = 'logo.png'
-#         shared_url = upload_file(request, request_field)
-#         self.assertEquals(
-#             shared_url,
-#             'url'
-#         )
+    def test_image_exist_wrong_format(self):
+        # Create a file in the temporary directory
+        f = open(path.join(self.test_dir, 'test.txt'), 'w')
+        self.assertEquals(image_exist(f.name), False)
 
+    def test_image_format(self):
+        # Create a file in the temporary directory
+        self.assertEquals(valid_image_format(self.temp_image.name), True)
+
+    def test_image_wrong_format(self):
+        # Create a file in the temporary directory
+        f = open(path.join(self.test_dir, 'test.txt'), 'w')
+        self.assertEquals(valid_image_format(f.name), False)
+
+    @patch('customizations.utils.open')
+    @patch('customizations.utils.urlopen')
+    def test_download_image_from_url(self, mock_urlopen, mock_openfile):
+        res = download('www.url.com', 'image_name.png')
+        self.assertEquals(res, True)
