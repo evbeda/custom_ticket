@@ -54,8 +54,15 @@ width: 250px;
     <th style="text-align: right;font-weight: normal;background: #f9f9f9;width: 300px;font-size: 16px;color:#878685;">
          <span style="font-size: 14px;">
           Order #{{order_id}}
-          TicketType Sequence  {{ attendee.ticket_type_sequence }}
-          Event Sequence  {{ attendee.event_sequence }}
+          {% if attendee.ticket_type_sequence %}
+              TicketType Sequence  #{{ attendee.ticket_type_sequence }}
+          {% endif %}
+          {% if attendee.event_sequence %}
+              Event Sequence  #{{ attendee.event_sequence }}
+          {% endif %}
+          {% if customization.ticket_template.show_ticket_type_price %}
+              Price {{ attendee.cost_gross }}
+          {% endif %}
          </span>
          <!-- <span style="font-size: 14px;">
            <br>Status {{order_status}}
