@@ -185,47 +185,47 @@ from os import path
 #         self.assertEquals(response.status_code, 302)
 
 
-class TestDropboxHandler(TestCase):
-    def setUp(self):
-        self.files = [Mock(filename='image.png')]
-        self.rq = RequestFactory()
-        # Create a temporary directory
-        self.test_dir = tempfile.mkdtemp()
+# class TestDropboxHandler(TestCase):
+#     def setUp(self):
+#         self.files = [Mock(filename='image.png')]
+#         self.rq = RequestFactory()
+#         # Create a temporary directory
+#         self.test_dir = tempfile.mkdtemp()
 
-        temp_file = tempfile.NamedTemporaryFile()
-        size = (200, 200)
-        color = (255, 0, 0, 0)
-        image = Image.new("RGBA", size, color)
-        image.save(temp_file, 'png')
-        self.temp_image = temp_file
+#         temp_file = tempfile.NamedTemporaryFile()
+#         size = (200, 200)
+#         color = (255, 0, 0, 0)
+#         image = Image.new("RGBA", size, color)
+#         image.save(temp_file, 'png')
+#         self.temp_image = temp_file
 
-    def tearDown(self):
-        # Remove the directory after the test
-        shutil.rmtree(self.test_dir)
+#     def tearDown(self):
+#         # Remove the directory after the test
+#         shutil.rmtree(self.test_dir)
 
-    def test_image_exist(self):
-        self.assertEquals(image_exist(self.temp_image.name), True)
+#     def test_image_exist(self):
+#         self.assertEquals(image_exist(self.temp_image.name), True)
 
-    def test_image_no_exist(self):
-        path = "error.png"
-        self.assertEquals(image_exist(path), False)
+#     def test_image_no_exist(self):
+#         path = "error.png"
+#         self.assertEquals(image_exist(path), False)
 
-    def test_image_exist_wrong_format(self):
-        # Create a file in the temporary directory
-        f = open(path.join(self.test_dir, 'test.txt'), 'w')
-        self.assertEquals(image_exist(f.name), False)
+#     def test_image_exist_wrong_format(self):
+#         # Create a file in the temporary directory
+#         f = open(path.join(self.test_dir, 'test.txt'), 'w')
+#         self.assertEquals(image_exist(f.name), False)
 
-    def test_image_format(self):
-        # Create a file in the temporary directory
-        self.assertEquals(valid_image_format(self.temp_image.name), True)
+#     def test_image_format(self):
+#         # Create a file in the temporary directory
+#         self.assertEquals(valid_image_format(self.temp_image.name), True)
 
-    def test_image_wrong_format(self):
-        # Create a file in the temporary directory
-        f = open(path.join(self.test_dir, 'test.txt'), 'w')
-        self.assertEquals(valid_image_format(f.name), False)
+#     def test_image_wrong_format(self):
+#         # Create a file in the temporary directory
+#         f = open(path.join(self.test_dir, 'test.txt'), 'w')
+#         self.assertEquals(valid_image_format(f.name), False)
 
-    @patch('customizations.utils.open')
-    @patch('customizations.utils.urlopen')
-    def test_download_image_from_url(self, mock_urlopen, mock_openfile):
-        res = download('www.url.com', 'image_name.png')
-        self.assertEquals(res, True)
+#     @patch('customizations.utils.open')
+#     @patch('customizations.utils.urlopen')
+#     def test_download_image_from_url(self, mock_urlopen, mock_openfile):
+#         res = download('www.url.com', 'image_name.png')
+#         self.assertEquals(res, True)
