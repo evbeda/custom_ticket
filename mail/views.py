@@ -216,7 +216,6 @@ def process_data(order, venue, organizer, user_id):
     )
     format_date_start = date_start.strftime("%d/%m/%y %I:%M%p")
     ticket_template = customization[0].ticket_template
-    import ipdb; ipdb.set_trace()
     custom_data = CustomData(
         customization=customization[0],
         attendees=attendees,

@@ -157,6 +157,7 @@ class CustomData(object):
                  user_last_name='',
                  venue='',
                  is_test=False,
+                 footer_description='',
                  ):
 
         self.customization = customization
@@ -182,3 +183,4 @@ class CustomData(object):
         self.from_email = from_email
         self.emails = emails
         self.is_test = is_test
+        self.footer_description = footer_description
