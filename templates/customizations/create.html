@@ -1,6 +1,16 @@
 {% extends 'base_.html' %}
 {% load static from staticfiles %}
 {% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/image-picker.css' %}">
+<style type=“text/css”>
+   .thumbnail>img{
+       width: 300px;
+   }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{% static 'js/image-picker.js' %}"></script>
+
     {% if form.errors %}
         <strong>Fix the following errors.</strong>
         {% for key, value in form.errors.items %}
@@ -13,7 +23,16 @@
         <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
         <p>{{ form.logo.label }} : {{ form.logo }}</p>
         <p>{{ form.message.label }} : {{ form.message }}</p>
-        <p>{{ form.select_design_template.label }} : {{ form.select_design_template }}</p>
+        <br>
+        <p>Select template</p>
+        <select name="select_design_template" required="" id="id_select_design_template">
+        {% for tickets in form.tickets_templates %}
+        {{ tickets.name }}
+        <option data-img-src='{{tickets.preview}}' value='{{tickets.id}}'>{{ tickets.name }}</option>
+        {{ tickets.name }}
+        {% endfor %}
+        </select>
+
         <p>{{ form.message_ticket.label }} : {{ form.message_ticket }}</p>
         <br>
         <div style="text-align: center">
@@ -22,6 +41,9 @@
     </div>
     </form>
 
+<script type="text/javascript">
+    $("select").imagepicker()
 
+</script>
 {% endblock %}
 
