@@ -110,7 +110,9 @@ def data_fake(id):
             'user_last_name': u'Campbell',
             'user_order_email': u'ana@email.com',
             'user_order_first_name': u'Ana',
-            'user_order_last_name': u'Campbell'}
+            'user_order_last_name': u'Campbell',
+            'footer_description': u'Tax number | Company name',
+            }
     data_fake = dict(
         list(data_models.items()) +
         list(fake.items())

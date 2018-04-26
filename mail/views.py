@@ -215,7 +215,8 @@ def process_data(order, venue, organizer, user_id):
                        "%Y-%m-%dT%H:%M:%S")[:6]
     )
     format_date_start = date_start.strftime("%d/%m/%y %I:%M%p")
-
+    ticket_template = customization[0].ticket_template
+    import ipdb; ipdb.set_trace()
     custom_data = CustomData(
         customization=customization[0],
         attendees=attendees,
@@ -232,6 +233,7 @@ def process_data(order, venue, organizer, user_id):
         order_created=order['created'],
         order_status=order['status'],
         is_test=False,
+        footer_description=ticket_template.footer_description
     )
     return do_send_email(custom_data)
 
@@ -303,6 +305,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
         customization = Customization.objects.get(pk=self.kwargs['pk'])
 
         attendees.append(dict(attendee))
+        import ipdb; ipdb.set_trace()
         custom_data = CustomData(
             customization=customization,
             attendees=attendees,
@@ -322,6 +325,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             # payment_datetime='',
             from_email=form.cleaned_data['from_email'],
             emails=[form.cleaned_data['emails']],
+            footer_description=[form.cleaned_data['footer_description']],
             is_test=True,
         )
         return do_send_email(custom_data)
