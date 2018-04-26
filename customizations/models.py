@@ -23,6 +23,7 @@ class TicketTemplate(TimeStampedModel):
     show_ticket_type_sequence = models.BooleanField(default=False)
     show_ticket_type_price = models.BooleanField(default=False)
     footer_description = models.CharField(max_length=140, blank=True, null=True)
+    double_ticket = models.BooleanField(default=False)
 
 
 class CustomEmail(TimeStampedModel):
