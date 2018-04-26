@@ -114,3 +114,5 @@ static/media/*
 /static/media/*
 staticfiles/
 custom_ticket/static/*
+
+tags
