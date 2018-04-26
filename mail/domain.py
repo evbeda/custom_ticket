@@ -12,7 +12,8 @@ def data_to_dict_customization(id):
     except Exception:
         return {}
     data = {
-        'message_ticket': query.ticket_template.message_ticket,
+        'name': query.name,
+        'pdf_ticket_attach': query.pdf_ticket_attach
     }
     return data
 
@@ -29,7 +30,11 @@ def data_to_dict_custom_email(id):
         'logo_path': query.logo_path,
         'logo_name': query.logo_name,
         'logo_url': query.logo_url,
-
+        'image_partner': query.image_partner,
+        'image_partner_local': query.image_partner_local,
+        'image_partner_path': query.image_partner_path,
+        'image_partner_name': query.image_partner_name,
+        'image_partner_url': query.image_partner_url,
     }
 
     return data
@@ -158,6 +163,7 @@ class CustomData(object):
                  venue='',
                  is_test=False,
                  footer_description='',
+                 pdf_ticket_attach='',
                  ):
 
         self.customization = customization
@@ -184,3 +190,4 @@ class CustomData(object):
         self.emails = emails
         self.is_test = is_test
         self.footer_description = footer_description
+        self.pdf_ticket_attach = pdf_ticket_attach

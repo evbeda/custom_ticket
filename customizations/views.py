@@ -31,7 +31,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
         is_form_valid = super(ViewCreateCustomization, self).post(
             request, *args, **kwargs)
         links = upload_file(request, 'logo')
-
+        partner_links = upload_file(request, 'image_partner')
         if is_form_valid and bool(links):
             name = request.POST.get('name')
             message = request.POST.get('message')
@@ -45,6 +45,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             template = get_object_or_404(
                 BaseTicketTemplate,
                 pk=select_design_template)
+            pdf_ticket_attach = request.POST.get('pdf_ticket_attach')
             ticket = TicketTemplate.objects.create(
                 select_design_template=template,
                 message_ticket=message_ticket,
@@ -60,13 +61,20 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                 logo_local=links['local'],
                 logo_path=links['path'],
                 logo_name=links['name'],
-                logo_url=links['dropbox']
+                logo_url=links['dropbox'],
+
+                image_partner=partner_links['dropbox'],
+                image_partner_local=partner_links['local'],
+                image_partner_path=partner_links['path'],
+                image_partner_name=partner_links['name'],
+                image_partner_url=partner_links['dropbox'],
             )
             Customization.objects.create(
                 user=self.request.user,
                 ticket_template=ticket,
                 custom_email=custom_email,
                 name=name,
+                pdf_ticket_attach=pdf_ticket_attach,
             )
             if not UserWebhook.objects.filter(user=request.user).exists():
                 token = get_token(request.user)
@@ -92,6 +100,7 @@ def update_customization(request, pk):
     form = FormCustomization(initial={
         'name': customization.name,
         'logo': custom_email.logo,
+        'pdf_ticket_attach': customization.pdf_ticket_attach,
         'message': custom_email.message,
         'select_design_template': ticket_template.select_design_template,
         'message_ticket': ticket_template.message_ticket,
@@ -100,6 +109,7 @@ def update_customization(request, pk):
         'show_ticket_type_sequence': ticket_template.show_ticket_type_sequence,
         'show_ticket_type_price': ticket_template.show_ticket_type_price,
         'double_ticket': ticket_template.double_ticket,
+        'image_partner': custom_email.image_partner,
 
     })
     if request.method == 'POST':
@@ -107,8 +117,10 @@ def update_customization(request, pk):
         form = FormCustomization(request.POST, request.FILES)
         if form.is_valid():
             customization.name = form.cleaned_data['name']
+            customization.pdf_ticket_attach = form.cleaned_data['pdf_ticket_attach']
             custom_email.logo = form.cleaned_data['logo']
             custom_email.message = form.cleaned_data['message']
+            custom_email.image_partner = form.cleaned_data['image_partner']
             ticket_template.select_design_template = form.cleaned_data[
                 'select_design_template']
             ticket_template.message_ticket = form.cleaned_data[
