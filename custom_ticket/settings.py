@@ -35,7 +35,6 @@ def get_env_variable(var_name):
 
 # Application definition
 
-
 INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.admin',

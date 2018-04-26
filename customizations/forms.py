@@ -1,14 +1,14 @@
 
 from django import forms
 from django.core.validators import FileExtensionValidator
-from .models import Customization
+from .models import Customization, BaseTicketTemplate
 
 
 class FormCustomization(forms.ModelForm):
 
     class Meta:
         model = Customization
-        fields = ['name', 'select_event', 'logo', 'message', 'select_design_template', 'message_ticket']
+        fields = ['name', 'select_event', 'logo', 'message', 'message_ticket']
 
     name = forms.CharField(
         required=True,
@@ -39,13 +39,9 @@ class FormCustomization(forms.ModelForm):
         )
     )
 
-    options_design = (('DESIGN 1', 'Default Design'),)
-    select_design_template = forms.ChoiceField(
-        choices=options_design,
-        widget=forms.Select(
-            attrs={'class': 'form-control'}
-        )
-    )
+    tickets_templates = BaseTicketTemplate.objects.all()
+    # select_design_template = forms.ChoiceField(choices=MY_CHOICES)
+
     message_ticket = forms.CharField(
         required=True,
         widget=forms.Textarea(
