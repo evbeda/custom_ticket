@@ -108,6 +108,14 @@ class FormSendEmailPreview(forms.Form):
         )
     )
 
+    TRUE_FALSE_CHOICES = (
+        (True, 'Yes'),
+        (False, 'No')
+    )
+
+    pdf_ticket_attach = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="PDF Ticket Attach",
+                                          initial='', widget=forms.Select(), required=True)
+
     organizer_message = forms.CharField(
         required=True,
         widget=forms.Textarea(
