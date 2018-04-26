@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import datetime
 import requests
 import json
 import threading
+import time
+
 from eventbrite import Eventbrite
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -14,31 +17,33 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.views.generic import FormView
-from customizations.models import Customization
-from mail.forms import FormSendEmailPreview
-import datetime
-import time
-from mail.utils import (
-    async,
-    PDF,
+
+from customizations.models import (
+    Customization,
+    TicketSequence,
 )
+from customizations.utils import image_exist, download
 from mail.domain import (
     all_data,
     CustomData,
-    data_to_dict_all_models,
     data_fake
 )
 from customizations.utils import process_logo
+from mail.forms import FormSendEmailPreview
+
+from mail.utils import (
+    PDF,
+)
 
 
 def get_pdf_ticket(request, pk):
     data = data_fake(pk)
-    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+    pdf = PDF('tickets/hero_design.html', [data]).render().getvalue()
     return HttpResponse(pdf, content_type='application/pdf')
 
 
 def email_preview_pdf(request, pk):
-    data = data_to_dict_all_models(pk)
+    data = data_fake(pk)
     return render(request, 'mail/body_mail.html', context=data)
 
 
@@ -117,6 +122,7 @@ def accept_webhook(request):
 def get_data(body):
     print 'Here! get_data'
     print body
+    # import ipdb; ipdb.set_trace()
     config_data = json.loads(body)
     user_id = config_data['config']['user_id']
     if webhook_available_to_process(user_id):
@@ -147,29 +153,76 @@ def get_data(body):
     return HttpResponse()
 
 
+def register_ticket(attendee, customization):
+
+    event_sequence = TicketSequence.objects.filter(
+        event_id=attendee['event_id']
+    ).count()
+
+    ticket_type_sequence = TicketSequence.objects.filter(
+        ticket_type_id=attendee['ticket_class_id']
+    ).count()
+
+    TicketSequence.objects.create(
+        event_id=attendee['event_id'],
+        ticket_type_id=attendee['ticket_class_id'],
+        barcode=str(attendee['barcode']),
+        event_sequence=event_sequence + 1,
+        ticket_type_sequence=ticket_type_sequence + 1,
+        customization=customization,
+    )
+
+
+def get_event_sequence(barcode):
+    event_sequence = TicketSequence.objects.get(
+        barcode=barcode
+    ).event_sequence
+
+    return {
+        'event_sequence': event_sequence,
+    }
+
+
+def get_ticket_type_sequence(barcode):
+
+    ticket_type_sequence = TicketSequence.objects.get(
+        barcode=barcode
+    ).ticket_type_sequence
+
+    return {
+        'ticket_type_sequence': ticket_type_sequence,
+    }
+
+
 def process_data(order, venue, organizer, user_id):
+
     list_attendee = order['attendees']
+    customization = Customization.objects.select_related(
+        'ticket_template'
+    ).filter(user_id=user_id)
     attendees = []
     for att in list_attendee:
         attendee = {
             'attendee_first_name': att['profile']['first_name'],
             'attendee_last_name': att['profile']['last_name'],
-            'cost_gross': att['costs']['gross']['value'],
+            'cost_gross': att['costs']['gross']['display'],
             'barcode': att['barcodes'][0]['barcode'],
             'answers': att['answers'],
-            'ticket_class': att['ticket_class_name']
+            'ticket_class': att['ticket_class_name'],
+            'ticket_class_id': att['ticket_class_id'],
+            'event_id': att['event_id']
         }
+        register_ticket(attendee, customization[0])
         attendees.append(dict(attendee))
-    customization = Customization.objects.filter(user_id=user_id)
 
     date_start = datetime.datetime(
         *time.strptime(order['event']['start']['local'],
                        "%Y-%m-%dT%H:%M:%S")[:6]
     )
     format_date_start = date_start.strftime("%d/%m/%y %I:%M%p")
-
+    ticket_template = customization[0].ticket_template
     custom_data = CustomData(
-        customization_id=customization[0].id,
+        customization=customization[0],
         attendees=attendees,
         user_first_name=order['first_name'],
         user_last_name=order['last_name'],
@@ -184,6 +237,7 @@ def process_data(order, venue, organizer, user_id):
         order_created=order['created'],
         order_status=order['status'],
         is_test=False,
+        footer_description=ticket_template.footer_description
     )
     return do_send_email(custom_data)
 
@@ -193,6 +247,26 @@ def do_send_email(custom_data):
     data = all_data(custom_data)
 
     process_logo(data['logo_path'], data['logo_url'], data['logo_name'])
+    if not image_exist(data['logo_path']):
+        print 'downloading...'
+        if download(data['logo_url'], data['logo_name']):
+            print 'downloaded..'
+        else:
+            print "Unable to download file"
+        print 'The file now exist...'
+    else:
+        print 'file exist...'
+    if custom_data.customization.ticket_template.show_ticket_type_sequence:
+        for attendee in custom_data.attendees:
+            attendee['ticket_type_sequence'] = get_ticket_type_sequence(
+                attendee['barcode']
+            )['ticket_type_sequence']
+
+    if custom_data.customization.ticket_template.show_event_sequence:
+        for attendee in custom_data.attendees:
+            attendee['event_sequence'] = get_event_sequence(
+                attendee['barcode']
+            )['event_sequence']
 
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
@@ -204,8 +278,11 @@ def do_send_email(custom_data):
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
-    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
-    email.attach('ticket', pdf, 'application/pdf')
+    if data['pdf_ticket_attach'] is True:
+        pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+        email.attach('ticket', pdf, 'application/pdf')
+    else:
+        pass
     print 'send mail'
     print custom_data.order_id
     print data['emails']
@@ -240,11 +317,17 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             'ticket_class': form.cleaned_data['ticket_class']
         }
 
+        customization = Customization.objects.get(pk=self.kwargs['pk'])
+
         attendees.append(dict(attendee))
+        import ipdb
+        ipdb.set_trace()
         custom_data = CustomData(
-            customization_id=self.kwargs['pk'],
+            customization=customization,
             attendees=attendees,
+            customization_id=self.kwargs['pk'],
             organizer_logo=form.cleaned_data['organizer_logo'],
+            pdf_ticket_attach=form.cleaned_data['pdf_ticket_attach'],
             event_name_text=form.cleaned_data['event_name_text'],
             event_start=form.cleaned_data['event_start'],
             event_venue_location={form.cleaned_data['event_venue_location']},
@@ -260,6 +343,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             # payment_datetime='',
             from_email=form.cleaned_data['from_email'],
             emails=[form.cleaned_data['emails']],
+            footer_description=[form.cleaned_data['footer_description']],
             is_test=True,
         )
         return do_send_email(custom_data)

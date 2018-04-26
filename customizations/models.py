@@ -1,4 +1,4 @@
-    # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
 from django.conf import settings
@@ -19,6 +19,11 @@ class TimeStampedModel(models.Model):
 class TicketTemplate(TimeStampedModel):
     select_design_template = models.CharField(max_length=255)
     message_ticket = models.CharField(max_length=255)
+    show_event_sequence = models.BooleanField(default=False)
+    show_ticket_type_sequence = models.BooleanField(default=False)
+    show_ticket_type_price = models.BooleanField(default=False)
+    footer_description = models.CharField(max_length=140, blank=True, null=True)
+    double_ticket = models.BooleanField(default=False)
 
 
 class CustomEmail(TimeStampedModel):
@@ -29,6 +34,12 @@ class CustomEmail(TimeStampedModel):
     logo_name = models.CharField(max_length=255)
     logo_url = models.CharField(max_length=255)
 
+    image_partner = models.ImageField(max_length=255, upload_to='partner')
+    image_partner_local = models.CharField(max_length=255)
+    image_partner_path = models.CharField(max_length=255)
+    image_partner_name = models.CharField(max_length=255)
+    image_partner_url = models.CharField(max_length=255)
+
 
 class Customization(TimeStampedModel):
     user = models.ForeignKey(
@@ -38,6 +49,7 @@ class Customization(TimeStampedModel):
     name = models.CharField(max_length=255)
     ticket_template = models.ForeignKey(TicketTemplate, blank=True, null=True)
     custom_email = models.ForeignKey(CustomEmail, blank=True, null=True)
+    pdf_ticket_attach = models.BooleanField(default=True, blank=True)
 
 
 class UserWebhook(models.Model):
@@ -47,3 +59,13 @@ class UserWebhook(models.Model):
         on_delete=models.CASCADE,
         unique=True,
     )
+
+
+class TicketSequence(models.Model):
+    event_id = models.BigIntegerField(blank=True, null=True)
+    ticket_type_id = models.BigIntegerField(blank=True, null=True)
+    barcode = models.CharField(max_length=255, blank=True, null=True)
+    event_sequence = models.IntegerField(blank=True, null=True)
+    ticket_type_sequence = models.IntegerField(blank=True, null=True)
+    customization = models.ForeignKey(Customization, blank=True)
+
