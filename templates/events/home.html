@@ -29,73 +29,79 @@
 
 
     {% if customizations %}
-        {% for customs in customizations %}
-    <div class=“col-md-4”>
+    <div class="js-popular-events">
+      <section class="js-events-list">
 
-      <div class="g-cell g-cell--has-overflow g-cell-1-1 g-cell-md-1-2 g-cell-lg-1-3 l-pad-vert-3 ">
+      {% for customs in customizations %}
 
-        <div class="poster-card js-d-poster" >
 
-            <a href="" class="poster-card__main js-event-link" data-type="popular" data-source="home:popular" data-rank="0" data-eid="44802775307" data-automation="event-card">
+        <div class="g-cell g-cell--has-overflow g-cell-1-1 g-cell-md-1-2 g-cell-lg-1-3 l-pad-vert-3 ">
 
-              <div class="poster-card__header">
+          <div class="poster-card js-d-poster" >
 
-                  <div class="poster-card__image" style="background-color:#ccc;">
+              <a href="" class="poster-card__main js-event-link" data-type="popular" data-source="home:popular" data-rank="0" data-eid="44802775307" data-automation="event-card">
 
-                      <img class="js-poster-image " src="{{ customs.custom_email.logo }}"  alt="{{ customization_name }}">
+                <div class="poster-card__header">
 
-                  </div>
+                    <div class="poster-card__image" style="background-color:#ccc;">
 
-                  <span class="poster-card__label">{{ customs.created }}
-                  </span>
+                        <img class="js-poster-image " src="{{ customs.custom_email.logo }}"  alt="{{ customization_name }}">
 
-              </div>
+                    </div>
 
-              <div class="poster-card__body">
-                  <time class="poster-card__date">
+                    <span class="poster-card__label">{{ customs.created }}
+                    </span>
 
-                       {{ customs.user }}
-
-                  </time>
-
-                  <div class="poster-card__title">
-                     {{ customs.name }}
-                  </div>
-
-                  <div class="poster-card__venue">
-
-                      {{ customs.custom_email.message }}
-                      {{ customs.ticket_template.message_ticket }}
-                  </div>
-
-              </div>
-
-              <div class="poster-card__footer">
-
-                <div class="poster-card__tags">
-
-                      <a class="event-category" href="#" aria-label="${ mark_safe(_('Find {name} events').format(name=category.short_name)) }">{{ customs.ticket_template.select_design_template }}</a>
                 </div>
 
-              <div style="padding-top: 10px" class="poster-card__actions">
-                <a  class="glyphicon glyphicon-envelope" title="Test mail tool" class="js-share-event-card share-action" href="{% url 'mails:form_send_mail' pk=customs.id  %}"></a>
-                <a class="glyphicon glyphicon-trash" title="Delete Customization" href="{% url 'customizations:delete_customization' pk=customs.id  %}"></a>
-                <a class="glyphicon glyphicon-pencil" title="Update Customization"  href="{% url 'customizations:update_customization' pk=customs.id  %}"></a>
-                <a class="glyphicon glyphicon-eye-open" title="Preview your mail"  href="{% url 'mails:email_preview' pk=customs.id  %}"target="_blank"></a>
-                <a class="glyphicon glyphicon-file" title="Generate pdf preview"  href="{% url 'mails:generate_pdf' pk=customs.id %}"target="_blank"></a>
+                <div class="poster-card__body">
+                    <time class="poster-card__date">
 
-              </div>
+                         {{ customs.user }}
+
+                    </time>
+
+                    <div class="poster-card__title">
+                       {{ customs.name }}
+                    </div>
+
+                    <div class="poster-card__venue">
+
+                        {{ customs.custom_email.message }}
+                        {{ customs.ticket_template.message_ticket }}
+                    </div>
+
+                </div>
+
+                <div class="poster-card__footer">
+
+                  <div class="poster-card__tags">
+
+                        <a class="event-category" href="#" aria-label="${ mark_safe(_('Find {name} events').format(name=category.short_name)) }">{{ customs.ticket_template.select_design_template }}</a>
+                  </div>
+
+                <div style="padding-top: 10px" class="poster-card__actions">
+                  <a  class="glyphicon glyphicon-envelope" title="Test mail tool" class="js-share-event-card share-action" href="{% url 'mails:form_send_mail' pk=customs.id  %}"></a>
+                  <a class="glyphicon glyphicon-trash" title="Delete Customization" href="{% url 'customizations:delete_customization' pk=customs.id  %}"></a>
+                  <a class="glyphicon glyphicon-pencil" title="Update Customization"  href="{% url 'customizations:update_customization' pk=customs.id  %}"></a>
+                  <a class="glyphicon glyphicon-eye-open" title="Preview your mail"  href="{% url 'mails:email_preview' pk=customs.id  %}"target="_blank"></a>
+                  <a class="glyphicon glyphicon-file" title="Generate pdf preview"  href="{% url 'mails:generate_pdf' pk=customs.id %}"target="_blank"></a>
+
+                </div>
+
+            </div>
 
           </div>
 
         </div>
 
-      </div>
 
 
 
+    {% endfor %}
+    </section>
   </div>
-  {% endfor %}
+
 
   {% else %}
 

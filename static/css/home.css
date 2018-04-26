@@ -1,78 +1,5 @@
 @charset "UTF-8";
-/* ============== Browser Support ============== */
-/* ================== Colors ================== */
-/* ================ Typography ================= */
-/* ============ Heights and Widths ============= */
-/* ========== Responsive breakpoints =========== */
-/* ================= Elevations ================ */
-/* ================= Animations ================ */
-/* =================== Icons =================== */
-/* ============== Module specific ============== */
-/* ============== Accordion ============== */
-/* ============== Avatar ============== */
-/* ============== Button ============== */
-/* ============== Card ============== */
-/* ============== Event Cards ============== */
-/* ============== Form ============== */
-/* ============== Overlay ============== */
-/* ============== Reports ============== */
-/* ============== Responsive Form ============== */
-/* ============== Segmented Control ============== */
-/* ============== Ticket Types ============== */
-/* ============== Toggle / Switch ============== */
-/* ============== Browser Support ============== */
-/* ================== Colors ================== */
-/* ================ Typography ================= */
-/* ============ Heights and Widths ============= */
-/* ========== Responsive breakpoints =========== */
-/* ================= Elevations ================ */
-/* ================= Animations ================ */
-/* =================== Icons =================== */
-/* ============== Module specific ============== */
-/* ============== Accordion ============== */
-/* ============== Avatar ============== */
-/* ============== Button ============== */
-/* ============== Card ============== */
-/* ============== Event Cards ============== */
-/* ============== Form ============== */
-/* ============== Overlay ============== */
-/* ============== Reports ============== */
-/* ============== Responsive Form ============== */
-/* ============== Segmented Control ============== */
-/* ============== Ticket Types ============== */
-/* ============== Toggle / Switch ============== */
-/* ---------------------------------------------------------- */
-/*                                                            */
-/* A media query that captures:                               */
-/*                                                            */
-/* - Retina iOS devices                                       */
-/* - Retina Macs running Safari                               */
-/* - High DPI Windows PCs running IE 8 and above              */
-/* - Low DPI Windows PCs running IE, zoomed in                */
-/* - Low DPI Windows PCs and Macs running Firefox, zoomed in  */
-/* - Android hdpi devices and above                           */
-/* - Android tvdpi devices, including Google Nexus 7          */
-/* - Chrome running on high DPI Macs and PCs                  */
-/* - Opera running on high DPI Macs, PCs and mobile devices   */
-/*                                                            */
-/* Please note that that this code assumes you'll swap a      */
-/* 2× version of your images. If you'd like to supply         */
-/* finer increments, other thresholds might be appropriate.   */
-/*                                                            */
-/* A test for CSS pixel densites can be found here:           */
-/* http://bjango.com/articles/min-device-pixel-ratio/         */
-/*                                                            */
-/*                                  @marcedwards from @bjango */
-/*                                                            */
-/* ---------------------------------------------------------- */
-/* This is hacky and awesome. it should be part of mixins or something.
-   I found it once on stack overflow and couldn't find it later when I looked */
-/* XXX: test in browsers */
-/* ratio is the height divided by width in percentage form */
-/* This function is used to get the max height for multi-line ellipses
- * We use px values for line-height in styleguide, and unitless values for line-height in core
- * so we need to handle the possibility for both here
- */
+
 .hero-image-container {
   overflow: hidden; }
 
@@ -84,7 +11,6 @@
     .promo-event-cards .g-cell:nth-child(3) .event-card {
       display: block; } }
 
-/* Patch to show the tooltip overflow */
 .event-cards .g-cell {
   overflow: visible; }
 
