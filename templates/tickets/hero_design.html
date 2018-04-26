@@ -52,11 +52,10 @@ width: 180px;
 <table>
   <tr >
     <th style="background: white; font-weight: bold;">
-     <span style="font-size: 22px; color: red;">AUTO</span>
-     <span style="font-size: 22px; color: black;">ENTRADA</span>
+        <span style="font-size: 24px; color: #ff6c0a;">Eventbrite</span>
     </th>
 
-    <th style="text-align: right;font-weight: normal;width: 300px;font-size: 16px;color:#878685;">
+    <th style="text-align: right;font-weight: normal;width: 300px;font-size: 14px;color:#878685;">
          <span style="font-size: 14px;">
           Order #{{order_id}}
           {% if attendee.ticket_type_sequence %}
@@ -105,32 +104,32 @@ width: 180px;
 <!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
 <table>
   <tr>
-    <td style="color: #001b47;text-align: left;">
+    <td style="color: #001b47; padding-left: 10px">
         <p>
-       <span style="font-size: 16px; color:#ff6c0a;">LOCATION<br></span>
-       <span style="font-size: 16px;color:#878685;">
+       <span style="font-size: 14px; color:#ff6c0a;">LOCATION<br></span>
+       <span style="font-size: 14px;color:#878685;">
         {{event_venue_location.address_1|default_if_none:""}}, {{event_venue_location.address_2|default_if_none:""}} - {{event_venue_location.postal_code|default_if_none:"" }}
         {{event_venue_location.city|default_if_none:""}}, {{event_venue_location.country|default_if_none:""}}
         {{event_venue_location.region|default_if_none:""}}
-         </p>
+
          </span>
 
         <p>
-        <span style="font-size: 16px; color:#ff6c0a;">DATE<br></span>
-        <span style="font-size: 16px;color:#878685;">
+        <span style="font-size: 14px; color:#ff6c0a;">DATE<br></span>
+        <span style="font-size: 14px;color:#878685;">
         {{event_start}}
         </p>
         </span>
 
         <p>
-        <span style="font-size: 16px; color:#ff6c0a;">GUEST<br></span>
-          <span style="font-size: 16px;color:#878685;">
+        <span style="font-size: 14px; color:#ff6c0a;">GUEST<br></span>
+          <span style="font-size: 14px;color:#878685;">
          {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}
          </p>
         </span>
 
-        <span style="font-size: 16px; color:#ff6c0a;">TICKET TYPE<br></span>
-          <span style="font-size: 16px;color:#878685;">
+        <span style="font-size: 14px; color:#ff6c0a;">TICKET TYPE<br></span>
+          <span style="font-size: 14px;color:#878685;">
          {{attendee.ticket_class}}
          {% if customization.ticket_template.show_ticket_type_price %}
               {{ attendee.cost_gross }}
@@ -171,10 +170,16 @@ width: 180px;
     </td>
   </tr>
 </table>
-<span>
+<br>
+<span style="text-align: center">
   {{footer_description}}
 </span>
 <!-- - - - -  - - - - - - - - END FOOTER - - - - - - - - - - - - - -->
+{% if customization.ticket_template.double_ticket %}
+
+{% else %}
+  <div style="display:block; page-break-before:always;"></div>
+{% endif %}
 
 {% if customization.ticket_template.double_ticket %}
 <div class="dashed-line">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </div>
@@ -182,11 +187,10 @@ width: 180px;
 <table>
   <tr >
     <th style="font-weight: bold;">
-     <span style="font-size: 22px; color: red;">AUTO</span>
-     <span style="font-size: 22px; color: black;">ENTRADA</span>
+     <span style="font-size: 24px; color: #ff6c0a;">Eventbrite</span>
     </th>
 
-    <th style="text-align: right;font-weight: normal;width: 300px;font-size: 16px;color:#878685;">
+    <th style="text-align: right;font-weight: normal;width: 300px;font-size: 14px;color:#878685;">
          <span style="font-size: 14px;">
           Order #{{order_id}}
           {% if attendee.ticket_type_sequence %}
@@ -233,33 +237,33 @@ width: 180px;
 <!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
 <table>
   <tr>
-    <td style="color: #001b47;text-align: left;">
+    <td style="color: #001b47;padding-left: 10px;">
         <p>
-       <span style="font-size: 16px; color:#ff6c0a;">LOCATION<br></span>
-       <span style="font-size: 16px;color:#878685;">
+       <span style="font-size: 14px; color:#ff6c0a;">LOCATION<br></span>
+       <span style="font-size: 14px;color:#878685;">
         {{event_venue_location.address_1|default_if_none:""}}, {{event_venue_location.address_2|default_if_none:""}} - {{event_venue_location.postal_code|default_if_none:"" }}
         {{event_venue_location.city|default_if_none:""}}, {{event_venue_location.country|default_if_none:""}}
         {{event_venue_location.region|default_if_none:""}}
-         </p>
+
          </span>
 
         <p>
         <br/>
-        <span style="font-size: 16px; color:#ff6c0a;">DATE<br></span>
-        <span style="font-size: 16px;color:#878685;">
+        <span style="font-size: 14px; color:#ff6c0a;">DATE<br></span>
+        <span style="font-size: 14px;color:#878685;">
         {{event_start}}
         </p>
         </span>
 
         <p>
-        <span style="font-size: 16px; color:#ff6c0a;">GUEST<br></span>
-          <span style="font-size: 16px;color:#878685;">
+        <span style="font-size: 14px; color:#ff6c0a;">GUEST<br></span>
+          <span style="font-size: 14px;color:#878685;">
          {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}
          </p>
         </span>
 
-        <span style="font-size: 16px; color:#ff6c0a;">TICKET TYPE<br></span>
-          <span style="font-size: 16px;color:#878685;">
+        <span style="font-size: 14px; color:#ff6c0a;">TICKET TYPE<br></span>
+          <span style="font-size: 14px;color:#878685;">
          {{attendee.ticket_class}}
          {% if customization.ticket_template.show_ticket_type_price %}
               {{ attendee.cost_gross }}
@@ -303,7 +307,7 @@ width: 180px;
     </td>
   </tr>
 </table>
-<span>
+<span style="text-align: center">
   {{footer_description}}
 </span>
 <!-- - - - -  - - - - - - - - END FOOTER - - - - - - - - - - - - - -->
