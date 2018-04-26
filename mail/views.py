@@ -180,6 +180,7 @@ def get_event_sequence(barcode):
         'event_sequence': event_sequence,
     }
 
+
 def get_ticket_type_sequence(barcode):
 
     ticket_type_sequence = TicketSequence.objects.get(
@@ -190,9 +191,10 @@ def get_ticket_type_sequence(barcode):
         'ticket_type_sequence': ticket_type_sequence,
     }
 
+
 def process_data(order, venue, organizer, user_id):
     list_attendee = order['attendees']
-    customization = Customization.objects.select.related(
+    customization = Customization.objects.select_related(
         'ticket_template'
     ).filter(user_id=user_id)
     attendees = []
@@ -253,7 +255,7 @@ def do_send_email(custom_data):
         for attendee in custom_data.attendees:
             attendee['event_sequence'] = get_event_sequence(
                 attendee['barcode']
-            )['event_sequence'] 
+            )['event_sequence']
 
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
