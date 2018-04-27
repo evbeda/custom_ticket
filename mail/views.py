@@ -128,7 +128,7 @@ def get_data(body):
             )['api_url'] +
             '?token=' +
             access_token +
-            '&expand=event,attendees'
+            '&expand=event,attendees.reserved_seating'
         )
         venue = get_venue(
             token=access_token,
@@ -151,13 +151,18 @@ def process_data(order, venue, organizer, user_id):
     list_attendee = order['attendees']
     attendees = []
     for att in list_attendee:
+        if att['reserved_seating'] is None:
+            reserved_seating = None
+        else:
+            reserved_seating = att['reserved_seating']['description']
         attendee = {
             'attendee_first_name': att['profile']['first_name'],
             'attendee_last_name': att['profile']['last_name'],
             'cost_gross': att['costs']['gross']['value'],
             'barcode': att['barcodes'][0]['barcode'],
             'answers': att['answers'],
-            'ticket_class': att['ticket_class_name']
+            'ticket_class': att['ticket_class_name'],
+            'reserved_seating': reserved_seating
         }
         attendees.append(dict(attendee))
     customization = Customization.objects.filter(user_id=user_id)
