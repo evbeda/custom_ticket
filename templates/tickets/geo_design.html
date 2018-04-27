@@ -1,0 +1,225 @@
+{% load static %}
+{% load qr_tags %}
+{% for attendee in attendees %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<style>
+
+.qr{
+    width: 120px;
+}
+.front {
+    text-align: center;
+
+}
+table {
+
+}
+
+.text
+{
+line-height: 1.2
+}
+.logo {
+text-align: left;
+float: left;
+padding: 10px;
+width: 70px;
+}
+
+/* Regular */
+@font-face {
+font-family: myFirstFont;
+src: url(static/font/BentonSans-Regular_sOT.otf);
+}
+
+/* Regular */
+@font-face {
+font-family: myFirstFont;
+src: url(static/font/BentonSans-Bold_sOT.otf);
+font-weight: bold;
+}
+
+@page {
+
+background-image: url('static/images/img_pattern_back.jpg');
+size: letter portrait;
+@frame front_image { /* front_image */
+        -pdf-frame-content: front_image;
+    left: 0pt; width: 306pt; top: 0pt; height: 220pt;
+}
+
+@frame qr_code { /* QR */
+    -pdf-frame-content: qr_code;
+left: 106pt; width: 90pt; top: 150pt; height: 100pt;
+
+}
+@frame st_quad { /* Content frame 1 */
+    -pdf-frame-content: st_quad;
+left: 0pt; width: 306pt; top: 240pt; height: 160pt;
+}
+@frame nd_quad { /* Content frame 2 */
+    -pdf-frame-content: nd_quad;
+right: 0pt; width: 306pt; top: 0pt; height: 396pt; border:1px dashed #ccc;
+}
+
+@frame rd_quad { /* Content frame 3 */
+    -pdf-frame-content: rd_quad;
+left: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;
+}
+@frame th_quad { /* Content frame 4 */
+    -pdf-frame-content: th_quad;
+right: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;}
+
+
+}
+</style>
+<body >
+
+<!-- - - - - - - - - - - - - - - QR CODE - - - - - - - - - - - - - - - - - -->
+    <div id="qr_code" ">
+
+<!-- - - - - - - - - - - - - - - FRONT IMAGE - - - - - - - - - - - - - - - - - -->
+            <div id="front_image" style=" text-align: center;width: 900px">
+                 <img class="front"  src="static/images/img_singer.png" alt="">
+            </div>
+<!-- - - - - - - - - - - - - - - END FRONT IMAGE - - - - - - - - - - - - - - - - - -->
+    <div class="qr">
+    {% qr_from_text attendee.barcode "m" %}
+    </div>
+    </div>
+<!-- - - - - - - - - - - - - - - END QR CODE - - - - - - - - - - - - - - - - - -->
+
+<!-- - - - - - - - - - - - - - - 1ST QUAD - - - - - - - - - - - - - - - - - -->
+    <div id="st_quad" >
+        <div style="font-family: myFirstFont;text-align: center;color: #282C35;">
+            {{ attendee.barcode }}
+        </div>
+
+        <div style="font-family: myFirstFont;text-align: center; font-size: 22px;color: #282C35;">
+
+              {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}
+
+        </div>
+
+        <div style="font-family: myFirstFont;text-align: center; font-weight: bold; font-size: 9px;color: #282C35;">
+                    <br><br><br><br><br><br><br><br><br><br>
+              Ordered by {{user_order_first_name}} {{user_order_last_name}}
+              on {{ order_created}}
+
+        </div>
+
+    </div>
+<!-- - - - - - - - - - - - - - - END 1ST QUAD - - - - - - - - - - - - - - - - - -->
+
+<!-- - - - - - - - - - - - - - - 2ND QUAD - - - - - - - - - - - - - - - - - -->
+    <div id="nd_quad" >
+        <div class="text">
+        <div style="font-family: myFirstFont;padding: 10px;text-align: right;">
+        <span style="font-family: myFirstFont;font-weight: bold; padding: 20px;color:#ADB0B6;">
+         <br>   ORDER #{{order_id}}
+        </span>
+        </div>
+
+        <div class="logo" style="padding: 20px;">
+        <img  style="font-family: myFirstFont;padding: 20px;" src="{{ logo_url }}" alt="LOGO" border="0" >
+        </div>
+
+        <div class="content" style="font-family: myFirstFont;padding: 20px;">
+
+               <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;">EVENT</span>
+
+                <span style="font-weight: bold; font-family: myFirstFont;font-size: 22px;color:#282C35;">
+                <br>{{event_name_text}}</br>
+                </span>
+
+                <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>DATE & TIME<br></span>
+
+                <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+                {{event_start}}</br>
+                </span>
+
+
+               <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>LOCATION</span>
+               <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+                <br>
+                {{event_venue_location.address_1|default_if_none:""}}
+                <br>
+                {{event_venue_location.address_2|default_if_none:""}}
+                <br>
+                {{event_venue_location.city|default_if_none:""}}, CA {{event_venue_location.postal_code|default_if_none:"" }}
+                <br>
+                {{event_venue_location.region|default_if_none:""}}
+                <br>
+                {{event_venue_location.country|default_if_none:""}}
+                <br>
+               </span>
+
+               <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>RESERVED SEATING</span>
+               <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+                <br>
+                Seat No: B6
+               </span>
+
+        </div>
+            <table>
+                        <tr>
+                            <td style="font-family: myFirstFont;margin: 20px;">
+                                <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;">PAYMENT STATUS<br></span>
+                                <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+                                    {{order_status}}
+                                </span>
+                            </td>
+                            <td>
+                                <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;">TYPE<br></span>
+                                <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+                                    {{attendee.ticket_class}}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+        </div>
+    </div>
+<!-- - - - - - - - - - - - - - - END 2ND QUAD - - - - - - - - - - - - - - - - - -->
+
+<!-- - - - - - - - - - - - - - - 3RD QUAD - - - - - - - - - - - - - - - - - -->
+    <div id="rd_quad">
+        <div style="font-family: myFirstFont;padding: 10px;text-align: right;">
+        <span style="font-family: myFirstFont;font-weight: bold; padding: 20px;color:#ADB0B6;">
+          Then here
+          <img width="18px" src="static/images/arrow_right.png" alt="arrow">
+        </span>
+        </div>
+        <img src="" alt="">
+    </div>
+<!-- - - - - - - - - - - - - - - END 3RD QUAD - - - - - - - - - - - - - - - - - -->
+
+<!-- - - - - - - - - - - - - - - 4TH QUAD - - - - - - - - - - - - - - - - - -->
+    <div id="th_quad">
+        <div style="font-family: myFirstFont;padding: 10px;text-align: left;">
+        <span style="font-family: myFirstFont;font-weight: bold; padding: 20px;color:#ADB0B6;">
+            <img width="18px" src="static/images/arrow_up.png" alt="arrow">Fold here first
+
+        </span>
+        </div>
+        <div style="font-family: myFirstFont;padding: 10px;text-align: left;" class="transition scaleX text">
+        <span style="font-family: myFirstFont;text-align: center;">
+
+            <br><br><br><br><br>
+        <img src="static/images/img_find_event.png" alt="">
+        </p>
+        </span>
+        </div>
+
+    </div>
+<!-- - - - - - - - - - - - - - - END 4TH QUAD - - - - - - - - - - - - - - - - - -->
+</body>
+</html>
+
+<div style="display:block; page-break-before:always;"></div>
+{% endfor %}
