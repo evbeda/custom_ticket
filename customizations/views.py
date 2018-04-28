@@ -37,10 +37,21 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             message = request.POST.get('message')
             select_design_template = request.POST.get('select_design_template')
             message_ticket = request.POST.get('message_ticket')
+            show_event_sequence = request.POST.get('show_event_sequence') == 'on'
+            show_ticket_type_sequence = request.POST.get('show_ticket_type_sequence') == 'on'
+            show_ticket_type_price = request.POST.get('show_ticket_type_price') == 'on'
+            footer_description = request.POST.get('footer_description')
+            double_ticket = request.POST.get('double_ticket') == 'on'
+            # import ipdb; ipdb.set_trace()
 
             ticket = TicketTemplate.objects.create(
                 select_design_template=select_design_template,
-                message_ticket=message_ticket
+                message_ticket=message_ticket,
+                show_event_sequence=show_event_sequence,
+                show_ticket_type_sequence=show_ticket_type_sequence,
+                show_ticket_type_price=show_ticket_type_price,
+                footer_description=footer_description,
+                double_ticket=double_ticket,
             )
             custom_email = CustomEmail.objects.create(
                 message=message,
@@ -83,6 +94,11 @@ def update_customization(request, pk):
         'message': custom_email.message,
         'select_design_template': ticket_template.select_design_template,
         'message_ticket': ticket_template.message_ticket,
+        'footer_description': ticket_template.footer_description,
+        'show_event_sequence': ticket_template.show_event_sequence,
+        'show_ticket_type_sequence': ticket_template.show_ticket_type_sequence,
+        'show_ticket_type_price': ticket_template.show_ticket_type_price,
+        'double_ticket': ticket_template.double_ticket,
 
     })
     if request.method == 'POST':
@@ -94,7 +110,18 @@ def update_customization(request, pk):
             custom_email.message = form.cleaned_data['message']
             ticket_template.select_design_template = form.cleaned_data[
                 'select_design_template']
-            ticket_template.message_ticket = form.cleaned_data['message_ticket']
+            ticket_template.message_ticket = form.cleaned_data[
+                'message_ticket']
+            ticket_template.footer_description = form.cleaned_data[
+                'footer_description']
+            ticket_template.show_event_sequence = form.cleaned_data[
+                'show_event_sequence']
+            ticket_template.show_ticket_type_sequence = form.cleaned_data[
+                'show_ticket_type_sequence']
+            ticket_template.show_ticket_type_price = form.cleaned_data[
+                'show_ticket_type_price']
+            ticket_template.double_ticket = form.cleaned_data[
+                'double_ticket']
             custom_email.save()
             ticket_template.save()
             customization.save()

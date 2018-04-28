@@ -2,28 +2,53 @@
 {% load static from staticfiles %}
 
 {% block content %}
- <br>
-  <br>
- <h2>Update Customization</h2> <br>
-  <br>
-    <form action="" method="post" enctype='multipart/form-data'>
-        {% csrf_token %}
-        <p>{{ form.name.label }} : {{ form.name }}</p>
-        <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
-        <p>Logo :<img src="{{ instance.custom_email.logo }}" width="250" height="200" /></p>
-        <p>{{ form.logo.label }} ({{instance.custom_email.logo}})</p>
+<br/>
+<br/>
+<h2>Update Customization</h2>
+<br/>
+<br/>
+  <form action="" method="post" enctype='multipart/form-data'>
+      {% csrf_token %}
+      <p>{{ form.name.label }} : {{ form.name }}</p>
+      <br/>
+      <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
+      <br/>
+      <p>Logo :<img src="{{ instance.custom_email.logo }}" width="250" height="200" /></p>
+      <br/>
+      <p>{{ form.logo.label }} ({{instance.custom_email.logo}})</p>
+      <br/>
+      <p>{{ form.logo.label }} : {{ form.logo }}</p>
+      <br/>
+      <p>{{ form.message.label }} : {{ form.message }}</p>
+      <br/>
+      <p>{{ form.select_design_template.label }} : {{ form.select_design_template }}</p>
+      <br/>
+      <p>{{ form.message_ticket.label }} : {{ form.message_ticket }}</p>
+      <br/>
+      {{ form.footer_description.label }} : {{ form.footer_description }}
+      <br/>
+      {{ form.show_event_sequence.label }} : {{ form.show_event_sequence }}
+      <br/>
+      {{ form.show_ticket_type_sequence.label }} : {{ form.show_ticket_type_sequence }}
+      <br/>
+      {{ form.show_ticket_type_price.label }} : {{ form.show_ticket_type_price }}
+      <br/>
+      {{ form.double_ticket.label }} : {{ form.double_ticket }}
+      <br/>
+  <div style="text-align: center">
+      <br>
+      <br>
+      <input type="submit" class="btn btn-primary" value="Save">
+  </div>
+  </form>
 
-        <p>{{ form.logo.label }} : {{ form.logo }}</p>
-        <p>{{ form.message.label }} : {{ form.message }}</p>
-        <p>{{ form.select_design_template.label }} : {{ form.select_design_template }}</p>
-        <p>{{ form.message_ticket.label }} : {{ form.message_ticket }}</p>
-<div style="text-align: center">
-  <br>
-  <br>
-        <input type="submit" class="btn btn-primary" value="Save">
-    </div>
-    </form>
+<style type="text/css">
 
+  form {
+    padding-bottom: 100px;
+  }
+
+</style>
 
 {% endblock %}
 

@@ -19,6 +19,11 @@ class TimeStampedModel(models.Model):
 class TicketTemplate(TimeStampedModel):
     select_design_template = models.CharField(max_length=255)
     message_ticket = models.CharField(max_length=255)
+    show_event_sequence = models.BooleanField(default=False)
+    show_ticket_type_sequence = models.BooleanField(default=False)
+    show_ticket_type_price = models.BooleanField(default=False)
+    footer_description = models.CharField(max_length=140, blank=True, null=True)
+    double_ticket = models.BooleanField(default=False)
 
 
 class CustomEmail(TimeStampedModel):
@@ -47,3 +52,13 @@ class UserWebhook(models.Model):
         on_delete=models.CASCADE,
         unique=True,
     )
+
+
+class TicketSequence(models.Model):
+    event_id = models.BigIntegerField(blank=True, null=True)
+    ticket_type_id = models.BigIntegerField(blank=True, null=True)
+    barcode = models.CharField(max_length=255, blank=True, null=True)
+    event_sequence = models.IntegerField(blank=True, null=True)
+    ticket_type_sequence = models.IntegerField(blank=True, null=True)
+    customization = models.ForeignKey(Customization, blank=True)
+
