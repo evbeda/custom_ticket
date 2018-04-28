@@ -8,6 +8,7 @@ from eventbrite import Eventbrite
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from PIL import Image
+from customizations.models import UserWebhook
 
 
 def get_unique_file_name(user, file_name):
@@ -125,6 +126,8 @@ def create_webhook(token):
 
 
 def delete_webhook(token, webhook_id):
+    webhook = UserWebhook.objects.get(webhook_id=webhook_id)
+    webhook.delete()
     Eventbrite(token).delete('/webhooks/' + webhook_id + "/")
     return HttpResponseRedirect('/')
 

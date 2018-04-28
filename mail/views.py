@@ -14,15 +14,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.views.generic import FormView
-from customizations.models import (
-    Customization,
-    TicketSequence,
-)
 from mail.forms import FormSendEmailPreview
 import datetime
 import time
 from mail.utils import (
-    async,
     PDF,
 )
 from mail.domain import (
@@ -32,11 +27,14 @@ from mail.domain import (
     data_fake
 )
 from customizations.utils import process_logo
+from customizations.models import (
+    Customization,
+    TicketSequence)
 
 
 def get_pdf_ticket(request, pk):
     data = data_fake(pk)
-    pdf = PDF('tickets/hero_design.html', [data]).render().getvalue()
+    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
     return HttpResponse(pdf, content_type='application/pdf')
 
 
@@ -120,7 +118,6 @@ def accept_webhook(request):
 def get_data(body):
     print 'Here! get_data'
     print body
-    # import ipdb; ipdb.set_trace()
     config_data = json.loads(body)
     user_id = config_data['config']['user_id']
     if webhook_available_to_process(user_id):
@@ -132,7 +129,7 @@ def get_data(body):
             )['api_url'] +
             '?token=' +
             access_token +
-            '&expand=event,attendees'
+            '&expand=event,attendees.reserved_seating'
         )
         venue = get_venue(
             token=access_token,
@@ -199,6 +196,10 @@ def process_data(order, venue, organizer, user_id):
     ).filter(user_id=user_id)
     attendees = []
     for att in list_attendee:
+        if att['reserved_seating'] is None:
+            reserved_seating = None
+        else:
+            reserved_seating = att['reserved_seating']['description']
         attendee = {
             'attendee_first_name': att['profile']['first_name'],
             'attendee_last_name': att['profile']['last_name'],
@@ -207,10 +208,12 @@ def process_data(order, venue, organizer, user_id):
             'answers': att['answers'],
             'ticket_class': att['ticket_class_name'],
             'ticket_class_id': att['ticket_class_id'],
-            'event_id': att['event_id']
+            'event_id': att['event_id'],
+            'reserved_seating': reserved_seating
         }
         register_ticket(attendee, customization[0])
         attendees.append(dict(attendee))
+    customization = Customization.objects.filter(user_id=user_id)
 
     date_start = datetime.datetime(
         *time.strptime(order['event']['start']['local'],
@@ -234,7 +237,7 @@ def process_data(order, venue, organizer, user_id):
         order_created=order['created'],
         order_status=order['status'],
         is_test=False,
-        footer_description=ticket_template.footer_description
+        footer_description=ticket_template.footer_description,
     )
     return do_send_email(custom_data)
 
@@ -244,19 +247,17 @@ def do_send_email(custom_data):
     data = all_data(custom_data)
 
     process_logo(data['logo_path'], data['logo_url'], data['logo_name'])
-
     if custom_data.customization.ticket_template.show_ticket_type_sequence:
-        for attendee in custom_data.attendees:
-            attendee['ticket_type_sequence'] = get_ticket_type_sequence(
-                attendee['barcode']
-            )['ticket_type_sequence']
+            for attendee in custom_data.attendees:
+                attendee['ticket_type_sequence'] = get_ticket_type_sequence(
+                    attendee['barcode']
+                )['ticket_type_sequence']
 
     if custom_data.customization.ticket_template.show_event_sequence:
         for attendee in custom_data.attendees:
             attendee['event_sequence'] = get_event_sequence(
                 attendee['barcode']
             )['event_sequence']
-
     message = render_to_string('mail/body_mail.html', context=data)
     email = EmailMessage(
         data['event_name_text'],
@@ -267,7 +268,7 @@ def do_send_email(custom_data):
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
-    pdf = PDF('tickets/hero_design.html', [data]).render().getvalue()
+    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
     email.attach('ticket', pdf, 'application/pdf')
     print 'send mail'
     print custom_data.order_id
@@ -302,11 +303,8 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             'answers': {},
             'ticket_class': form.cleaned_data['ticket_class']
         }
-
         customization = Customization.objects.get(pk=self.kwargs['pk'])
-
         attendees.append(dict(attendee))
-
         custom_data = CustomData(
             customization=customization,
             attendees=attendees,
