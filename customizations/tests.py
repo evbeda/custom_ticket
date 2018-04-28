@@ -80,8 +80,13 @@ class IndexViewTest(TestBase):
             '/customizations/create-customization/',
             data={
                 u'name': [u'prueba'],
+                u'show_ticket_type_sequence': [u'on'],
+                u'show_ticket_type_price': [u'on'],
                 u'select_event': [u'Apply All Events'],
                 u'message_ticket': [u'prueba ticket'],
+                u'additional_info': [u'asdasd'],
+                u'footer_description': [u'asdasd'],
+                u'show_event_sequence': [u'on'],
                 u'create_customization': [u'Create'],
                 u'select_design_template': [u'DESIGN 1'],
                 u'csrfmiddlewaretoken': [u'b7wtBfWYFKGkxNxDPrwS8WLZxv001isUjKBrCvrjg9ZibLSKaru2ozuuaS3JMOi1'],

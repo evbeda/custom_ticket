@@ -110,7 +110,9 @@ def data_fake(id):
             'user_last_name': u'Campbell',
             'user_order_email': u'ana@email.com',
             'user_order_first_name': u'Ana',
-            'user_order_last_name': u'Campbell'}
+            'user_order_last_name': u'Campbell',
+            'footer_description': u'Tax number | Company name',
+            }
     data_fake = dict(
         list(data_models.items()) +
         list(fake.items())
@@ -120,7 +122,7 @@ def data_fake(id):
 
 def all_data(custom_data):
     data_api = custom_data.__dict__
-    data_models = data_to_dict_all_models(custom_data.customization_id)
+    data_models = data_to_dict_all_models(custom_data.customization.id)
     all_data = dict(
         list(data_api.items()) +
         list(data_models.items())
@@ -131,7 +133,7 @@ def all_data(custom_data):
 class CustomData(object):
 
     def __init__(self,
-                 customization_id=0,
+                 customization=Customization(),
                  attendees=[],
                  organizer_logo='',
                  event_name_text='',
@@ -154,10 +156,11 @@ class CustomData(object):
                  user_first_name='',
                  user_last_name='',
                  venue='',
-                 is_test=False
+                 is_test=False,
+                 footer_description='',
                  ):
 
-        self.customization_id = customization_id
+        self.customization = customization
         self.attendees = attendees
         self.organizer_logo = organizer_logo
         self.event_name_text = event_name_text
@@ -180,3 +183,4 @@ class CustomData(object):
         self.from_email = from_email
         self.emails = emails
         self.is_test = is_test
+        self.footer_description = footer_description
