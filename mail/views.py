@@ -26,6 +26,8 @@ from mail.domain import (
     data_to_dict_all_models,
     data_fake
 )
+# from customizations.utils import file_exist, download
+from django.shortcuts import render, get_object_or_404, redirect
 from customizations.utils import process_logo
 from customizations.models import (
     Customization,
@@ -34,7 +36,9 @@ from customizations.models import (
 
 def get_pdf_ticket(request, pk):
     data = data_fake(pk)
-    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+    customization = get_object_or_404(Customization, pk=pk)
+    html_url = customization.ticket_template.select_design_template.template_source
+    pdf = PDF(html_url, [data]).render().getvalue()
     return HttpResponse(pdf, content_type='application/pdf')
 
 

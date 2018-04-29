@@ -106,9 +106,11 @@
   {% else %}
 
 <div style="text-align: center">
-  <br>
-  <br>
-        <h2>You don't have any customization created yet</h2>
+
+          <img class="index-img" src="{% static 'images/nocus.png' %}" />
+            <p hidden>You don't have any customization created yet</p>
+            <!-- <div hidden>No banners yet!<div> -->
+
 </div>
 
 {% endif %}
@@ -126,14 +128,5 @@
     </a>
 </div>
 
-<footer class="footer">
-  <div class="container">
-    <span class="text-muted">
-      <a href="{% url 'customizations:create_customization' %}">
-        <button type="button" class="pull-right btn btn-circle btn-danger"><span class="fa fa-plus"></span></button>
-      </a>
-    </span>
-  </div>
-</footer>
 {% endblock %}
 

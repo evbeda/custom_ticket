@@ -16,8 +16,21 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
+class BaseTicketTemplate(TimeStampedModel):
+    template_source = models.TextField()
+    name = models.CharField(max_length=255)
+    preview = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
 class TicketTemplate(TimeStampedModel):
-    select_design_template = models.CharField(max_length=255)
+    # select_design_template = models.CharField(max_length=255)
+    select_design_template = models.ForeignKey(
+        BaseTicketTemplate,
+        blank=True,
+        null=True)
     message_ticket = models.CharField(max_length=255)
     show_event_sequence = models.BooleanField(default=False)
     show_ticket_type_sequence = models.BooleanField(default=False)
