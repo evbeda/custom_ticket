@@ -10,6 +10,7 @@ from django.core.files.storage import FileSystemStorage
 from PIL import Image
 from customizations.models import UserWebhook
 
+
 def get_unique_file_name(user, file_name):
     timestamp = str(int(time.time()))
     f_name = file_name.replace(' ', '-')

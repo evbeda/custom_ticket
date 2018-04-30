@@ -984,7 +984,7 @@ class TestMailsWithCostumization(TestBase):
         }]
         customization = Customization.objects.filter(user_id=self.user.id)
         custom_data = CustomData(
-            customization_id=customization[0].id,
+            customization=customization[0],
             attendees=self.attendee,
             user_first_name='Nombre del User',
             user_last_name='Apellido del User',
