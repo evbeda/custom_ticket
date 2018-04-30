@@ -88,7 +88,7 @@ class IndexViewTest(TestBase):
                 u'footer_description': [u'asdasd'],
                 u'show_event_sequence': [u'on'],
                 u'create_customization': [u'Create'],
-                u'select_design_template': [u'DESIGN 1'],
+                u'select_design_template': [u'1'],
                 u'csrfmiddlewaretoken': [u'b7wtBfWYFKGkxNxDPrwS8WLZxv001isUjKBrCvrjg9ZibLSKaru2ozuuaS3JMOi1'],
                 u'message': [u'prueba mensaje'],
                 'logo': img,

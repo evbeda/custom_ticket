@@ -8,7 +8,8 @@ from customizations.models import (
     Customization,
     TicketTemplate,
     CustomEmail,
-    UserWebhook
+    UserWebhook,
+    BaseTicketTemplate
 )
 from customizations.forms import FormCustomization
 from customizations.utils import upload_file
@@ -41,9 +42,11 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
             show_ticket_type_price = request.POST.get('show_ticket_type_price') == 'on'
             footer_description = request.POST.get('footer_description')
             double_ticket = request.POST.get('double_ticket') == 'on'
-
+            template = get_object_or_404(
+                BaseTicketTemplate,
+                pk=select_design_template)
             ticket = TicketTemplate.objects.create(
-                select_design_template=select_design_template,
+                select_design_template=template,
                 message_ticket=message_ticket,
                 show_event_sequence=show_event_sequence,
                 show_ticket_type_sequence=show_ticket_type_sequence,
