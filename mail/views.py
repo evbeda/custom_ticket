@@ -272,8 +272,11 @@ def do_send_email(custom_data):
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
-    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
-    email.attach('ticket', pdf, 'application/pdf')
+    if data['pdf_ticket_attach'] is True:
+        pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+        email.attach('ticket', pdf, 'application/pdf')
+    else:
+        pass
     print 'send mail'
     print custom_data.order_id
     print data['emails']
