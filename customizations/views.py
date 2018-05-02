@@ -31,56 +31,58 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
         is_form_valid = super(ViewCreateCustomization, self).post(
             request, *args, **kwargs)
         links = upload_file(request, 'logo')
-
-        if is_form_valid and bool(links):
-            name = request.POST.get('name')
-            message = request.POST.get('message')
-            select_design_template = request.POST.get('select_design_template')
-            message_ticket = request.POST.get('message_ticket')
-            show_event_sequence = request.POST.get('show_event_sequence') == 'on'
-            show_ticket_type_sequence = request.POST.get('show_ticket_type_sequence') == 'on'
-            show_ticket_type_price = request.POST.get('show_ticket_type_price') == 'on'
-            footer_description = request.POST.get('footer_description')
-            double_ticket = request.POST.get('double_ticket') == 'on'
-            template = get_object_or_404(
-                BaseTicketTemplate,
-                pk=select_design_template)
-            ticket = TicketTemplate.objects.create(
-                select_design_template=template,
-                message_ticket=message_ticket,
-                show_event_sequence=show_event_sequence,
-                show_ticket_type_sequence=show_ticket_type_sequence,
-                show_ticket_type_price=show_ticket_type_price,
-                footer_description=footer_description,
-                double_ticket=double_ticket,
-            )
-            custom_email = CustomEmail.objects.create(
-                message=message,
-                logo=links['dropbox'],
-                logo_local=links['local'],
-                logo_path=links['path'],
-                logo_name=links['name'],
-                logo_url=links['dropbox']
-            )
-            Customization.objects.create(
-                user=self.request.user,
-                ticket_template=ticket,
-                custom_email=custom_email,
-                name=name,
-            )
-            if not UserWebhook.objects.filter(user=request.user).exists():
-                token = get_token(request.user)
-                webhook_id = create_webhook(token)
-                UserWebhook.objects.create(
-                    user=self.request.user,
-                    webhook_id=webhook_id,
-                )
-            return HttpResponseRedirect('/')
+        if Customization.objects.filter(user=request.user).exists():
+            return HttpResponseRedirect('/customizations/error-create')
         else:
-            form = FormCustomization()
-            return render(request, self.template_name, {
-                'form': form}
-            )
+            if is_form_valid and bool(links):
+                name = request.POST.get('name')
+                message = request.POST.get('message')
+                select_design_template = request.POST.get('select_design_template')
+                message_ticket = request.POST.get('message_ticket')
+                show_event_sequence = request.POST.get('show_event_sequence') == 'on'
+                show_ticket_type_sequence = request.POST.get('show_ticket_type_sequence') == 'on'
+                show_ticket_type_price = request.POST.get('show_ticket_type_price') == 'on'
+                footer_description = request.POST.get('footer_description')
+                double_ticket = request.POST.get('double_ticket') == 'on'
+                template = get_object_or_404(
+                    BaseTicketTemplate,
+                    pk=select_design_template)
+                ticket = TicketTemplate.objects.create(
+                    select_design_template=template,
+                    message_ticket=message_ticket,
+                    show_event_sequence=show_event_sequence,
+                    show_ticket_type_sequence=show_ticket_type_sequence,
+                    show_ticket_type_price=show_ticket_type_price,
+                    footer_description=footer_description,
+                    double_ticket=double_ticket,
+                )
+                custom_email = CustomEmail.objects.create(
+                    message=message,
+                    logo=links['dropbox'],
+                    logo_local=links['local'],
+                    logo_path=links['path'],
+                    logo_name=links['name'],
+                    logo_url=links['dropbox']
+                )
+                Customization.objects.create(
+                    user=self.request.user,
+                    ticket_template=ticket,
+                    custom_email=custom_email,
+                    name=name,
+                )
+                if not UserWebhook.objects.filter(user=request.user).exists():
+                    token = get_token(request.user)
+                    webhook_id = create_webhook(token)
+                    UserWebhook.objects.create(
+                        user=self.request.user,
+                        webhook_id=webhook_id,
+                    )
+                return HttpResponseRedirect('/')
+            else:
+                form = FormCustomization()
+                return render(request, self.template_name, {
+                    'form': form}
+                )
 
 
 def update_customization(request, pk):
