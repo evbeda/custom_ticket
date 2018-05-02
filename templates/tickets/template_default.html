@@ -6,7 +6,6 @@
         <head>
             <meta charset="UTF-8">
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <title>Document</title>
         </head>
         <body>
 
@@ -31,9 +30,9 @@
                         <tr>
                             <td colspan="3">
                                 <p style="color:#666666;font-weight:400;font-size:15px;line-height:21px;margin-bottom:18px">
-                                    <br> Nro. de pedido: {{order_id}} <br>
-                                    Estado: {{order_status}} <br>
-                                    Información adicional: {{message_ticket}} <br>
+                                    <br> Order: {{order_id}} <br>
+                                    Order Status: {{order_status}} <br>
+                                    Aditional Information: {{message_ticket}} <br>
                                     Location:<br>
                                     {{event_venue_location.address_1|default_if_none:""}} | {{event_venue_location.address_2|default_if_none:""}} |{{event_venue_location.postal_code|default_if_none:"" }}<br>
                                     {{event_venue_location.city|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}<br>
@@ -44,15 +43,15 @@
                                         <tr>
                                             <th style="border-bottom:1px dashed #d3d3d3;text-align:left;padding-bottom:12px;padding-right:12px">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
-                                                Nombre </div>
+                                                Name </div>
                                             </th>
                                             <th style="border-bottom:1px dashed #d3d3d3;text-align:left;padding-bottom:12px;padding-right:12px">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
-                                                Tipo de Entrada </div>
+                                                Type </div>
                                             </th>
                                             <th style="border-bottom:1px dashed #d3d3d3;text-align:right;padding-bottom:12px;padding-right:0">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
-                                                Cantidad </div>
+                                                Quantity </div>
                                             </th>
                                         </tr>
                                     </thead>
