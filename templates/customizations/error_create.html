@@ -1,0 +1,12 @@
+{% extends 'base_.html' %}
+{% block content %}
+    <form action="" method="post">{% csrf_token %}
+        <div class="container">
+            <br><br>
+        <h2>You already have a customization, to make a new you have to delete the previous one </h2>
+        </div>
+        <br><br>
+        <div style="text-align: center">
+        <a  class="btn btn-primary" href="{% url 'home'   %}">Home</a>
+    </div>
+{% endblock %}

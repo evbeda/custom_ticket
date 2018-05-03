@@ -980,9 +980,9 @@ class TestMailsWithCostumization(TestBase):
             'answers': [],
             'ticket_class': 'Ticket'
         }]
-        customization = Customization.objects.filter(user_id=self.user.id)
+        customization = Customization.objects.get(user_id=self.user.id)
         custom_data = CustomData(
-            customization=customization[0],
+            customization=customization,
             attendees=self.attendee,
             user_first_name='Nombre del User',
             user_last_name='Apellido del User',

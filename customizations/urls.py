@@ -25,6 +25,12 @@ urlpatterns = [
         name='delete_customization'
     ),
     url(
+        r'^error-create$',
+        TemplateView.as_view(
+            template_name='customizations/error_create.html'),
+        name='error_create'
+    ),
+    url(
         r'^(?P<pk>[0-9]+)/update$',
         update_customization,
         name='update_customization'

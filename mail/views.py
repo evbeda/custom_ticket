@@ -197,7 +197,7 @@ def process_data(order, venue, organizer, user_id):
     list_attendee = order['attendees']
     customization = Customization.objects.select_related(
         'ticket_template'
-    ).filter(user_id=user_id)
+    ).get(user_id=user_id)
     attendees = []
     for att in list_attendee:
         if att['reserved_seating'] is None:
@@ -215,18 +215,17 @@ def process_data(order, venue, organizer, user_id):
             'event_id': att['event_id'],
             'reserved_seating': reserved_seating
         }
-        register_ticket(attendee, customization[0])
+        register_ticket(attendee, customization)
         attendees.append(dict(attendee))
-    customization = Customization.objects.filter(user_id=user_id)
 
     date_start = datetime.datetime(
         *time.strptime(order['event']['start']['local'],
                        "%Y-%m-%dT%H:%M:%S")[:6]
     )
     format_date_start = date_start.strftime("%d/%m/%y %I:%M%p")
-    ticket_template = customization[0].ticket_template
+    ticket_template = customization.ticket_template
     custom_data = CustomData(
-        customization=customization[0],
+        customization=customization,
         attendees=attendees,
         user_first_name=order['first_name'],
         user_last_name=order['last_name'],
@@ -247,9 +246,7 @@ def process_data(order, venue, organizer, user_id):
 
 
 def do_send_email(custom_data):
-
     data = all_data(custom_data)
-
     process_logo(data['logo_path'], data['logo_url'], data['logo_name'])
     if custom_data.customization.ticket_template.show_ticket_type_sequence:
             for attendee in custom_data.attendees:
