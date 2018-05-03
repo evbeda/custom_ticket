@@ -11,7 +11,7 @@
 <style>
 .dashed-line{
   padding-bottom: 5px;
-  padding-top: 5px;
+  padding-top: 50px;
 }
 .qr-code{
     width: 250px;
@@ -35,9 +35,14 @@ hr.line {
   background: #999;
 }
 .logo {
-text-align: center;
 float: left;
-width: 180px;
+width: 100px;
+height: 100px;
+}
+.qrdob{
+float: left;
+width: 100px;
+height: 100px;
 }
 </style>
 <body >
@@ -123,6 +128,11 @@ width: 180px;
         <span style="font-size: 14px; color:#ff6c0a;">TICKET TYPE<br></span>
           <span style="font-size: 14px;color:#878685;">
          {{attendee.ticket_class}}
+         <br>
+         {% if attendee.reserved_seating %}
+              Location: {{ attendee.reserved_seating }}
+        {% endif %}
+        <br>
          {% if customization.ticket_template.show_ticket_type_price %}
               {{ attendee.cost_gross }}
           {% endif %}
@@ -130,21 +140,14 @@ width: 180px;
         </span>
 
     </td>
-    <td  style="width: 250px;background: #f9f9f9;color: #001b47;text-align: center;">
+    <td  style="width: 250px;color: #001b47;text-align: center;">
       <div class="qr-code">
             {% qr_from_text attendee.barcode "s" %}
-        </div>
-        <div class="eb">
-        <img src="{% static 'custom_ticket/images/powered_by_eventbrite.png' %}" alt="powered_by_eventbrite">
         </div>
     </td>
   </tr>
 </table>
 <!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
-<!-- <table> -->
-<!--  <td style="background: #f9f9f9;color: #001b47;"> -->
-<!--     </td> -->
-<!-- </table> -->
 <!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
 <table>
   <tr>
@@ -174,135 +177,85 @@ width: 180px;
 {% endif %}
 
 {% if customization.ticket_template.double_ticket %}
+
 <div class="dashed-line">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </div>
 <!-- - - - -  - - - - - - - - HEADER - - - - - - - - - - - - - -->
-<table>
-  <tr >
-    <th style="font-weight: bold;">
-     <span style="font-size: 24px; color: #ff6c0a;">Eventbrite</span>
-    </th>
 
-    <th style="text-align: right;font-weight: normal;width: 300px;font-size: 14px;color:#878685;">
-         <span style="font-size: 14px;">
-          Order #{{order_id}}
-          {% if attendee.ticket_type_sequence %}
-              TicketType Sequence  #{{ attendee.ticket_type_sequence }}
-          {% endif %}
-          {% if attendee.event_sequence %}
-              Event Sequence  #{{ attendee.event_sequence }}
-          {% endif %}
-         </span>
-         <!-- <span style="font-size: 14px;">
-           <br>Status {{order_status}}
-         </span>
-         <span style="font-size: 14px;">
-           <br>Type <b>
-            {{attendee.ticket_class}}
-            </b>
-         </span> -->
-    </th>
-  </tr>
-</table>
+
+
+
 <!-- - - - -  - - - - - - - - END HEADER - - - - - - - - - - - - - -->
 
 <!-- - - - -  - - - - - - - - EVENT NAME - - - - - - - - - - - - - -->
-<table>
-  <tr>
+  <table>
+    <tr>
 
-    <th style="color: #515150;font-weight: normal;">
-        <span style="font-size: 24px;">{{event_name_text}}</span>
-    </th>
-    <th style="width: 80px">
+      <th style="color: #515150;font-weight: normal;">
+          <span style="font-size: 20px;">{{event_name_text}}</span>
+      </th>
 
-    </th>
-
-  </tr>
-</table>
+    </tr>
+  </table>
 <!-- - - - -  - - - - - - - - END EVENT NAME - - - - - - - - - - - - - -->
-<table>
- <td style="color: #001b47;">
-  <hr>
-  <br>
-    </td>
-</table>
+
 <!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
-<table>
-  <tr>
-    <td style="color: #001b47;padding-left: 10px;">
-        <p>
-       <span style="font-size: 14px; color:#ff6c0a;">LOCATION<br></span>
-       <span style="font-size: 14px;color:#878685;">
-        {{event_venue_location.address_1|default_if_none:""}}, {{event_venue_location.address_2|default_if_none:""}} - {{event_venue_location.postal_code|default_if_none:"" }}
-        {{event_venue_location.city|default_if_none:""}}, {{event_venue_location.country|default_if_none:""}}
-        {{event_venue_location.region|default_if_none:""}}
+  <table>
+    <tr>
+      <td style="padding-left: 10px;">
 
-         </span>
+         <span style="font-size: 10px; font-weight: bold;"">LOCATION<br></span>
+         <span style="font-size: 10px;color:#878685;">
+          {{event_venue_location.address_1|default_if_none:""}}, {{event_venue_location.address_2|default_if_none:""}} - {{event_venue_location.postal_code|default_if_none:"" }}
+          {{event_venue_location.city|default_if_none:""}}, {{event_venue_location.country|default_if_none:""}}
+          {{event_venue_location.region|default_if_none:""}}
 
-        <p>
-        <br/>
-        <span style="font-size: 14px; color:#ff6c0a;">DATE<br></span>
-        <span style="font-size: 14px;color:#878685;">
-        {{event_start}}
-        </p>
-        </span>
+           </span>
 
-        <p>
-        <span style="font-size: 14px; color:#ff6c0a;">GUEST<br></span>
-          <span style="font-size: 14px;color:#878685;">
-         {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}
-         </p>
-        </span>
+          <p>
+          <span style="font-size: 10px; font-weight: bold;">DATE<br></span>
+          <span style="font-size: 10px;color:#878685;">
+          {{event_start}}
+          </p>
+          </span>
 
-        <span style="font-size: 14px; color:#ff6c0a;">TICKET TYPE<br></span>
-          <span style="font-size: 14px;color:#878685;">
-         {{attendee.ticket_class}}
-         {% if customization.ticket_template.show_ticket_type_price %}
-              {{ attendee.cost_gross }}
-          {% endif %}
-         </p>
-        </span>
 
-    </td>
-    <td  style="width: 250px;color: #001b47;text-align: center;">
-      <div class="qr-code">
-            {% qr_from_text attendee.barcode "s" %}
-        </div>
-        <div class="eb">
-        <img src="{% static 'custom_ticket/images/powered_by_eventbrite.png' %}" alt="powered_by_eventbrite">
-        </div>
-    </td>
-  </tr>
-</table>
+          <span style="font-size: 10px; font-weight: bold;">TICKET TYPE<br></span>
+            <span style="font-size: 10px;color:#878685;">
+           {{attendee.ticket_class}} <br>
+           {% if customization.ticket_template.show_ticket_type_price %}
+                {{ attendee.cost_gross }}
+            {% endif %}
+           </p>
+          </span>
+
+      </td>
+      <td  style="width: 150px;text-align: center;">
+        <div class="qrdob">
+              {% qr_from_text attendee.barcode "s" %}<br>
+              <span style="font-size: 10px;">
+            Order #{{order_id}} <br>
+            {% if attendee.ticket_type_sequence %}
+                TicketType Sequence  #{{ attendee.ticket_type_sequence }}<br>
+            {% endif %}
+            {% if attendee.event_sequence %}
+                Event Sequence  #{{ attendee.event_sequence }}<br>
+            {% endif %}
+           </span>
+          </div>
+
+      </td>
+    </tr>
+  </table>
 
 <!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
-<!-- <table> -->
-<!--  <td style="background: #f9f9f9;color: #001b47;"> -->
-<!--   <br> -->
-<!--   <hr> -->
-<!--     </td> -->
-<!-- </table> -->
+
 <!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
-<table>
-  <tr>
-    <td style="color: #001b47;">
-      <div class="logo">
-        <img src="{{ logo_url }}" alt="LOGO" border="0" >
-        </div>
-
-    </td>
-
-    <td style="color: #878685; text-align: left;">
-                <span style="font-size: 14px;color:#878685;">
-                  {{message_ticket}}
-                </span>
-    </td>
-  </tr>
-</table>
-<span style="text-align: center">
-  {{footer_description}}
-</span>
+<br>
+  <span style="text-align: center;">
+    {{footer_description}}
+  </span>
 <!-- - - - -  - - - - - - - - END FOOTER - - - - - - - - - - - - - -->
-
+</div>
 
 </body>
 </html>

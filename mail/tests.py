@@ -10,7 +10,7 @@ from mock import (
 from social_django.models import UserSocialAuth
 from django.core import mail
 from django.test import TestCase, RequestFactory
-from customizations.models import Customization, CustomEmail, TicketTemplate
+from customizations.models import Customization, CustomEmail, TicketTemplate, BaseTicketTemplate
 from .views import (
     do_send_email,
     get_data,
@@ -54,8 +54,13 @@ class TestBase(TestCase):
             logo_path='/Users/fcarabelli/eventbrite/custom_ticket/static/media/EDAc-3-40871c64b344c9650cc713492de322d5e08c896f26395a9b1e2fb16a-logo-ex-7.png',
 
         )
+        self.select_design_template = BaseTicketTemplate.objects.create(
+            template_source=u'tickets/template_default.html'
+        )
+
         self.ticket_template = TicketTemplate.objects.create(
-            message_ticket='message'
+            message_ticket='message',
+            select_design_template=self.select_design_template,
 
         )
         self.customization = Customization.objects.create(
@@ -978,7 +983,7 @@ class TestMailsWithCostumization(TestBase):
             'cost_gross': 0.0,
             'barcode': 16041996,
             'answers': [],
-            'ticket_class': 'Ticket'
+            'ticket_class': 'Ticket',
         }]
         customization = Customization.objects.get(user_id=self.user.id)
         custom_data = CustomData(
@@ -997,6 +1002,7 @@ class TestMailsWithCostumization(TestBase):
             order_created='2018-04-02T02:00:00Z',
             order_status='placed',
             is_test=False,
+            template_url=u'tickets/template_default.html'
         )
         response = do_send_email(custom_data)
         self.assertEquals(response.status_code, 200)
