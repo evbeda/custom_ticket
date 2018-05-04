@@ -31,6 +31,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
         is_form_valid = super(ViewCreateCustomization, self).post(
             request, *args, **kwargs)
         links = upload_file(request, 'logo')
+        partner_links = upload_file(request, 'image_partner')
         if Customization.objects.filter(user=request.user).exists():
             return HttpResponseRedirect('/customizations/error-create')
         else:
@@ -62,7 +63,12 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                     logo_local=links['local'],
                     logo_path=links['path'],
                     logo_name=links['name'],
-                    logo_url=links['dropbox']
+                    logo_url=links['dropbox'],
+                    image_partner=partner_links['dropbox'],
+                    image_partner_local=partner_links['local'],
+                    image_partner_path=partner_links['path'],
+                    image_partner_name=partner_links['name'],
+                    image_partner_url=partner_links['dropbox'],
                 )
                 Customization.objects.create(
                     user=self.request.user,
@@ -102,7 +108,7 @@ def update_customization(request, pk):
         'show_ticket_type_sequence': ticket_template.show_ticket_type_sequence,
         'show_ticket_type_price': ticket_template.show_ticket_type_price,
         'double_ticket': ticket_template.double_ticket,
-
+        'image_partner': custom_email.image_partner,
     })
     if request.method == 'POST':
         # form = FormCustomization(data=request.POST)
@@ -111,6 +117,7 @@ def update_customization(request, pk):
             customization.name = form.cleaned_data['name']
             custom_email.logo = form.cleaned_data['logo']
             custom_email.message = form.cleaned_data['message']
+            custom_email.image_partner = form.cleaned_data['image_partner']
             ticket_template.select_design_template = form.cleaned_data[
                 'select_design_template']
             ticket_template.message_ticket = form.cleaned_data[

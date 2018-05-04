@@ -14,6 +14,7 @@ class FormCustomization(forms.ModelForm):
             'message',
             # 'select_design_template',
             'message_ticket',
+            'image_partner',
         ]
 
     name = forms.CharField(
@@ -110,4 +111,15 @@ class FormCustomization(forms.ModelForm):
     double_ticket = forms.BooleanField(
         required=False,
         label="Double Ticket",
+    )
+    image_partner = forms.ImageField(
+        required=False,
+        validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
+        widget=forms.FileInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    TRUE_FALSE_CHOICES = (
+        (True, 'Yes'),
+        (False, 'No')
     )
