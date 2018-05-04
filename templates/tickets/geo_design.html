@@ -124,10 +124,10 @@ right: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;}
         <span style="font-family: myFirstFont;font-weight: bold; padding: 20px;color:#ADB0B6;">
          <br>
          {% if attendee.ticket_type_sequence %}
-              TicketType Sequence  #{{ attendee.ticket_type_sequence }}
+              Sequence #{{ attendee.ticket_type_sequence }}
           {% endif %}
           {% if attendee.event_sequence %}
-              Event Sequence  #{{ attendee.event_sequence }}
+              Sequence #{{ attendee.event_sequence }}
           {% endif %}
         </span>
         </div>
@@ -185,8 +185,8 @@ right: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;}
                                 <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;">TYPE<br></span>
                                 <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
                                     {{attendee.ticket_class}}
-                                    {% if attendee.reserved_seating %}
-                                                      Location: {{ attendee.reserved_seating }}
+                                    {% if attendee.reserved_seating %}<br>
+                                                      {{ attendee.reserved_seating }}
                                                 {% endif %}
                                     {% if customization.ticket_template.show_ticket_type_price %}
                                                       {{ attendee.cost_gross }}

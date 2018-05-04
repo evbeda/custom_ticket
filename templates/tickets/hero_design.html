@@ -36,8 +36,8 @@ hr.line {
 }
 .logo {
 float: left;
-width: 100px;
-height: 100px;
+width: 320px;
+height: 180px;
 }
 .qrdob{
 float: left;
@@ -57,22 +57,14 @@ height: 100px;
          <span style="font-size: 14px;">
           Order #{{order_id}}
           {% if attendee.ticket_type_sequence %}
-              TicketType Sequence  #{{ attendee.ticket_type_sequence }}
+              Sequence #{{ attendee.ticket_type_sequence }}
           {% endif %}
           {% if attendee.event_sequence %}
-              Event Sequence  #{{ attendee.event_sequence }}
+              Sequence #{{ attendee.event_sequence }}
           {% endif %}
 
 
          </span>
-         <!-- <span style="font-size: 14px;">
-           <br>Status {{order_status}}
-         </span>
-         <span style="font-size: 14px;">
-           <br>Type <b>
-            {{attendee.ticket_class}}
-            </b>
-         </span> -->
     </th>
   </tr>
 </table>
@@ -130,7 +122,7 @@ height: 100px;
          {{attendee.ticket_class}}
          <br>
          {% if attendee.reserved_seating %}
-              Location: {{ attendee.reserved_seating }}
+              {{ attendee.reserved_seating }}
         {% endif %}
         <br>
          {% if customization.ticket_template.show_ticket_type_price %}
@@ -147,11 +139,18 @@ height: 100px;
     </td>
   </tr>
 </table>
+<br>
+<table>
+ <td style="color: #001b47;">
+  <hr>
+  <br>
+    </td>
+</table>
 <!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
 <!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
 <table>
   <tr>
-    <td style="color: #001b47;">
+    <td style="color: #001b47; padding-left: 10px">
       <div class="logo">
         <img src="{{ logo_url }}" alt="LOGO" border="0" >
         </div>
@@ -164,6 +163,13 @@ height: 100px;
                 </span>
     </td>
   </tr>
+</table>
+<br>
+<table>
+ <td style="color: #001b47;">
+  <hr>
+  <br>
+    </td>
 </table>
 <br>
 <span style="text-align: center">
@@ -244,8 +250,13 @@ height: 100px;
           </div>
 
       </td>
+
+
+  </tr>
     </tr>
   </table>
+  <table>
+
 
 <!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
 

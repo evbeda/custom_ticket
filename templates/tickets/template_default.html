@@ -25,17 +25,20 @@
                 <table cellpadding="0" cellspacing="0" border="0" class="m_4623262137051836037x_no_text_resize" style="width:100%;margin-bottom:12px">
                     <tbody>
                         <tr>
-                            <td style="border-bottom:1px dashed #d3d3d3">
+                            <td>
                                 <!-- LOGO -->
                                 <img style="width: 150px; height: 150px;" src="{{ logo_url }}" alt="LOGO" border="0" >
                                 <!-- END LOGO -->
+                            </td>
+                            <td colspan="2" style="text-align:right;"">
+                                {% qr_from_text attendee.barcode "m" %}
+                            </td>
+                        </tr>
+                        <br>
+                        <tr>
+                            <td colspan="2">
                                 <h2 style="color:#404040;font-weight:300;margin:0 0 12px 0;font-size:24px;line-height:30px">
                                 {{event_name_text}} </h2>
-                            </td>
-                            <td colspan="2" style="text-align:right;border-bottom:1px dashed #d3d3d3">
-                                {% qr_from_text attendee.barcode "m" %}
-                                <div style="color:#666666;font-weight:400;font-size:13px;line-height:18px">
-                                {{event_start}}</div>
                             </td>
                         </tr>
                         <tr>
@@ -43,18 +46,18 @@
                                 <p style="color:#666666;font-weight:400;font-size:15px;line-height:21px;margin-bottom:18px">
                                     <br> Order: {{order_id}} <br>
                                     {% if attendee.ticket_type_sequence %}
-                                                      TicketType Sequence  #{{ attendee.ticket_type_sequence }}
-                                                  {% endif %}<br>
-                                                  {% if attendee.event_sequence %}
-                                                      Event Sequence  #{{ attendee.event_sequence }}
-                                                  {% endif %}<br>
+                                          Sequence #{{ attendee.ticket_type_sequence }}<br>
+                                      {% endif %}
+                                      {% if attendee.event_sequence %}
+                                          Sequence #{{ attendee.event_sequence }}<br>
+                                      {% endif %}
                                     Order Status: {{order_status}} <br>
                                     Aditional Information: {{message_ticket}} <br>
                                      {% if attendee.reserved_seating %}
-                                                   Location:  {{ attendee.reserved_seating }}
+                                                   {{ attendee.reserved_seating }}
                                                 {% endif %}<br>
                                     {{event_venue_location.address_1|default_if_none:""}} | {{event_venue_location.address_2|default_if_none:""}} |
-                                    {{event_venue_location.city|default_if_none:""}} {{event_venue_location.region|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}
+                                    {{event_venue_location.city|default_if_none:""}} | {{event_venue_location.region|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}
 
                                 </p>
                                 <table cellpadding="0" cellspacing="0" border="0" style="width:100%">
