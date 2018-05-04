@@ -198,6 +198,7 @@ def process_data(order, venue, organizer, user_id):
     customization = Customization.objects.select_related(
         'ticket_template'
     ).get(user_id=user_id)
+    template_url = customization.ticket_template.select_design_template.template_source
     attendees = []
     for att in list_attendee:
         if att['reserved_seating'] is None:
@@ -213,7 +214,7 @@ def process_data(order, venue, organizer, user_id):
             'ticket_class': att['ticket_class_name'],
             'ticket_class_id': att['ticket_class_id'],
             'event_id': att['event_id'],
-            'reserved_seating': reserved_seating
+            'reserved_seating': reserved_seating,
         }
         register_ticket(attendee, customization)
         attendees.append(dict(attendee))
@@ -241,8 +242,14 @@ def process_data(order, venue, organizer, user_id):
         order_status=order['status'],
         is_test=False,
         footer_description=ticket_template.footer_description,
+        template_url=template_url,
     )
     return do_send_email(custom_data)
+
+
+def get_url(attendee):
+    url = attendee['url']
+    return url
 
 
 def do_send_email(custom_data):
@@ -269,7 +276,8 @@ def do_send_email(custom_data):
         headers={'Message-ID': 'foo'},
     )
     email.content_subtype = 'html'
-    pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+    url = custom_data.template_url
+    pdf = PDF(url, [data]).render().getvalue()
     email.attach('ticket', pdf, 'application/pdf')
     print 'send mail'
     print custom_data.order_id

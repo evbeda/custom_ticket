@@ -7,9 +7,20 @@
             <meta charset="UTF-8">
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         </head>
+        <style>
+        .dashed-line{
+          padding-bottom: 5px;
+          padding-top: 50px;
+        }
+
+        .qrdob{
+        float: left;
+        width: 100px;
+        height: 100px;
+        }
+        </style>
         <body>
 
-            <img src="https://ci3.googleusercontent.com/proxy/IQahZVq8RnsGGUT5P_dRhdAKB7Uk49NXr5pmKfCiQZDLTeGDLVz8CBjmzVwdqY8T6OJ_1IQ1aL7-HPiuJB_GOXXdRc1sK1cr9RnLJGGv26jp7VvAw_-j5ZMQ-NyMxNkXAOi6Rg=s0-d-e1-ft#https://cdn.evbstatic.com/s3-s3/marketing/emails/modules/ridges_top_fullx2.jpg" alt="eventbrite" height="7" border="0" style="height:7px;border:none;display:block" class="CToWUd">
             <td class="m_4623262137051836037x_grid__col" style="padding:32px 40px;background-color:#ededed">
                 <table cellpadding="0" cellspacing="0" border="0" class="m_4623262137051836037x_no_text_resize" style="width:100%;margin-bottom:12px">
                     <tbody>
@@ -31,12 +42,20 @@
                             <td colspan="3">
                                 <p style="color:#666666;font-weight:400;font-size:15px;line-height:21px;margin-bottom:18px">
                                     <br> Order: {{order_id}} <br>
+                                    {% if attendee.ticket_type_sequence %}
+                                                      TicketType Sequence  #{{ attendee.ticket_type_sequence }}
+                                                  {% endif %}<br>
+                                                  {% if attendee.event_sequence %}
+                                                      Event Sequence  #{{ attendee.event_sequence }}
+                                                  {% endif %}<br>
                                     Order Status: {{order_status}} <br>
                                     Aditional Information: {{message_ticket}} <br>
-                                    Location:<br>
-                                    {{event_venue_location.address_1|default_if_none:""}} | {{event_venue_location.address_2|default_if_none:""}} |{{event_venue_location.postal_code|default_if_none:"" }}<br>
-                                    {{event_venue_location.city|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}<br>
-                                    {{event_venue_location.region|default_if_none:""}}<br>
+                                     {% if attendee.reserved_seating %}
+                                                   Location:  {{ attendee.reserved_seating }}
+                                                {% endif %}<br>
+                                    {{event_venue_location.address_1|default_if_none:""}} | {{event_venue_location.address_2|default_if_none:""}} |
+                                    {{event_venue_location.city|default_if_none:""}} {{event_venue_location.region|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}
+
                                 </p>
                                 <table cellpadding="0" cellspacing="0" border="0" style="width:100%">
                                     <thead>
@@ -53,6 +72,12 @@
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
                                                 Quantity </div>
                                             </th>
+                                            {% if customization.ticket_template.show_ticket_type_price %}
+                                            <th style="border-bottom:1px dashed #d3d3d3;text-align:right;padding-bottom:12px;padding-right:0">
+                                                <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
+                                                Cost </div>
+                                            </th>
+                                            {% endif %}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -70,6 +95,13 @@
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
                                                 {{attendee.quantity}} 1</div>
                                             </td>
+                                            {% if customization.ticket_template.show_ticket_type_price %}
+                                            <td style="text-align:right;padding:12px 0">
+                                                <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
+                                                      {{ attendee.cost_gross }}
+                                                </div>
+                                                {% endif %}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -78,9 +110,102 @@
                     </tbody>
                 </table>
             </td>
-            <img src="https://ci6.googleusercontent.com/proxy/ChkWB3VCDXts8fGD_fBmRzOcAG5oJwt9sGbDs6uysurO_fiBa2BV4lrAGSNt9MvTKvqx5M4v_WcCBRHhQd8y-tQIsA_1t6ZnpR8YDXy3o1GWtyEeazTP0MixLEvW1SaAohvp3R7p3Q=s0-d-e1-ft#https://cdn.evbstatic.com/s3-s3/marketing/emails/modules/ridges_bottom_fullx2.jpg" alt="eventbrite" height="7" border="0" style="height:7px;border:none;display:block" class="CToWUd">
+            <span style="text-align: center;">
+                {{footer_description}}
+              </span>
         </div>
-        <div style="display:block; page-break-before:always;"></div>
-    </body>
+        {% if customization.ticket_template.double_ticket %}
+
+{% else %}
+  <div style="display:block; page-break-before:always;"></div>
+{% endif %}
+
+{% if customization.ticket_template.double_ticket %}
+<div class="dashed-line">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </div>
+<!-- - - - -  - - - - - - - - HEADER - - - - - - - - - - - - - -->
+
+
+
+
+<!-- - - - -  - - - - - - - - END HEADER - - - - - - - - - - - - - -->
+
+<!-- - - - -  - - - - - - - - EVENT NAME - - - - - - - - - - - - - -->
+  <table>
+    <tr>
+
+      <th style="color: #515150;font-weight: normal;">
+          <span style="font-size: 20px;">{{event_name_text}}</span>
+      </th>
+
+    </tr>
+  </table>
+<!-- - - - -  - - - - - - - - END EVENT NAME - - - - - - - - - - - - - -->
+
+<!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
+  <table>
+    <tr>
+      <td style="padding-left: 10px;">
+
+         <span style="font-size: 10px; font-weight: bold;"">LOCATION<br></span>
+         <span style="font-size: 10px;color:#878685;">
+          {{event_venue_location.address_1|default_if_none:""}}, {{event_venue_location.address_2|default_if_none:""}} - {{event_venue_location.postal_code|default_if_none:"" }}
+          {{event_venue_location.city|default_if_none:""}}, {{event_venue_location.country|default_if_none:""}}
+          {{event_venue_location.region|default_if_none:""}}
+
+           </span>
+
+          <p>
+          <span style="font-size: 10px; font-weight: bold;">DATE<br></span>
+          <span style="font-size: 10px;color:#878685;">
+          {{event_start}}
+          </p>
+          </span>
+
+
+          <span style="font-size: 10px; font-weight: bold;">TICKET TYPE<br></span>
+            <span style="font-size: 10px;color:#878685;">
+           {{attendee.ticket_class}} <br>
+           {% if customization.ticket_template.show_ticket_type_price %}
+                {{ attendee.cost_gross }}
+            {% endif %}
+           </p>
+          </span>
+
+      </td>
+      <td  style="width: 150px;text-align: center;">
+        <div class="qrdob">
+              {% qr_from_text attendee.barcode "s" %}<br>
+              <span style="font-size: 10px;">
+            Order #{{order_id}} <br>
+            {% if attendee.ticket_type_sequence %}
+                TicketType Sequence  #{{ attendee.ticket_type_sequence }}<br>
+            {% endif %}
+            {% if attendee.event_sequence %}
+                Event Sequence  #{{ attendee.event_sequence }}<br>
+            {% endif %}
+           </span>
+          </div>
+
+      </td>
+    </tr>
+  </table>
+
+<!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
+
+<!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
+<br>
+  <span style="text-align: center;">
+    {{footer_description}}
+  </span>
+<!-- - - - -  - - - - - - - - END FOOTER - - - - - - - - - - - - - -->
+</div>
+
+</body>
 </html>
+<style>
+table {
+}
+</style>
+<div style="display:block; page-break-before:always;"></div>
+{% endif %}
 {% endfor %}

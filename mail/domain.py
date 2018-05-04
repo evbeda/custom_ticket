@@ -112,6 +112,7 @@ def data_fake(id):
             'user_order_first_name': u'Ana',
             'user_order_last_name': u'Campbell',
             'footer_description': u'Tax number | Company name',
+            'template_url': u'tickets/default.html'
             }
     data_fake = dict(
         list(data_models.items()) +
@@ -141,7 +142,6 @@ class CustomData(object):
                  event_venue_location={},
                  organizer_name='',
                  organizer_email='',
-                 #   reserved seating
                  user_order_email='',
                  order_id='',
                  order_created='',
@@ -158,6 +158,7 @@ class CustomData(object):
                  venue='',
                  is_test=False,
                  footer_description='',
+                 template_url=''
                  ):
 
         self.customization = customization
@@ -169,7 +170,6 @@ class CustomData(object):
         self.event_venue_location = event_venue_location
         self.organizer_name = organizer_name
         self.organizer_email = organizer_email
-        #   reserved seating
         self.user_order_email = user_order_email
         self.order_id = order_id
         self.order_created = order_created
@@ -184,3 +184,4 @@ class CustomData(object):
         self.emails = emails
         self.is_test = is_test
         self.footer_description = footer_description
+        self.template_url = template_url
