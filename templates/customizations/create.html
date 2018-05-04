@@ -18,21 +18,21 @@
             <p>{{ key }}:{{ value.0 }}</p>
         {% endfor %}
     {% endif %}
-    <h2>Create customization</h2>
-    <br/>
-    <form style="padding-left: 50px" role="form" method="post" enctype="multipart/form-data">{% csrf_token %}
-        <p>{{ form.name.label }} : {{ form.name }}</p>
+
+    <h2>Customization Details</h2>
+    <hr>
+
+    <p>After purchasing a ticket or registering for your events, attendees will receive an email with a ticket attached, both of which you can customize below. </p>
+    <br>
+    <form role="form" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+        <p><b>{{ form.name.label }}</b> {{ form.name }}</p>
         <br/>
-        <p>{{ form.select_event.label }} : {{ form.select_event }}</p>
+        <p><b>{{ form.select_event.label }}</b> {{ form.select_event }}</p>
         <br/>
-        <p>Ticket image : {{ form.logo }}</p>
-        <br/>
-        <p>Email message : {{ form.message }}</p>
-        <br/>
-        <p>Partner Image: {{ form.image_partner }}</p>
-        <br>
-        <p>Select template</p>
-        <div style="text-align: center; font-weight: bold;">
+        <p><b>Select template</b></p>
+        <div style="padding-left: 60px; font-weight: bold;">
+
         <select name="select_design_template" required="" id="id_select_design_template" class="image-picker show-labels show-html">
         {% for tickets in form.tickets_templates %}
         <option data-img-label='{{ tickets.name}}' data-img-src='{{tickets.preview}}' value='{{tickets.id}}'>
@@ -41,30 +41,76 @@
         </select>
     </div>
 
+        <h3>Customize</h3>
+        <hr>
+        <p>Add important information, brand logo, poster image or messages on the email and tickets. </p>
         <br/>
-        <p>Ticket message : {{ form.message_ticket }}</p>
+        <p><b>Logo</b> {{ form.logo }}</p>
         <br/>
-        {{ form.additional_info.label }} : {{ form.additional_info }}
+        <p><b>Ticket message</b> {{ form.message_ticket }}</p>
         <br/>
-        {{ form.footer_description.label }} : {{ form.footer_description }}
+        <p><b>Poster Image: {{ form.image_partner }}</b></p>
+        <br>
+        <p><b>Email message</b> {{ form.message }}</p>
         <br/>
-        {{ form.show_event_sequence.label }} : {{ form.show_event_sequence }}
-        <br/>
-        {{ form.show_ticket_type_sequence.label }} : {{ form.show_ticket_type_sequence }}
-        <br/>
-        {{ form.show_ticket_type_price.label }} : {{ form.show_ticket_type_price }}
-        <br/>
-        {{ form.double_ticket.label }} : {{ form.double_ticket }}
-        <div style="text-align: center">
+        <h3>Additional Settings</h3>
+        <hr>
+        <p>You can add legal requirements, additional information for you attendees or a message from a partner.</p>
+        <br>
+        <a onclick="toggle('info')"  class="btn">Insert additional info</a>
+        <div id='info' style='display: none;' class="col-md-12 d-none js-custom-event-form">
+            <b><br><input onclick="toggle('add')" id="checkBox" type="checkbox"> Additional Info</b>
+            <div id="add" style='display: none;'>
+                <br>
+                {{ form.additional_info }}
+            </div>
+            <br>
+            <b><br><input onclick="toggle('footer')" id="checkBox" type="checkbox"> Footer description</b>
+            <p>The footer description is a short text that will be placed at the bottom ticket in which is usually put legal information such as ssn, name of the orgnizador, etc.</p>
+            <div id="footer" style='display: none;'>
+                <br>{{ form.footer_description }}
+                <br>
+            </div>
+            <br><input onclick="toggle('sequence')" id="checkBox" type="checkbox"> <b>Numerate tickets</b>
+            <p>Select if you need tickets numerated by ticket type or by event. </p>
+            <br><div id="sequence" style='display: none; padding-left: 30px'>
+                {{ form.show_event_sequence }} {{ form.show_event_sequence.label }}
+                <br>
+                {{ form.show_ticket_type_sequence }} {{ form.show_ticket_type_sequence.label }}
+                <br>
+            </div>
+
+            {{ form.show_ticket_type_price }} <b>Price</b> <br> Select if you need to hide the price of ticket purchased<br>
+
+            <br><b>{{ form.double_ticket }} {{ form.double_ticket.label }} </b> <br>Select if you need the information of the tickets duplicated one page for each attendee.<br>
+            <br>
+
+        </div>
+
+
+    <div style="text-align: center">
         <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
         <input type="submit" class="btn btn-success" name="create_customization"  value="Create"/>
     </div>
+
     </form>
 <script type="text/javascript">
     $("#id_select_design_template").imagepicker({
           show_label  : true
         })
 </script>
+
+<script>
+  function toggle(id) {
+    var x = document.getElementById(id);
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+
 
 {% endblock %}
 
