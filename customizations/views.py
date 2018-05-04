@@ -11,9 +11,110 @@ from customizations.models import (
     UserWebhook,
     BaseTicketTemplate
 )
-from customizations.forms import FormCustomization
-from customizations.utils import upload_file
-from customizations.utils import create_webhook, get_token, delete_webhook
+from customizations.forms import FormCustomization, FormBaseTickets
+from customizations.utils import upload_file, generate_base_ticket
+from customizations.utils import (
+    create_webhook,
+    get_token,
+    delete_webhook,
+    add_admin,
+)
+from django.views.generic.list import ListView
+from .mixins import GroupRequiredMixin, AdminUser
+
+
+class ViewAdmin(AdminUser, LoginRequiredMixin, FormView):
+    user_required = [u'edacticket@gmail.com']
+    form_class = FormBaseTickets
+    template_name = 'admin/home.html'
+    home = 'events/home.html'
+
+    def post(self, request, *args, **kwargs):
+        is_form_valid = super(ViewAdmin, self).post(
+            request, *args, **kwargs)
+        if is_form_valid:
+            add_admin(request.user)
+            message = 'You have become an administrator'
+            return render(request, self.home, {
+                'message': message}
+            )
+        else:
+            form = 'FormBaseTickets()'
+            return render(request, self.template_name, {
+                'form': form}
+            )
+
+
+class ViewListBaseTickets(GroupRequiredMixin, LoginRequiredMixin, ListView):
+    group_required = [u'admin']
+    model = BaseTicketTemplate
+    template_name = 'basetickets/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ViewListBaseTickets, self).get_context_data(**kwargs)
+        context['basetickets'] = BaseTicketTemplate.objects.all()
+        return context
+
+    def get_queryset(self):
+        return BaseTicketTemplate.objects.all()
+
+
+class DeleteBaseTickets(GroupRequiredMixin, LoginRequiredMixin, DeleteView):
+    model = BaseTicketTemplate
+    group_required = [u'admin']
+    template_name = 'basetickets/delete.html'
+    success_url = '/customizations/home-baseticket'
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteBaseTickets, self).get_context_data(**kwargs)
+        return context
+
+
+class ViewCreateBaseTickets(GroupRequiredMixin, LoginRequiredMixin, FormView):
+    form_class = FormBaseTickets
+    group_required = [u'admin']
+    template_name = 'basetickets/create.html'
+
+    def post(self, request, *args, **kwargs):
+        is_form_valid = super(ViewCreateBaseTickets, self).post(
+            request, *args, **kwargs)
+        links = upload_file(request, 'preview')
+        if is_form_valid and bool(links):
+            name = request.POST.get('name')
+            template_source = request.POST.get('template_source')
+            content_html = request.POST.get('content_html')
+            BaseTicketTemplate.objects.create(
+                name=name,
+                template_source=template_source,
+                preview=links['dropbox'],
+                content_html=content_html
+            )
+            return HttpResponseRedirect('/customizations/home-baseticket')
+        else:
+            form = FormBaseTickets()
+
+            return render(request, self.template_name, {
+                'form': form}
+            )
+
+
+class ViewGenerateBaseTickets(GroupRequiredMixin, LoginRequiredMixin, FormView):
+    form_class = FormBaseTickets
+    group_required = [u'admin']
+    template_name = 'basetickets/generate.html'
+
+    def post(self, request, *args, **kwargs):
+        is_form_valid = super(ViewGenerateBaseTickets, self).post(
+            request, *args, **kwargs)
+        if is_form_valid and BaseTicketTemplate.objects.count() == 0:
+            generate_base_ticket(self)
+            return HttpResponseRedirect('/customizations/home-baseticket')
+        else:
+            form = FormBaseTickets()
+            form.error = 'You already have created base tickets.'
+            return render(request, self.template_name, {
+                'form': form}
+            )
 
 
 class CustomizationConfig(LoginRequiredMixin):

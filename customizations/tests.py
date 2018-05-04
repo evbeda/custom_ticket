@@ -24,8 +24,10 @@ from .utils import (
     valid_image_format,
     download,
 )
+from faker import Factory
 from freezegun import freeze_time
 from .models import UserWebhook
+from customizations.models import TicketTemplate
 from .views import ViewCreateCustomization
 from PIL import Image
 from os import path
@@ -33,10 +35,11 @@ from os import path
 
 class TestBase(TestCase):
     def setUp(self):
+        fake = Factory.create()
         self.user = get_user_model().objects.create_user(
-            username='edacticket',
+            username=fake.name(),
             password='12345',
-            email='edacticket@gmail.com',
+            email=fake.email(),
             first_name='edacticket',
             is_active=True,
             is_staff=True,
@@ -52,8 +55,13 @@ class TestBase(TestCase):
             uid="249759038146",
             extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'}
         )
-        login = self.client.login(username='edacticket', password='hello')
+        login = self.client.login(
+            username=self.user.username,
+            password='hello',
+        )
         return login
+
+
 
 
 @override_settings(STATICFILES_STORAGE=None)
@@ -97,8 +105,8 @@ class IndexViewTest(TestBase):
             follow=True,
         )
 
-        mock_token.assert_called_once()
         mock_webhook.assert_called_once()
+
         self.assertEquals(
             mock_upload_file.call_count,
             2,

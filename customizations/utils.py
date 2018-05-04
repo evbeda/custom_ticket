@@ -8,7 +8,41 @@ from eventbrite import Eventbrite
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from PIL import Image
-from customizations.models import UserWebhook
+from customizations.models import UserWebhook, BaseTicketTemplate
+from django.contrib.auth.models import Group
+
+
+def add_admin(user):
+    if Group.objects.filter(name='admin').exists():
+        admin = Group.objects.get(name='admin')
+        admin.user_set.add(user)
+    else:
+        Group.objects.create(name='admin')
+        admin = Group.objects.get(name='admin')
+        admin.user_set.add(user)
+
+
+def in_group(group, user):
+    groups = user.groups.values()
+    return group in groups.values_list('name', flat=True)
+
+
+def generate_base_ticket(self):
+    BaseTicketTemplate.objects.create(
+        template_source='tickets/template_default.html',
+        name="Default design",
+        preview="../../static/images/preview_default.png",
+    )
+    BaseTicketTemplate.objects.create(
+        template_source='tickets/hero_design.html',
+        name="Hero design",
+        preview="../../static/images/hero_design.png",
+    )
+    BaseTicketTemplate.objects.create(
+        template_source='tickets/geo_design.html',
+        name="Geo design",
+        preview="../../static/images/geo_design.png",
+    )
 
 
 def get_unique_file_name(user, file_name):

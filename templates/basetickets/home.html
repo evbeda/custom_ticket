@@ -1,0 +1,55 @@
+{% extends 'base_.html' %}
+{% load static from staticfiles %}
+{% block content %}
+
+
+
+    {% if basetickets %}
+        <h2>Base Tickets
+
+       <a href="{% url 'customizations:create_baseticket'  %}" class="js-search-click-action js-d-track-link btn btn--secondary" >
+      New Base Ticket
+         </a>
+         <a href="{% url 'customizations:generate_baseticket'  %}" class="js-search-click-action js-d-track-link btn btn--secondary" >
+      Generate Base Ticket
+         </a>
+
+        </h2>
+        <br>
+
+
+  <br>
+
+
+      {% for bases in basetickets %}
+
+        <p>
+            <hr>
+       <b> Name:</b> {{ bases.name }} <br>
+         <img src="{{ bases.preview }}" alt="Preview" width="250px" height="250px"><br>
+         <b> Source: </b>{{ bases.template_source }}<br>
+         <b> Content HTML:</b> {{ bases.content_html }}<br>
+         <a class="glyphicon glyphicon-trash" title="Delete Customization" href="{% url 'customizations:delete_baseticket' pk=bases.id  %}"></a>
+          <hr>
+
+        </p>
+
+      {% endfor %}
+
+
+
+
+    {% else %}
+    <h2> You don't have any Base Ticket created yet</h2><br>
+    <div class="g-cell g-cell-1-1 text--centered js-see-more-events-btn">
+   <a href="{% url 'customizations:create_baseticket'  %}" class="js-search-click-action js-d-track-link btn btn--secondary" >
+      New Base Ticket
+    </a>
+</div>
+
+    {% endif %}
+
+
+
+{% endblock %}
+

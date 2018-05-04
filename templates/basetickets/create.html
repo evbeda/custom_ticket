@@ -1,0 +1,39 @@
+{% extends 'base_.html' %}
+{% load static from staticfiles %}
+{% block content %}
+
+
+
+
+    {% if form.errors %}
+        <strong>Fix the following errors.</strong>
+        {% for key, value in form.errors.items %}
+            <p>{{ key }}:{{ value.0 }}</p>
+        {% endfor %}
+    {% endif %}
+    <h2>Create Base Tickets</h2>
+    <br/>
+    <form style="padding-left: 50px" role="form" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <p>{{ form.name.label }} : {{ form.name }}</p>
+        <br/>
+        <p>{{ form.preview.label }} : {{ form.preview }}</p>
+        <br/>
+        <p>{{ form.template_source.label }} : {{ form.template_source }}</p>
+        <br/>
+        <p>{{ form.content_html.label }} : {{ form.content_html }}</p>
+        <br/>
+        <br>
+
+        <div style="text-align: center">
+        <a class="btn btn-danger" href="{% url 'customizations:home_baseticket' %}">Cancel</a>
+        <input type="submit" class="btn btn-success" name="create_customization"  value="Create"/>
+    </div>
+    </form>
+<script type="text/javascript">
+    $("#id_select_design_template").imagepicker({
+          show_label  : true
+        })
+</script>
+
+{% endblock %}
+

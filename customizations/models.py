@@ -20,6 +20,7 @@ class BaseTicketTemplate(TimeStampedModel):
     template_source = models.TextField()
     name = models.CharField(max_length=255)
     preview = models.CharField(max_length=255)
+    content_html = models.TextField()
 
     def __str__(self):
         return self.name
@@ -31,16 +32,16 @@ class TicketTemplate(TimeStampedModel):
         BaseTicketTemplate,
         blank=True,
         null=True)
-    message_ticket = models.CharField(max_length=255)
+    message_ticket = models.TextField()
     show_event_sequence = models.BooleanField(default=False)
     show_ticket_type_sequence = models.BooleanField(default=False)
     show_ticket_type_price = models.BooleanField(default=False)
-    footer_description = models.CharField(max_length=140, blank=True, null=True)
+    footer_description = models.TextField(blank=True, null=True)
     double_ticket = models.BooleanField(default=False)
 
 
 class CustomEmail(TimeStampedModel):
-    message = models.CharField(max_length=255)
+    message = models.TextField()
     logo = models.ImageField(max_length=255, upload_to='logos')
     logo_local = models.CharField(max_length=255)
     logo_path = models.CharField(max_length=255)
