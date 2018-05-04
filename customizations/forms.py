@@ -3,6 +3,56 @@ from django.core.validators import FileExtensionValidator
 from .models import Customization, BaseTicketTemplate
 
 
+class FormBaseTickets(forms.ModelForm):
+    class Meta:
+        model = BaseTicketTemplate
+        fields = [
+            'name',
+            'template_source',
+            'preview',
+            'content_html'
+        ]
+    name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Name of base tickets',
+                'class': 'form-control',
+                'value': 'Default design',
+            }
+        )
+    )
+    template_source = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Source URL ticket template',
+                'class': 'form-control',
+                'value': 'tickets/template_default.html',
+            }
+        )
+    )
+
+    preview = forms.ImageField(
+        required=True,
+        validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
+        widget=forms.FileInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+    content_html = forms.CharField(
+        required=True,
+        widget=forms.Textarea(
+            attrs={
+                'placeholder': 'You can put here the html content.',
+                'class': 'form-control',
+                'rows': 6
+            }
+        )
+    )
+
+
 class FormCustomization(forms.ModelForm):
 
     class Meta:

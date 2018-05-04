@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 from customizations.models import Customization
 
 from eventbrite import Eventbrite
-
+from customizations.utils import in_group
 
 class EventsView(LoginRequiredMixin, TemplateView):
     template_name = "events/events.html"
@@ -36,10 +36,12 @@ class EventsView(LoginRequiredMixin, TemplateView):
 class HomeView(LoginRequiredMixin, ListView):
     model = Customization
     template_name = 'events/home.html'
+    group = 'admin'
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['customizations'] = Customization.objects.filter(user=self.request.user)
+        context['is_admin'] = in_group(self.group, self.request.user)
         return context
 
     def get_queryset(self):

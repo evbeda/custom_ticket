@@ -1,0 +1,13 @@
+{% extends 'base_.html' %}
+{% block content %}
+    <form action="" method="post">{% csrf_token %}
+        <div class="container">
+            <br><br>
+        <h2>Are you sure you want to delete the "{{ object.name }}" base ticket? </h2>
+        </div>
+        <br><br>
+        <div style="text-align: center">
+        <input class="btn btn-danger" type="submit" value="Confirm" />
+        <a  class="btn btn-primary" href="{% url 'customizations:home_baseticket'   %}">Cancel</a>
+    </div>
+{% endblock %}
