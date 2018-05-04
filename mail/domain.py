@@ -12,6 +12,7 @@ def data_to_dict_customization(id):
     except Exception:
         return {}
     data = {
+        'name': query.name,
         'message_ticket': query.ticket_template.message_ticket,
     }
     return data
@@ -29,7 +30,11 @@ def data_to_dict_custom_email(id):
         'logo_path': query.logo_path,
         'logo_name': query.logo_name,
         'logo_url': query.logo_url,
-
+        'image_partner': query.image_partner,
+        'image_partner_local': query.image_partner_local,
+        'image_partner_path': query.image_partner_path,
+        'image_partner_name': query.image_partner_name,
+        'image_partner_url': query.image_partner_url,
     }
 
     return data

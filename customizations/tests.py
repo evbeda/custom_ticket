@@ -92,13 +92,17 @@ class IndexViewTest(TestBase):
                 u'csrfmiddlewaretoken': [u'b7wtBfWYFKGkxNxDPrwS8WLZxv001isUjKBrCvrjg9ZibLSKaru2ozuuaS3JMOi1'],
                 u'message': [u'prueba mensaje'],
                 'logo': img,
+                'image_partner': img,
             },
             follow=True,
         )
 
         mock_token.assert_called_once()
         mock_webhook.assert_called_once()
-        mock_upload_file.assert_called_once()
+        self.assertEquals(
+            mock_upload_file.call_count,
+            2,
+        )
         self.assertEquals(200, response.status_code)
 
     @patch(
@@ -147,7 +151,7 @@ class TestFormCustomization(TestCase):
         form_data = {
             'name': 'testform', 'select_event': 'Apply to All', 'logo': None,
             'message': 'Test', 'select_design_template': 'Default Design',
-            'message_ticket': 'Test'
+            'message_ticket': 'Test', 'image_partner': None
         }
         form = FormCustomization(form_data)
         self.assertTrue(form.is_valid)

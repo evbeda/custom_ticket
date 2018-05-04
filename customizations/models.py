@@ -46,6 +46,11 @@ class CustomEmail(TimeStampedModel):
     logo_path = models.CharField(max_length=255)
     logo_name = models.CharField(max_length=255)
     logo_url = models.CharField(max_length=255)
+    image_partner = models.ImageField(max_length=255, upload_to='partner')
+    image_partner_local = models.CharField(max_length=255)
+    image_partner_path = models.CharField(max_length=255)
+    image_partner_name = models.CharField(max_length=255)
+    image_partner_url = models.CharField(max_length=255)
 
 
 class Customization(TimeStampedModel):
