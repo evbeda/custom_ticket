@@ -62,6 +62,7 @@ class Customization(TimeStampedModel):
     name = models.CharField(max_length=255)
     ticket_template = models.ForeignKey(TicketTemplate, blank=True, null=True)
     custom_email = models.ForeignKey(CustomEmail, blank=True, null=True)
+    pdf_ticket_attach = models.NullBooleanField(default=True, blank=True, null=True)
 
 
 class UserWebhook(models.Model):

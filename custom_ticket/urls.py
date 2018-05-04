@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
-from events.views import HomeView
+from customizations.views import ListCustomizations
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -14,8 +14,8 @@ urlpatterns = [
     ),
     url(
         r'^$',
-        HomeView.as_view(),
-        name='home'
+        ListCustomizations.as_view(),
+        name='list_customizations'
     ),
     url(
         r'customizations/',

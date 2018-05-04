@@ -26,7 +26,7 @@
         <p>Barcode Attende : {{ form.attendee_barcode }}</p>
         <p>Name : {{ form.attendee_first_name }}</p>
         <p>Last Name : {{ form.attendee_last_name }}</p>
-
+        <p>PDF Attach : {{ form.pdf_ticket_attach }}</p>
   </div>
   <div id="menu1" class="tab-pane fade">
     <h3>Ticket</h3>
@@ -64,7 +64,7 @@
 <div style="text-align: center">
   <br>
   <br>
-        <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
+        <a class="btn btn-danger" href="{% url 'list_customizations' %}">Cancel</a>
         <input class="btn btn-success" type="submit" value="Send Mail Preview">
 </div>
 

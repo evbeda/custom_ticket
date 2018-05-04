@@ -65,6 +65,7 @@ class FormCustomization(forms.ModelForm):
             # 'select_design_template',
             'message_ticket',
             'image_partner',
+            'pdf_ticket_attach'
         ]
 
     name = forms.CharField(
@@ -173,3 +174,6 @@ class FormCustomization(forms.ModelForm):
         (True, 'Yes'),
         (False, 'No')
     )
+
+    pdf_ticket_attach = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="PDF Ticket Attach",
+                                          initial='', widget=forms.Select(), required=True)

@@ -12,7 +12,7 @@ from django.core.mail import BadHeaderError, EmailMessage
 from django.core.urlresolvers import reverse as r
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import FormView
 from mail.forms import FormSendEmailPreview
 import datetime
@@ -27,7 +27,6 @@ from mail.domain import (
     data_fake
 )
 # from customizations.utils import file_exist, download
-from django.shortcuts import render, get_object_or_404, redirect
 from customizations.utils import process_logo
 from customizations.models import (
     Customization,
@@ -256,10 +255,10 @@ def do_send_email(custom_data):
     data = all_data(custom_data)
     process_logo(data['logo_path'], data['logo_url'], data['logo_name'])
     if custom_data.customization.ticket_template.show_ticket_type_sequence:
-            for attendee in custom_data.attendees:
-                attendee['ticket_type_sequence'] = get_ticket_type_sequence(
-                    attendee['barcode']
-                )['ticket_type_sequence']
+        for attendee in custom_data.attendees:
+            attendee['ticket_type_sequence'] = get_ticket_type_sequence(
+                attendee['barcode']
+            )['ticket_type_sequence']
 
     if custom_data.customization.ticket_template.show_event_sequence:
         for attendee in custom_data.attendees:
@@ -277,8 +276,12 @@ def do_send_email(custom_data):
     )
     email.content_subtype = 'html'
     url = custom_data.template_url
-    pdf = PDF(url, [data]).render().getvalue()
-    email.attach('ticket', pdf, 'application/pdf')
+    if data['pdf_ticket_attach'] is True:
+        pdf = PDF(url, [data]).render().getvalue()
+        # pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
+        email.attach('ticket', pdf, 'application/pdf')
+    else:
+        pass
     print 'send mail'
     print custom_data.order_id
     print data['emails']
