@@ -113,7 +113,7 @@ def get_social_user(user_id):
 
 
 def accept_webhook(request):
-    print "accepting webhook"
+    print 'Here! accepting webhook'
     threading.Thread(target=get_data, args=(request.body,)).start()
     print "responding webhook"
     return HttpResponse()

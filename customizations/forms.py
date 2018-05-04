@@ -71,7 +71,7 @@ class FormCustomization(forms.ModelForm):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'name',
+                'placeholder': 'Name to identify the customization',
                 'class': 'form-control',
             }
         )
@@ -85,7 +85,7 @@ class FormCustomization(forms.ModelForm):
     )
 
     logo = forms.ImageField(
-        required=True,
+        required=False,
         validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
         widget=forms.FileInput(
             attrs={'class': 'form-control'}
@@ -93,10 +93,10 @@ class FormCustomization(forms.ModelForm):
     )
 
     message = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'You can put here the email message.',
+                'placeholder': 'e.g. Thanks for registering please keep your tickets handy. Print them out and bring them with you',
                 'class': 'form-control',
                 'rows': 6
             }
@@ -111,10 +111,10 @@ class FormCustomization(forms.ModelForm):
     #     )
     # )
     message_ticket = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'You can put here the ticket message',
+                'placeholder': 'Tell your attendees what they should bring the event, or specific info that they may need.',
                 'class': 'form-control',
                 'rows': 6
             }
@@ -125,7 +125,7 @@ class FormCustomization(forms.ModelForm):
         required=False,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'addiional info here',
+                'placeholder': 'Add a partner description, useful information for your attendees or whatever you want to.',
                 'class': 'form-control',
                 'rows': 6
             }
@@ -136,7 +136,7 @@ class FormCustomization(forms.ModelForm):
         required=False,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'This inscription will be placed at the ticket bottom',
+                'placeholder': ' e.g. Eventbrite Inc. /  Reg. No. 4742147',
                 'class': 'form-control',
                 'rows': 1
             }
