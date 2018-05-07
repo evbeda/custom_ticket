@@ -31,6 +31,7 @@ from customizations.models import TicketTemplate
 from .views import ViewCreateCustomization
 from PIL import Image
 from os import path
+from django.contrib.auth.models import Group
 
 
 class TestBase(TestCase):
@@ -45,6 +46,11 @@ class TestBase(TestCase):
             is_staff=True,
             is_superuser=True
         )
+        group_name = "admin"
+        self.group = Group(name=group_name)
+        self.group.save()
+        self.user.groups.add(self.group)
+        self.group.user_set.add(self.user)
         self.user.set_password('hello')
         self.user.save()
         self.user_access_token = 'HJDTUHYQ3ZVTVLMN52VZ'
