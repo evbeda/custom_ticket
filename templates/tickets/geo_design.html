@@ -188,7 +188,7 @@ right: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;}
                                     {% if attendee.reserved_seating %}<br>
                                                       {{ attendee.reserved_seating }}
                                                 {% endif %}
-                                    {% if customization.ticket_template.show_ticket_type_price %}
+                                    {% if not customization.ticket_template.hide_ticket_type_price %}
                                                       {{ attendee.cost_gross }}
                                                 {% endif %}
                                 </span>
@@ -202,6 +202,32 @@ right: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;}
 <!-- - - - - - - - - - - - - - - 3RD QUAD - - - - - - - - - - - - - - - - - -->
     <div id="rd_quad">
         <div style="font-family: myFirstFont;padding: 10px;text-align: right;">
+            {% if image_partner_url %}
+    <table>
+         <tr>
+           <td style="color: #001b47; padding-left: 10px">
+            <div>
+                <img style="width: 240px; height: 135px;" src="{{ image_partner_url }}" alt="LOGO" border="0" > <br><br>
+            </div>
+             </td>
+             <td style="color: #878685; text-align: left;">
+                <span style="font-size: 14px;color:#878685;">
+                  {{message_ticket}}
+                </span>
+                </td>
+                 </tr>
+    </table>
+    {% else %}
+    <table>
+         <tr>
+             <td style="color: #878685; text-align: center;">
+                <span style="font-size: 14px;color:#878685;">
+                  {{message_ticket}}
+                </span>
+                </td>
+                 </tr>
+    </table>
+    {% endif %}
         <span style="font-family: myFirstFont;font-weight: bold; padding: 20px;color:#ADB0B6;">
           Then here
           <img width="18px" src="static/images/arrow_right.png" alt="arrow">

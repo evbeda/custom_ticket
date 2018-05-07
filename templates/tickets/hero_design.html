@@ -36,8 +36,12 @@ hr.line {
 }
 .logo {
 float: left;
-width: 320px;
-height: 180px;
+width: 160px;
+height: 60px;
+}
+.partner-img{
+  width: 240px;
+  height: 135px;
 }
 .qrdob{
 float: left;
@@ -50,7 +54,9 @@ height: 100px;
 <table>
   <tr >
     <th style="background: white; font-weight: bold;">
-        <span style="font-size: 24px; color: #ff6c0a;">Eventbrite</span>
+         <div class="logo">
+        <img src="{{ logo_url }}" alt="LOGO" border="0" >
+        </div>
     </th>
 
     <th style="text-align: right;font-weight: normal;width: 300px;font-size: 14px;color:#878685;">
@@ -125,7 +131,7 @@ height: 100px;
               {{ attendee.reserved_seating }}
         {% endif %}
         <br>
-         {% if customization.ticket_template.show_ticket_type_price %}
+         {% if not customization.ticket_template.hide_ticket_type_price %}
               {{ attendee.cost_gross }}
           {% endif %}
          </p>
@@ -148,11 +154,12 @@ height: 100px;
 </table>
 <!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
 <!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
+{% if image_partner_url %}
 <table>
   <tr>
     <td style="color: #001b47; padding-left: 10px">
-      <div class="logo">
-        <img src="{{ logo_url }}" alt="LOGO" border="0" >
+      <div class="partner-img">
+        <img style="width: 240px; height: 135px;" src="{{ image_partner_url }}" alt="LOGO" border="0" > <br><br>
         </div>
 
     </td>
@@ -164,6 +171,18 @@ height: 100px;
     </td>
   </tr>
 </table>
+{% else %}
+<table>
+  <tr>
+
+    <td style="color: #878685; text-align: center;">
+                <span style="font-size: 14px;color:#878685;">
+                  {{message_ticket}}
+                </span>
+    </td>
+  </tr>
+</table>
+{% endif %}
 <br>
 <table>
  <td style="color: #001b47;">
@@ -228,9 +247,7 @@ height: 100px;
           <span style="font-size: 10px; font-weight: bold;">TICKET TYPE<br></span>
             <span style="font-size: 10px;color:#878685;">
            {{attendee.ticket_class}} <br>
-           {% if customization.ticket_template.show_ticket_type_price %}
                 {{ attendee.cost_gross }}
-            {% endif %}
            </p>
           </span>
 
