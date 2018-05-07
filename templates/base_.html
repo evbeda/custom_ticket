@@ -1,4 +1,5 @@
 {% load static %}
+{% load auth_extras %}
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
@@ -139,6 +140,15 @@
                             Events
                         </a>
                     </li>
+                    {% if request.user|has_group:"admin" %}
+
+                    <li class="list--with-divider-top active">
+                        <a class="js-d-track-link" href="{% url 'customizations:home_baseticket'  %}" >
+                           Base Tickets <span class="label label-danger">ADMIN</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
                     <li>
                         <a class="js-d-track-link" href="{% url 'customizations:create_customization'  %}" >
                            New Customization
@@ -180,6 +190,18 @@
                            New Customization
                         </a>
                     </li>
+
+                     {% if request.user|has_group:"admin" %}
+
+                    <li class="list--with-divider-top active">
+                        <a class="js-d-track-link" href="{% url 'customizations:home_baseticket'  %}" >
+                           Base Tickets <span class="label label-danger">ADMIN</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+
+
                     <li class="list--with-divider-top">
                         <a class="js-d-track-link" href="{% url 'logout'  %}" >
                            Sign out

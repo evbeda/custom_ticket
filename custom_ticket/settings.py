@@ -96,6 +96,9 @@ TEMPLATES = [
                 'social_django.context_processors.login_redirect',
                 'django.template.context_processors.media',
             ],
+            'libraries':{
+                'auth_extras': 'custom_ticket.templatetags.auth_extras',
+            }
         },
     },
 ]

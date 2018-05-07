@@ -17,32 +17,9 @@ from customizations.utils import (
     create_webhook,
     get_token,
     delete_webhook,
-    add_admin,
 )
 from django.views.generic.list import ListView
-from .mixins import GroupRequiredMixin, AdminUser
-
-
-class ViewAdmin(AdminUser, LoginRequiredMixin, FormView):
-    user_required = [u'edacticket@gmail.com']
-    form_class = FormBaseTickets
-    template_name = 'admin/home.html'
-    home = 'events/home.html'
-
-    def post(self, request, *args, **kwargs):
-        is_form_valid = super(ViewAdmin, self).post(
-            request, *args, **kwargs)
-        if is_form_valid:
-            add_admin(request.user)
-            message = 'You have become an administrator'
-            return render(request, self.home, {
-                'message': message}
-            )
-        else:
-            form = 'FormBaseTickets()'
-            return render(request, self.template_name, {
-                'form': form}
-            )
+from .mixins import GroupRequiredMixin
 
 
 class ViewListBaseTickets(GroupRequiredMixin, LoginRequiredMixin, ListView):

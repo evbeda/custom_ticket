@@ -9,17 +9,6 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from PIL import Image
 from customizations.models import UserWebhook, BaseTicketTemplate
-from django.contrib.auth.models import Group
-
-
-def add_admin(user):
-    if Group.objects.filter(name='admin').exists():
-        admin = Group.objects.get(name='admin')
-        admin.user_set.add(user)
-    else:
-        Group.objects.create(name='admin')
-        admin = Group.objects.get(name='admin')
-        admin.user_set.add(user)
 
 
 def in_group(group, user):
