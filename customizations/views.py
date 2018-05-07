@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView, DeleteView
+from django.views.generic import FormView, DeleteView, ListView
 from customizations.models import (
     Customization,
     TicketTemplate,
@@ -17,8 +17,8 @@ from customizations.utils import (
     create_webhook,
     get_token,
     delete_webhook,
+    in_group,
 )
-from django.views.generic.list import ListView
 from .mixins import GroupRequiredMixin
 
 
@@ -100,6 +100,21 @@ class CustomizationConfig(LoginRequiredMixin):
     success_url = reverse_lazy('/')
 
 
+class ListCustomizations(LoginRequiredMixin, ListView):
+    model = Customization
+    template_name = 'events/home.html'
+    group = 'admin'
+
+    def get_context_data(self, **kwargs):
+        context = super(ListCustomizations, self).get_context_data(**kwargs)
+        context['customizations'] = Customization.objects.filter(user=self.request.user)
+        context['is_admin'] = in_group(self.group, self.request.user)
+        return context
+
+    def get_queryset(self):
+        return Customization.objects.filter(user=self.request.user)
+
+
 class ViewCreateCustomization(LoginRequiredMixin, FormView):
     form_class = FormCustomization
     template_name = 'customizations/create.html'
@@ -113,7 +128,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
         if Customization.objects.filter(user=request.user).exists():
             return HttpResponseRedirect('/customizations/error-create')
         else:
-            if is_form_valid and bool(links):
+            if is_form_valid and links['status']:
                 name = request.POST.get('name')
                 message = request.POST.get('message')
                 select_design_template = request.POST.get('select_design_template')
@@ -123,6 +138,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                 hide_ticket_type_price = request.POST.get('hide_ticket_type_price') == 'on'
                 footer_description = request.POST.get('footer_description')
                 double_ticket = request.POST.get('double_ticket') == 'on'
+                pdf_ticket_attach = request.POST.get('pdf_ticket_attach')
                 template = get_object_or_404(
                     BaseTicketTemplate,
                     pk=select_design_template)
@@ -146,13 +162,13 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                     image_partner_local=partner_links['local'],
                     image_partner_path=partner_links['path'],
                     image_partner_name=partner_links['name'],
-                    image_partner_url=partner_links['dropbox'],
                 )
                 Customization.objects.create(
                     user=self.request.user,
                     ticket_template=ticket,
                     custom_email=custom_email,
                     name=name,
+                    pdf_ticket_attach=pdf_ticket_attach,
                 )
                 if not UserWebhook.objects.filter(user=request.user).exists():
                     token = get_token(request.user)
@@ -187,6 +203,7 @@ def update_customization(request, pk):
         'hide_ticket_type_price': ticket_template.hide_ticket_type_price,
         'double_ticket': ticket_template.double_ticket,
         'image_partner': custom_email.image_partner,
+        'pdf_ticket_attach': customization.pdf_ticket_attach,
     })
     if request.method == 'POST':
         # form = FormCustomization(data=request.POST)
@@ -194,6 +211,7 @@ def update_customization(request, pk):
         if form.is_valid():
             customization.name = form.cleaned_data['name']
             custom_email.logo = form.cleaned_data['logo']
+            customization.pdf_ticket_attach = form.cleaned_data['pdf_ticket_attach']
             custom_email.message = form.cleaned_data['message']
             custom_email.image_partner = form.cleaned_data['image_partner']
             ticket_template.select_design_template = form.cleaned_data[
@@ -221,7 +239,7 @@ def update_customization(request, pk):
 
 class DeleteCustomization(CustomizationConfig, DeleteView):
     template_name = 'customizations/delete.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('list_customizations')
     context_object_name = 'customizations'
 
     def get_context_data(self, **kwargs):

@@ -13,7 +13,7 @@ def data_to_dict_customization(id):
         return {}
     data = {
         'name': query.name,
-        'message_ticket': query.ticket_template.message_ticket,
+        'pdf_ticket_attach': query.pdf_ticket_attach
     }
     return data
 
@@ -163,7 +163,8 @@ class CustomData(object):
                  venue='',
                  is_test=False,
                  footer_description='',
-                 template_url=''
+                 template_url='',
+                 pdf_ticket_attach='',
                  ):
 
         self.customization = customization
@@ -190,3 +191,4 @@ class CustomData(object):
         self.is_test = is_test
         self.footer_description = footer_description
         self.template_url = template_url
+        self.pdf_ticket_attach = pdf_ticket_attach

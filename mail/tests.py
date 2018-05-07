@@ -758,7 +758,7 @@ class TestMailsWithCostumization(TestBase):
     )
     def test_get_data(self, mock_requests, mock_data, mock_venue, mock_organizer):
         request = MagicMock(
-            body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
+            body='{"config":{"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
         with self.settings(SERVER_ACCESS_TOKEN='HJDTUHYQ3ZVTVLMN52VZ'):
             get_data(request.body)

@@ -26,7 +26,7 @@ from .utils import (
 )
 from faker import Factory
 from freezegun import freeze_time
-from .models import UserWebhook
+from .models import UserWebhook, BaseTicketTemplate
 from customizations.models import TicketTemplate
 from .views import ViewCreateCustomization
 from PIL import Image
@@ -68,13 +68,17 @@ class TestBase(TestCase):
         return login
 
 
-
-
 @override_settings(STATICFILES_STORAGE=None)
 class IndexViewTest(TestBase):
 
     def setUp(self):
         super(IndexViewTest, self).setUp()
+        BaseTicketTemplate.objects.create(
+            template_source="Test",
+            name="Test",
+            preview="Test",
+            content_html="Test",
+        )
 
     def test_homepage(self):
         response = self.client.get('/')
@@ -86,7 +90,14 @@ class IndexViewTest(TestBase):
 
     @patch('customizations.views.get_token', return_value='HJDTUHYQ3ZVTVLMN52VZ')
     @patch('customizations.views.create_webhook', return_value='646089')
-    @patch('customizations.views.upload_file', return_value={'path': u'/Users/asaiz/eventbrite/custom_ticket/static/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'local': u'http://localhost:8000/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'name': u'EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png', 'dropbox': u'https://www.dropbox.com/s/2h44xdq9x6466ip/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png?dl=1'})
+    @patch('customizations.views.upload_file',
+           return_value={
+               'path': u'/Users/asaiz/eventbrite/custom_ticket/static/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png',
+               'local': u'http://localhost:8000/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png',
+               'name': u'EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png',
+               'dropbox': u'https://www.dropbox.com/s/2h44xdq9x6466ip/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png?dl=1',
+               'status': True,
+           })
     def test_post(self, mock_upload_file, mock_webhook, mock_token):
         img = BytesIO(b'mybinarydata')
         img.name = 'myimage.jpg'
@@ -107,10 +118,10 @@ class IndexViewTest(TestBase):
                 u'message': [u'prueba mensaje'],
                 'logo': img,
                 'image_partner': img,
+                'pdf_ticket_attach': True,
             },
             follow=True,
         )
-
         mock_webhook.assert_called_once()
 
         self.assertEquals(
@@ -165,7 +176,7 @@ class TestFormCustomization(TestCase):
         form_data = {
             'name': 'testform', 'select_event': 'Apply to All', 'logo': None,
             'message': 'Test', 'select_design_template': 'Default Design',
-            'message_ticket': 'Test', 'image_partner': None
+            'message_ticket': 'Test', 'image_partner': None, 'pdf_ticket_attach': True
         }
         form = FormCustomization(form_data)
         self.assertTrue(form.is_valid)

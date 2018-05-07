@@ -97,26 +97,37 @@ def save_file(name, file):
 
 def upload_file(request, request_field):
     valid_type = ['image/png', 'image/jpeg']
-    request_file = request.FILES[request_field]
     public_url = {}
-    if request_file.content_type in valid_type:
-        unique_name = get_unique_file_name(request.user, request_file.name)
-        domain = request.build_absolute_uri('/')[:-1]
-        fs = save_file(unique_name, request_file)
 
-        public_url['name'] = unique_name
-        path_file = fs.location + '/' + fs.name
-        public_url['path'] = path_file
-
-        # local
-        public_url['local'] = get_file_local(domain, fs.name)
-
-        # dropbox
-        public_url['dropbox'] = upload_file_dropbox(path_file, fs.name)
-
+    if request_field not in request.FILES:
+        public_url['status'] = False
+        public_url['dropbox'] = ''
+        public_url['local'] = ''
+        public_url['path'] = ''
+        public_url['name'] = ''
         return public_url
     else:
-        return public_url
+        request_file = request.FILES[request_field]
+        if request_file.content_type in valid_type:
+            unique_name = get_unique_file_name(request.user, request_file.name)
+            domain = request.build_absolute_uri('/')[:-1]
+            fs = save_file(unique_name, request_file)
+
+            public_url['name'] = unique_name
+            path_file = fs.location + '/' + fs.name
+            public_url['path'] = path_file
+
+            # local
+            public_url['local'] = get_file_local(domain, fs.name)
+
+            # dropbox
+            public_url['dropbox'] = upload_file_dropbox(path_file, fs.name)
+            public_url['status'] = True
+
+            return public_url
+        else:
+            public_url['status'] = False
+            return public_url
 
 
 def get_file_local(domain, file_name_saved):

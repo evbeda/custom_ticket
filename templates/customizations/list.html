@@ -10,7 +10,13 @@
 
     <div class="js-search-bar">
       <div style="text-align: center;">
-
+        {% if is_admin %}
+         <h3><p class="label label-danger">USER ADMIN
+         </p></h3><br>
+         <a href="{% url 'customizations:home_baseticket'  %}" class="js-search-click-action js-d-track-link btn btn--secondary" >
+      Base Tickets
+    </a>
+        {% endif %}
 
       <h3><p class="label label-danger">{{ message }}</p></h3>
       </div>
@@ -111,19 +117,17 @@
 
 
   {% else %}
-<br><br><br>
+
 <div style="text-align: center">
 
-          <h2 style="color: #0278b8; font-weight: bold">It's look like you don't have any customization</h2>
-          <br><br>
-
+          <img class="index-img" src="{% static 'images/nocus.png' %}" />
             <p hidden>You don't have any customization created yet</p>
             <!-- <div hidden>No banners yet!<div> -->
 
 </div>
 
 {% endif %}
-<br><br>
+
 <footer class="w3-container ">
             <br>
             <p class="btn-group">
