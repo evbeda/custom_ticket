@@ -95,6 +95,7 @@ class FormCustomization(forms.ModelForm):
 
     message = forms.CharField(
         required=False,
+        max_length=800,
         widget=forms.Textarea(
             attrs={
                 'placeholder': 'e.g. Thanks for registering please keep your tickets handy. Print them out and bring them with you',
@@ -112,7 +113,8 @@ class FormCustomization(forms.ModelForm):
     #     )
     # )
     message_ticket = forms.CharField(
-        required=False,
+        required=True,
+        max_length=400,
         widget=forms.Textarea(
             attrs={
                 'placeholder': 'Tell your attendees what they should bring the event, or specific info that they may need.',
@@ -135,6 +137,7 @@ class FormCustomization(forms.ModelForm):
 
     footer_description = forms.CharField(
         required=False,
+        max_length=100,
         widget=forms.TextInput(
             attrs={
                 'placeholder': ' e.g. Eventbrite Inc. /  Reg. No. 4742147',

@@ -123,12 +123,13 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
     def post(self, request, *args, **kwargs):
         is_form_valid = super(ViewCreateCustomization, self).post(
             request, *args, **kwargs)
+        form = FormCustomization(request.POST)
         links = upload_file(request, 'logo')
         partner_links = upload_file(request, 'image_partner')
         if Customization.objects.filter(user=request.user).exists():
             return HttpResponseRedirect('/customizations/error-create')
         else:
-            if is_form_valid and links['status']:
+            if form.is_valid() and links['status']:
                 name = request.POST.get('name')
                 message = request.POST.get('message')
                 select_design_template = request.POST.get('select_design_template')
@@ -179,7 +180,6 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                     )
                 return HttpResponseRedirect('/')
             else:
-                form = FormCustomization()
                 return render(request, self.template_name, {
                     'form': form}
                 )

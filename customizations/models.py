@@ -32,16 +32,16 @@ class TicketTemplate(TimeStampedModel):
         BaseTicketTemplate,
         blank=True,
         null=True)
-    message_ticket = models.TextField()
+    message_ticket = models.CharField(max_length=400)
     show_event_sequence = models.BooleanField(default=False)
     show_ticket_type_sequence = models.BooleanField(default=False)
     hide_ticket_type_price = models.BooleanField(default=False)
-    footer_description = models.TextField(blank=True, null=True)
+    footer_description = models.CharField(max_length=100, blank=True, null=True)
     double_ticket = models.BooleanField(default=False)
 
 
 class CustomEmail(TimeStampedModel):
-    message = models.TextField()
+    message = models.TextField(max_length=800)
     logo = models.ImageField(max_length=255, upload_to='logos')
     logo_local = models.CharField(max_length=255)
     logo_path = models.CharField(max_length=255)
@@ -59,7 +59,7 @@ class Customization(TimeStampedModel):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=50)
     ticket_template = models.ForeignKey(TicketTemplate, blank=True, null=True)
     custom_email = models.ForeignKey(CustomEmail, blank=True, null=True)
     pdf_ticket_attach = models.NullBooleanField(default=True, blank=True, null=True)
