@@ -18,48 +18,62 @@
         width: 100px;
         height: 100px;
         }
+        .qr-code{
+        width: 180px;
+        }
+        .logo {
+        float: left;
+        width: 150px;
+        height:150px;
+}
         </style>
         <body>
-
-            <td class="m_4623262137051836037x_grid__col" style="padding:32px 40px;background-color:#ededed">
-                <table cellpadding="0" cellspacing="0" border="0" class="m_4623262137051836037x_no_text_resize" style="width:100%;margin-bottom:12px">
+                <table>
                     <tbody>
                         <tr>
                             <td>
+                                <div class="logo">
                                 <!-- LOGO -->
-                                <img style="width: 150px; height: 150px;" src="{{ logo_url }}" alt="LOGO" border="0" >
+                                <img src="{{ logo_url }}" alt="LOGO" border="0" >
                                 <!-- END LOGO -->
+                            </div>
                             </td>
-                            <td colspan="2" style="text-align:right;"">
+
+                            <td colspan="2" style="text-align:right; width: 150px" >
+                                <div class="qr-code">
                                 {% qr_from_text attendee.barcode "m" %}
+                                </div>
+                                <br>
                             </td>
+
                         </tr>
-                        <br>
+
                         <tr>
                             <td colspan="2">
                                 <h2 style="color:#404040;font-weight:300;margin:0 0 12px 0;font-size:24px;line-height:30px">
                                 {{event_name_text}} </h2>
+                                <br>
                             </td>
                         </tr>
+                        <br>
                         <tr>
-                            <td colspan="3">
+                            <td>
                                 <p style="color:#666666;font-weight:400;font-size:15px;line-height:21px;margin-bottom:18px">
-                                    <br> Order: {{order_id}} <br>
+                                    <b>Order:</b> {{order_id}} <br>
                                     {% if attendee.ticket_type_sequence %}
-                                          Sequence #{{ attendee.ticket_type_sequence }}<br>
+                                          <b>Sequence</b> #{{ attendee.ticket_type_sequence }}<br>
                                       {% endif %}
                                       {% if attendee.event_sequence %}
                                           Sequence #{{ attendee.event_sequence }}<br>
                                       {% endif %}
-                                    Order Status: {{order_status}} <br>
-                                    Aditional Information: {{message_ticket}} <br>
-                                     {% if attendee.reserved_seating %}
-                                                   {{ attendee.reserved_seating }}
-                                                {% endif %}<br>
+                                    <b>Order Status:</b> {{order_status}} <br>
+                                    <b>Venue Addreess:</b>
                                     {{event_venue_location.address_1|default_if_none:""}} | {{event_venue_location.address_2|default_if_none:""}} |
                                     {{event_venue_location.city|default_if_none:""}} | {{event_venue_location.region|default_if_none:""}} | {{event_venue_location.country|default_if_none:""}}
 
                                 </p>
+                                <br>
+                            </td>
                                 <table cellpadding="0" cellspacing="0" border="0" style="width:100%">
                                     <thead>
                                         <tr>
@@ -71,11 +85,17 @@
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
                                                 Type </div>
                                             </th>
+                                            {% if attendee.reserved_seating %}
+                                            <th style="border-bottom:1px dashed #d3d3d3;text-align:left;padding-bottom:12px;padding-right:12px">
+                                                <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
+                                                Section </div>
+                                            </th>
+                                            {% endif %}
                                             <th style="border-bottom:1px dashed #d3d3d3;text-align:right;padding-bottom:12px;padding-right:0">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
                                                 Quantity </div>
                                             </th>
-                                            {% if customization.ticket_template.show_ticket_type_price %}
+                                            {% if not customization.ticket_template.hide_ticket_type_price %}
                                             <th style="border-bottom:1px dashed #d3d3d3;text-align:right;padding-bottom:12px;padding-right:0">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px;font-weight:500">
                                                 Cost </div>
@@ -94,11 +114,17 @@
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
                                                 {{attendee.ticket_class}}  </div>
                                             </td>
+                                            {% if attendee.reserved_seating %}
+                                            <td style="padding:12px 0;padding-right:3px">
+                                                <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
+                                                {{ attendee.reserved_seating }} </div>
+                                            </td>
+                                            {% endif %}
                                             <td style="text-align:right;padding:12px 0">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
                                                 {{attendee.quantity}} 1</div>
                                             </td>
-                                            {% if customization.ticket_template.show_ticket_type_price %}
+                                            {% if not customization.ticket_template.hide_ticket_type_price %}
                                             <td style="text-align:right;padding:12px 0">
                                                 <div style="color:#666666;font-weight:400;font-size:15px;line-height:21px">
                                                       {{ attendee.cost_gross }}
@@ -108,13 +134,41 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
-            </td>
-                                        <!-- IMAGE PARTNER -->
-    <img style="width: 300px; height: 300px;" src="{{ image_partner_url }}" alt="LOGO" border="0" > <br><br>
+            <!-- IMAGE PARTNER -->
+<table>
+ <td style="color: #001b47;">
+  <hr>
+  <br>
+    </td>
+</table>
+    {% if image_partner_url %}
+    <table>
+         <tr>
+           <td style="color: #001b47; padding-left: 10px">
+            <div>
+                <img style="width: 240px; height: 135px;" src="{{ image_partner_url }}" alt="LOGO" border="0" > <br><br>
+            </div>
+             </td>
+             <td style="color: #878685; text-align: left;">
+                <span style="font-size: 14px;color:#878685;">
+                  {{message_ticket}}
+                </span>
+                </td>
+                 </tr>
+    </table>
+    {% else %}
+    <table>
+         <tr>
+             <td style="color: #878685; text-align: center;">
+                <span style="font-size: 14px;color:#878685;">
+                  {{message_ticket}}
+                </span>
+                </td>
+                 </tr>
+    </table>
+    {% endif %}
                                 <!-- END IMAGE PARTNER -->
             <span style="text-align: center;">
                 {{footer_description}}
@@ -171,7 +225,7 @@
           <span style="font-size: 10px; font-weight: bold;">TICKET TYPE<br></span>
             <span style="font-size: 10px;color:#878685;">
            {{attendee.ticket_class}} <br>
-           {% if customization.ticket_template.show_ticket_type_price %}
+           {% if customization.ticket_template.hide_ticket_type_price %}
                 {{ attendee.cost_gross }}
             {% endif %}
            </p>

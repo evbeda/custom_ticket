@@ -153,9 +153,9 @@ class FormCustomization(forms.ModelForm):
         label="Show sequence of ticket by type",
     )
 
-    show_ticket_type_price = forms.BooleanField(
+    hide_ticket_type_price = forms.BooleanField(
         required=False,
-        label="Show price of ticket purchased",
+        label="Hide price of ticket purchased",
     )
 
     double_ticket = forms.BooleanField(

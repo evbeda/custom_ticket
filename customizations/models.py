@@ -35,7 +35,7 @@ class TicketTemplate(TimeStampedModel):
     message_ticket = models.TextField()
     show_event_sequence = models.BooleanField(default=False)
     show_ticket_type_sequence = models.BooleanField(default=False)
-    show_ticket_type_price = models.BooleanField(default=False)
+    hide_ticket_type_price = models.BooleanField(default=False)
     footer_description = models.TextField(blank=True, null=True)
     double_ticket = models.BooleanField(default=False)
 
