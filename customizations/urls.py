@@ -8,15 +8,9 @@ from customizations.views import (
     ViewListBaseTickets,
     DeleteBaseTickets,
     ViewGenerateBaseTickets,
-    ViewAdmin,
 )
 
 urlpatterns = [
-    url(
-        r'^admin/$',
-        ViewAdmin.as_view(),
-        name='home_admin'
-    ),
     url(
         r'^$',
         TemplateView.as_view(
