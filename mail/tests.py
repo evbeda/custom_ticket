@@ -8,6 +8,8 @@ from mock import (
     MagicMock,
     patch,
 )
+from django.conf import settings
+from bases.tests import TestBase
 from social_django.models import UserSocialAuth
 
 from customizations.models import (
@@ -31,7 +33,7 @@ from mail.views import (
 )
 
 
-class TestBase(TestCase):
+class TestBaseUser(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             id=1,
@@ -73,7 +75,7 @@ class TestBase(TestCase):
         )
 
 
-class TestDefs(TestBase):
+class TestDefs(TestBase, TestBaseUser):
     def setUp(self):
         super(TestDefs, self).setUp()
 
@@ -566,7 +568,7 @@ class TestDefs(TestBase):
         )
 
 
-class TestMailsWithCostumization(TestBase):
+class TestMailsWithCostumization(TestBase, TestBaseUser):
     def setUp(self):
         super(TestMailsWithCostumization, self).setUp()
 
@@ -973,7 +975,7 @@ class TestMailsWithCostumization(TestBase):
         email = mail.outbox[0]
         from_email = email.from_email
         to_email = email.to
-        self.assertEquals(from_email, 'edacticket@gmail.com')
+        self.assertEquals(from_email, settings.EMAIL_HOST_USER)
         self.assertEquals(to_email, [u'edacticket@gmail.com'])
         self.assertEquals(response.status_code, 200)
 
@@ -1015,11 +1017,10 @@ class TestMailsWithCostumization(TestBase):
         self.assertEquals(to_email, ['unmail@gmail.com'])
 
 
-class TestMailWithoutCustomization(TestCase):
+class TestMailWithoutCustomization(TestBase):
 
     @patch('customizations.utils.download', return_value=True)
     def test_integration_data_send_mail(self, mock_download):
-
         request = MagicMock(
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
