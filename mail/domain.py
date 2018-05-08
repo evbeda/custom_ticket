@@ -121,7 +121,8 @@ def data_fake(id):
             'user_order_first_name': u'Ana',
             'user_order_last_name': u'Campbell',
             'footer_description': u'Tax number | Company name',
-            'template_url': u'tickets/default.html'
+            'template_url': u'tickets/default.html',
+            'organizer_name': u'Organizer Name'
             }
     data_fake = dict(
         list(data_models.items()) +

@@ -52,7 +52,7 @@ def get_pdf_ticket(request, pk):
 
 
 def email_preview_pdf(request, pk):
-    data = data_to_dict_all_models(pk)
+    data = data_fake(pk)
     return render(request, 'mail/body_mail.html', context=data)
 
 
