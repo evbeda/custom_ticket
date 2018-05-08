@@ -2,7 +2,11 @@
 
 from __future__ import unicode_literals
 
-from customizations.models import Customization, CustomEmail, TicketTemplate
+from customizations.models import (
+    Customization,
+    CustomEmail,
+    TicketTemplate,
+)
 from events.models import TicketType
 
 

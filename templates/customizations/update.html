@@ -35,6 +35,9 @@
       <p>{{ form.image_partner.label }} ({{instance.custom_email.image_partner}})</p>
       <br>
       <p>{{ form.image_partner.label }} : {{ form.image_partner }}</p>
+      <br>
+      <p>Selected Ticket Template: {{ instance.ticket_template.select_design_template }}</p>
+      <br>
 
         <p>Select template</p>
         <select name="select_design_template" required="" id="id_select_design_template" class="image-picker show-labels show-html">

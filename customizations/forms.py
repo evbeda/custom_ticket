@@ -1,6 +1,9 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
-from .models import Customization, BaseTicketTemplate
+from .models import (
+    Customization,
+    BaseTicketTemplate,
+)
 
 
 class FormBaseTickets(forms.ModelForm):
@@ -62,7 +65,7 @@ class FormCustomization(forms.ModelForm):
             'select_event',
             'logo',
             'message',
-            # 'select_design_template',
+            'select_design_template',
             'message_ticket',
             'image_partner',
             'pdf_ticket_attach'
@@ -106,12 +109,7 @@ class FormCustomization(forms.ModelForm):
     )
     tickets_templates = BaseTicketTemplate.objects.all()
     # options_design = (('DESIGN 1', 'Default Design'),)
-    # select_design_template = forms.ChoiceField(
-    #     choices=options_design,
-    #     widget=forms.Select(
-    #         attrs={'class': 'form-control'}
-    #     )
-    # )
+    select_design_template = forms.IntegerField(widget=forms.HiddenInput())
     message_ticket = forms.CharField(
         required=True,
         max_length=400,
