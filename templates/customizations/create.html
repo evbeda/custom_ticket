@@ -10,13 +10,13 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{% static 'js/image-picker.js' %}"></script>
-
+<!--
     {% if form.errors %}
         <strong>Fix the following errors.</strong>
         {% for key, value in form.errors.items %}
             <p>{{ key }}:{{ value.0 }}</p>
         {% endfor %}
-    {% endif %}
+    {% endif %} -->
 
     <h2>Customization Details</h2>
     <hr>
@@ -25,7 +25,9 @@
     <br>
     <form role="form" method="post" enctype="multipart/form-data">{% csrf_token %}
 
-        <p><b>{{ form.name.label }}</b> {{ form.name }}</p>
+        <p><b>{{ form.name.label }}</b> {{ form.name }} {% if form.name.errors %}<div class="alert alert-danger">
+                <strong>{{ form.name.errors }}</strong>
+            </div>{% endif %}</p>
         <br/>
         <p><b>{{ form.select_event.label }}</b> {{ form.select_event }}</p>
         <br/>
@@ -51,11 +53,15 @@
         <br/>
         <p><b>Logo</b> {{ form.logo }}</p>
         <br/>
-        <p><b>Ticket message</b> {{ form.message_ticket }}</p>
+        <p><b>Ticket message</b> {{ form.message_ticket }} {% if form.message_ticket.errors %}<div class="alert alert-danger">
+                <strong>{{ form.message_ticket.errors }}</strong>
+            </div>{% endif %}</p>
         <br/>
-        <p><b>Poster Image: {{ form.image_partner }}</b></p>
+        <p><b>Poster Image:</b> {{ form.image_partner }}</p>
         <br>
-        <p><b>Email message</b> {{ form.message }}</p>
+        <p><b>Email message</b> {{ form.message }}  {% if form.message.errors %}<div class="alert alert-danger">
+                <strong>{{ form.message.errors }}</strong>
+            </div>{% endif %}</p>
         <br/>
         <h3>Additional Settings</h3>
         <hr>
@@ -72,7 +78,9 @@
             <b><br><input onclick="toggle('footer')" id="checkBox" type="checkbox"> Footer description</b>
             <p>The footer description is a short text that will be placed at the bottom ticket in which is usually put legal information such as ssn, name of the organizer, etc.</p>
             <div id="footer" style='display: none;'>
-                <br>{{ form.footer_description }}
+                <br><p><b>Ticket message</b> {{ form.footer_description }} {% if form.footer_description.errors %}<div class="alert alert-danger">
+                <strong>{{ form.footer_description.errors }}</strong>
+            </div>{% endif %}</p>
                 <br>
             </div>
             <br><input onclick="toggle('sequence')" id="checkBox" type="checkbox"> <b>Numerate tickets</b>
