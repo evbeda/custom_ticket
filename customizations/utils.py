@@ -1,14 +1,20 @@
 import dropbox
 import hashlib
-import time
-from urllib2 import urlopen
 import os.path
-from django.http import HttpResponseRedirect
-from eventbrite import Eventbrite
+import time
+
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponseRedirect
+
+from eventbrite import Eventbrite
 from PIL import Image
-from customizations.models import UserWebhook, BaseTicketTemplate
+from urllib2 import urlopen
+
+from customizations.models import (
+    UserWebhook,
+    BaseTicketTemplate,
+)
 
 
 def in_group(group, user):

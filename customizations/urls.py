@@ -1,13 +1,13 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from customizations.views import (
+    DeleteBaseTickets,
     DeleteCustomization,
-    ViewCreateCustomization,
     update_customization,
     ViewCreateBaseTickets,
-    ViewListBaseTickets,
-    DeleteBaseTickets,
+    ViewCreateCustomization,
     ViewGenerateBaseTickets,
+    ViewListBaseTickets,
 )
 
 urlpatterns = [

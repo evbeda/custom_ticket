@@ -2,285 +2,217 @@
 {% load auth_extras %}
 <!DOCTYPE html>
 <html lang="en-us">
-<head>
-
-
-
-    <meta http-equiv="Content-Language" content="en">
-    <meta name="csrf_token" content="cab426e2167c11e889ca63367948411d">
-
-
-<meta name="robots" content="index, follow">
-
-    <meta name="description" content="Eventbrite brings people together through live experiences. Discover events that match your passions, or create your own with online ticketing tools.">
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="{% static 'css/w3school.css' %}">
-    <link href="https://getbootstrap.com/docs/3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/3.3/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-    <link href="https://getbootstrap.com/docs/3.3/examples/theme/theme.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-    <link rel="canonical" href="">
-    <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/global_header.css' %}">
-    <link rel="stylesheet" href="{% static 'css/eds.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-
-
-
-    <title>
-    Custom Ticket by Eventbrite
-</title>
-
-
-
-<style type="text/css">
-
-
-@media screen and (max-width: 1000px) {
-    img {
+    <head>
+        <meta http-equiv="Content-Language" content="en">
+        <meta name="csrf_token" content="cab426e2167c11e889ca63367948411d">
+        <meta name="robots" content="index, follow">
+        <meta name="description" content="Eventbrite brings people together through live experiences. Discover events that match your passions, or create your own with online ticketing tools.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/w3school.css' %}">
+        <link href="https://getbootstrap.com/docs/3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://getbootstrap.com/docs/3.3/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+        <link href="https://getbootstrap.com/docs/3.3/examples/theme/theme.css" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="canonical" href="">
+        <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
+        <link rel="stylesheet" href="{% static 'css/global_header.css' %}">
+        <link rel="stylesheet" href="{% static 'css/eds.css' %}">
+        <link rel="stylesheet" href="{% static 'css/home.css' %}">
+        <title>
+        Custom Ticket by Eventbrite
+        </title>
+        <style type="text/css">
+        @media screen and (max-width: 1000px) {
+        img {
         max-width: 100%;
         height: auto;
         width: auto/9;
-    }
-}
-
-.footer {
-   position: relative;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   text-align: center;
-}
-
-.scrollable {
-  overflow-y: scroll;
-  padding-bottom: 80px;
-  padding-top: 30px;
-  min-height: 900px;
-}
-
-</style>
-</head>
-
-<body class="lang-en en-us  js-d-track-event-links" >
-
-
-
-    <div id="auth-modalv2"></div>
-<header>
-<a class="skip-links js-d-skip-links" href="#" dorsal-guid="a66a2e92-155f-8e50-9c92-cb56134de54b" data-xd-wired="skip-links">Skip Main Navigation</a>
-<div class="js-create-banner-experiment"></div>
-<div id="global-header" class="global-header-container logged-out consumer-header" data-role="header" data-id="main-header" data-automation="global-header">
-    <div class="global-header js-global-header">
-        <div class="major">
-           <a class="btn header-link btn--link js-gh-dd-link js-d-track-link js-modal-auth js-xd-janus-checkpoint-event" href="{% url 'list_customizations'  %}" >
-
-           Custom Ticket
-       </a>
-            <div class="gh-dd header-search">
-                <form action="" method="GET" class="responsive-form is-hidden" id="search-autocomplete" __bizdiag="107714964" __biza="WJ__">
-                    <div class="search-autocomplete js-header-search-autocomplete is-init">
-                            <a href="#" class="hide-large js-header-search-icon mobile-action-b " title="Search">
-                                <i class="ico-search-v2 header-search-icon"></i>
-                                <span class="is-hidden-accessible">Search menu</span>
-                            </a>
-
-                            <div class="search-autocomplete__query-input js-search-query-area show-large">
-                                <div class="responsive-form__input--icon js-d-clearable-input" dorsal-guid="05e7b1e7-cc46-5ff7-4aee-da1ed20ea9c5" data-xd-wired="clearable-input">
-                                    <label for="q" class="is-hidden-accessible">Search for events</label>
-                                    <div class="responsive-form__input--icon__container show-large">
-                                        <i class="ico-search-v2 js-search-query-icon"></i>
-                                    </div>
-                                    <input type="search" class="js-search-query-input ui-autocomplete-input" data-automation="search-input" id="q" name="q" placeholder="Search for events" data-role="none" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
-                                    <button class="directory-search js-directory-search btn btn--brite is-hidden">
-                                        <i class="ico-search-v2"></i>
-                                    </button>
-                                <div class="responsive-form__input--icon__container close-button hide-large is-hidden">
-    <a href="#" class="js-clear-input">
-        <i class="ico-cross"></i><span class="is-hidden-accessible">x</span>
-    </a>
-</div></div>
+        }
+        }
+        .footer {
+        position: relative;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        }
+        .scrollable {
+        overflow-y: scroll;
+        padding-bottom: 80px;
+        padding-top: 30px;
+        min-height: 900px;
+        }
+        </style>
+    </head>
+    <body class="lang-en en-us  js-d-track-event-links" >
+        <div id="auth-modalv2"></div>
+        <header>
+            <a class="skip-links js-d-skip-links" href="#" dorsal-guid="a66a2e92-155f-8e50-9c92-cb56134de54b" data-xd-wired="skip-links">Skip Main Navigation</a>
+            <div class="js-create-banner-experiment"></div>
+            <div id="global-header" class="global-header-container logged-out consumer-header" data-role="header" data-id="main-header" data-automation="global-header">
+                <div class="global-header js-global-header">
+                    <div class="major">
+                        <a class="btn header-link btn--link js-gh-dd-link js-d-track-link js-modal-auth js-xd-janus-checkpoint-event" href="{% url 'list_customizations'  %}" >
+                            Custom Ticket
+                        </a>
+                        <div class="gh-dd header-search">
+                            <form action="" method="GET" class="responsive-form is-hidden" id="search-autocomplete" __bizdiag="107714964" __biza="WJ__">
+                                <div class="search-autocomplete js-header-search-autocomplete is-init">
+                                    <a href="#" class="hide-large js-header-search-icon mobile-action-b " title="Search">
+                                        <i class="ico-search-v2 header-search-icon"></i>
+                                        <span class="is-hidden-accessible">Search menu</span>
+                                    </a>
+                                    <div class="search-autocomplete__query-input js-search-query-area show-large">
+                                        <div class="responsive-form__input--icon js-d-clearable-input" dorsal-guid="05e7b1e7-cc46-5ff7-4aee-da1ed20ea9c5" data-xd-wired="clearable-input">
+                                            <label for="q" class="is-hidden-accessible">Search for events</label>
+                                            <div class="responsive-form__input--icon__container show-large">
+                                                <i class="ico-search-v2 js-search-query-icon"></i>
+                                            </div>
+                                            <input type="search" class="js-search-query-input ui-autocomplete-input" data-automation="search-input" id="q" name="q" placeholder="Search for events" data-role="none" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                                            <button class="directory-search js-directory-search btn btn--brite is-hidden">
+                                            <i class="ico-search-v2"></i>
+                                            </button>
+                                            <div class="responsive-form__input--icon__container close-button hide-large is-hidden">
+                                                <a href="#" class="js-clear-input">
+                                                    <i class="ico-cross"></i><span class="is-hidden-accessible">x</span>
+                                                </a>
+                                            </div></div>
+                                        </div>
+                                    <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" role="listbox" aria-activedescendant="ui-active-menuitem" style="z-index: 3; display: none;"></ul></div>
+                                    <input type="hidden" name="mode" value="search">
+                                </form>
                             </div>
-                    <ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" role="listbox" aria-activedescendant="ui-active-menuitem" style="z-index: 3; display: none;"></ul></div>
-                    <input type="hidden" name="mode" value="search">
-                </form>
-            </div>
-        </div>
-        <div class="minor" role="navigation">
-            <div class="gh-dd global-header__browse-events show-large text--truncated  js-gh-browse-events">
-
-            </div>
-
-        <div class="gh-dd gh-profile-box js-gh-dd show-large">
-
-        </div>
-
-            <div class="gh-dd gh-help-box js-gh-dd">
-
-            </div>
-
-
-            <div class="gh-dd gh-profile-box js-gh-dd">
-                <a id="user_menu_responsive" class="user-avatar header-link js-gh-action hide-large" onclick="toggle_menu_responsive()" href="#" data-automation="global-nav-user-avatar" aria-controls="js-global-nav-account-menu" aria-haspopup="true" aria-expanded="false">
-                    M
-                    <span class="is-hidden-accessible">Menu</span>
-                </a>
-                <div id="user_menu_list_responsive" class="gh-dd-menu on-right js-gh-dd-menu" id="js-global-nav-account-menu" aria-hidden="true" aria-expanded="false" role="group" data-automation="global-nav-account-dropdown">
-                    <ul class="list">
-                    <li>
-                        <a class="js-d-track-link" href="{% url 'list_customizations'  %}" >
-                           Customizations
-                        </a>
-                    </li>
-                    <li>
-                        <a class="js-d-track-link" href="{% url 'events:home_events'  %}" >
-                            Events
-                        </a>
-                    </li>
-                    {% if request.user|has_group:"admin" %}
-
-                    <li class="list--with-divider-top active">
-                        <a class="js-d-track-link" href="{% url 'customizations:home_baseticket'  %}" >
-                           Base Tickets <span class="label label-danger">ADMIN</span>
-                        </a>
-                    </li>
-                    {% endif %}
-
-                    <li>
-                        <a class="js-d-track-link" href="{% url 'customizations:create_customization'  %}" >
-                           New Customization
-                        </a>
-                    </li>
-                    <li class="list--with-divider-top">
-                        <a class="js-d-track-link" href="{% url 'logout'  %}" >
-                           Sign out
-                        </a>
-                    </li>
-
-
-
-                    </ul>
+                        </div>
+                        <div class="minor" role="navigation">
+                            <div class="gh-dd global-header__browse-events show-large text--truncated  js-gh-browse-events">
+                            </div>
+                            <div class="gh-dd gh-profile-box js-gh-dd show-large">
+                            </div>
+                            <div class="gh-dd gh-help-box js-gh-dd">
+                            </div>
+                            <div class="gh-dd gh-profile-box js-gh-dd">
+                                <a id="user_menu_responsive" class="user-avatar header-link js-gh-action hide-large" onclick="toggle_menu_responsive()" href="#" data-automation="global-nav-user-avatar" aria-controls="js-global-nav-account-menu" aria-haspopup="true" aria-expanded="false">
+                                    M
+                                    <span class="is-hidden-accessible">Menu</span>
+                                </a>
+                                <div id="user_menu_list_responsive" class="gh-dd-menu on-right js-gh-dd-menu" id="js-global-nav-account-menu" aria-hidden="true" aria-expanded="false" role="group" data-automation="global-nav-account-dropdown">
+                                    <ul class="list">
+                                        <li>
+                                            <a class="js-d-track-link" href="{% url 'list_customizations'  %}" >
+                                                Customizations
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="js-d-track-link" href="{% url 'events:home_events'  %}" >
+                                                Events
+                                            </a>
+                                        </li>
+                                        {% if request.user|has_group:"admin" %}
+                                            <li class="list--with-divider-top active">
+                                                <a class="js-d-track-link" href="{% url 'customizations:home_baseticket'  %}" >
+                                                    Base Tickets <span class="label label-danger">ADMIN</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        <li>
+                                            <a class="js-d-track-link" href="{% url 'customizations:create_customization'  %}" >
+                                                New Customization
+                                            </a>
+                                        </li>
+                                        <li class="list--with-divider-top">
+                                            <a class="js-d-track-link" href="{% url 'logout'  %}" >
+                                                Sign out
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="hide-small hide-medium gh-dd js-gh-dd">
+                                <div class="gh-dd gh-profile-box js-gh-dd show-large">
+                                    <a id="user_menu" class="header-link gh-help js-gh-action" onclick="toggle_menu()" href="#" aria-controls="gh-organize-list" aria-haspopup="true" aria-expanded="false" data-automation="gh-organize-action">{{ user.first_name }} {{ user.last_name }}</a>
+                                    <div id="user_menu_list"  class="gh-dd-menu on-right js-gh-dd-menu" id="gh-organize-list" aria-hidden="true" aria-expanded="false" role="group" data-automation="gh-organize-dropdown">
+                                        <ul class="list list--has-highlight">
+                                            <li>
+                                                <a class="js-d-track-link" href="{% url 'list_customizations'  %}" >
+                                                    Customizations
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="js-d-track-link" href="{% url 'events:home_events'  %}" >
+                                                    Events
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="js-d-track-link" href="{% url 'customizations:create_customization'  %}" >
+                                                    New Customization
+                                                </a>
+                                            </li>
+                                            {% if request.user|has_group:"admin" %}
+                                                <li class="list--with-divider-top active">
+                                                    <a class="js-d-track-link" href="{% url 'customizations:home_baseticket'  %}" >
+                                                        Base Tickets <span class="label label-danger">ADMIN</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            <li class="list--with-divider-top">
+                                                <a class="js-d-track-link" href="{% url 'logout'  %}" >
+                                                    Sign out
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-
-
-            <div class="hide-small hide-medium gh-dd js-gh-dd">
-
-        <div class="gh-dd gh-profile-box js-gh-dd show-large">
-            <a id="user_menu" class="header-link gh-help js-gh-action" onclick="toggle_menu()" href="#" aria-controls="gh-organize-list" aria-haspopup="true" aria-expanded="false" data-automation="gh-organize-action">{{ user.first_name }} {{ user.last_name }}</a>
-
-            <div id="user_menu_list"  class="gh-dd-menu on-right js-gh-dd-menu" id="gh-organize-list" aria-hidden="true" aria-expanded="false" role="group" data-automation="gh-organize-dropdown">
-                <ul class="list list--has-highlight">
-                    <li>
-                        <a class="js-d-track-link" href="{% url 'list_customizations'  %}" >
-                           Customizations
-                        </a>
-                    </li>
-                    <li>
-                        <a class="js-d-track-link" href="{% url 'events:home_events'  %}" >
-                            Events
-                        </a>
-                    </li>
-                    <li>
-                        <a class="js-d-track-link" href="{% url 'customizations:create_customization'  %}" >
-                           New Customization
-                        </a>
-                    </li>
-
-                     {% if request.user|has_group:"admin" %}
-
-                    <li class="list--with-divider-top active">
-                        <a class="js-d-track-link" href="{% url 'customizations:home_baseticket'  %}" >
-                           Base Tickets <span class="label label-danger">ADMIN</span>
-                        </a>
-                    </li>
-                    {% endif %}
-
-
-
-                    <li class="list--with-divider-top">
-                        <a class="js-d-track-link" href="{% url 'logout'  %}" >
-                           Sign out
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-</header>
-
-
-<div class="scrollable">
-<div class="container theme-showcase">
-          {% block content %}
-          {% endblock %}
-</div>
-</div>
-
-
-
-
-
-    </div>
-
-<div class="global-footer footer">
-    <div class="g-grid l-mar-top-2">
-        <h2 class="is-hidden-accessible">Site Navigation</h2>
-
-
-        <div class="g-group text--centered show-large">
-            <div class="g-cell g-cell-12-12">
-                <div class="footer-section--border"></div>
-            </div>
-            <div class="g-group l-pad-vert-5 l-sm-pad-vert-3">
-                <div class="g-cell g-cell-12-12">
-                    <p class="footer-copyright text-body-medium">© 2018 Custom Ticket by Eventbrite</p>
+            </header>
+            <div class="scrollable">
+                <div class="container theme-showcase">
+                    {% block content %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
-    </div> <!-- end g-grid -->
-
-</div>
-
-
-<script>
-function toggle_menu(){
-    if (document.getElementById("user_menu").className == "header-link gh-help js-gh-action") {
-        document.getElementById("user_menu").className = "header-link gh-help js-gh-action active locked";
-        document.getElementById("user_menu_list").className = "gh-dd-menu on-right js-gh-dd-menu js-gh-dd-menu--show";
-    } else {
-        document.getElementById("user_menu").className = "header-link gh-help js-gh-action";
-        document.getElementById("user_menu_list").className = "gh-dd-menu on-right js-gh-dd-menu";
-    }
-
-}
-function toggle_menu_responsive(){
-
-    if (document.getElementById("user_menu_responsive").className == "header-link gh-help js-gh-action") {
-        document.getElementById("user_menu_responsive").className = "header-link gh-help js-gh-action active locked";
-        document.getElementById("user_menu_list_responsive").className = "gh-dd-menu on-right js-gh-dd-menu js-gh-dd-menu--show";
-    } else {
-        document.getElementById("user_menu_responsive").className = "header-link gh-help js-gh-action";
-        document.getElementById("user_menu_list_responsive").className = "gh-dd-menu on-right js-gh-dd-menu";
-    }
-}
-
-
-</script>
-
-</div>         </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
-        </script>
-        <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+        <div class="global-footer footer">
+            <div class="g-grid l-mar-top-2">
+                <h2 class="is-hidden-accessible">Site Navigation</h2>
+                <div class="g-group text--centered show-large">
+                    <div class="g-cell g-cell-12-12">
+                        <div class="footer-section--border"></div>
+                    </div>
+                    <div class="g-group l-pad-vert-5 l-sm-pad-vert-3">
+                        <div class="g-cell g-cell-12-12">
+                            <p class="footer-copyright text-body-medium">© 2018 Custom Ticket by Eventbrite</p>
+                        </div>
+                    </div>
+                </div>
+                </div> <!-- end g-grid -->
+            </div>
+            <script>
+            function toggle_menu(){
+            if (document.getElementById("user_menu").className == "header-link gh-help js-gh-action") {
+            document.getElementById("user_menu").className = "header-link gh-help js-gh-action active locked";
+            document.getElementById("user_menu_list").className = "gh-dd-menu on-right js-gh-dd-menu js-gh-dd-menu--show";
+            } else {
+            document.getElementById("user_menu").className = "header-link gh-help js-gh-action";
+            document.getElementById("user_menu_list").className = "gh-dd-menu on-right js-gh-dd-menu";
+            }
+            }
+            function toggle_menu_responsive(){
+            if (document.getElementById("user_menu_responsive").className == "header-link gh-help js-gh-action") {
+            document.getElementById("user_menu_responsive").className = "header-link gh-help js-gh-action active locked";
+            document.getElementById("user_menu_list_responsive").className = "gh-dd-menu on-right js-gh-dd-menu js-gh-dd-menu--show";
+            } else {
+            document.getElementById("user_menu_responsive").className = "header-link gh-help js-gh-action";
+            document.getElementById("user_menu_list_responsive").className = "gh-dd-menu on-right js-gh-dd-menu";
+            }
+            }
+            </script>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://getbootstrap.com/docs/3.3/dist/js/bootstrap.min.js"></script>
+    </script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 </body></html>
-

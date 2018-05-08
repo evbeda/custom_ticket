@@ -1,37 +1,34 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from io import BytesIO
-import json
 import shutil
 import tempfile
-from mock import (
-    MagicMock,
-    patch,
-    Mock,
-    mock_open,
-)
-from .utils import create_webhook, get_token, delete_webhook
+
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.test.utils import override_settings
-from social_django.models import UserSocialAuth
-from django.test import TestCase, RequestFactory
-from django.contrib.auth.models import AnonymousUser, User
-from .forms import FormCustomization
-from .utils import (
-    get_unique_file_name,
-    upload_file,
-    image_exist,
-    valid_image_format,
-    download,
-)
 from faker import Factory
 from freezegun import freeze_time
-from .models import UserWebhook, BaseTicketTemplate
-from customizations.models import TicketTemplate
-from .views import ViewCreateCustomization
-from PIL import Image
+from mock import (
+    patch,
+    Mock,
+)
 from os import path
-from django.contrib.auth.models import Group
+from PIL import Image
+from social_django.models import UserSocialAuth
+from django.test import TestCase, RequestFactory
+
+from customizations.forms import FormCustomization
+from customizations.models import UserWebhook, BaseTicketTemplate
+from customizations.utils import (
+    create_webhook,
+    delete_webhook,
+    download,
+    get_token,
+    get_unique_file_name,
+    image_exist,
+    valid_image_format,
+)
 
 
 class TestBase(TestCase):

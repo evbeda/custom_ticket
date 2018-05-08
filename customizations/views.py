@@ -1,25 +1,39 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import (
+    render,
+    get_object_or_404,
+    redirect,
+)
 from django.urls import reverse_lazy
-from django.views.generic import FormView, DeleteView, ListView
+from django.views.generic import (
+    FormView,
+    DeleteView,
+    ListView,
+)
+from customizations.forms import (
+    FormCustomization,
+    FormBaseTickets,
+)
+from customizations.mixins import GroupRequiredMixin
 from customizations.models import (
     Customization,
     TicketTemplate,
     CustomEmail,
     UserWebhook,
-    BaseTicketTemplate
+    BaseTicketTemplate,
 )
-from customizations.forms import FormCustomization, FormBaseTickets
-from customizations.utils import upload_file, generate_base_ticket
+from customizations.utils import (
+    upload_file,
+    generate_base_ticket,
+)
 from customizations.utils import (
     create_webhook,
     get_token,
     delete_webhook,
     in_group,
 )
-from .mixins import GroupRequiredMixin
 
 
 class ViewListBaseTickets(GroupRequiredMixin, LoginRequiredMixin, ListView):
@@ -195,7 +209,7 @@ def update_customization(request, pk):
         'name': customization.name,
         'logo': custom_email.logo,
         'message': custom_email.message,
-        'select_design_template': ticket_template.select_design_template,
+        'select_design_template': ticket_template.select_design_template_id,
         'message_ticket': ticket_template.message_ticket,
         'footer_description': ticket_template.footer_description,
         'show_event_sequence': ticket_template.show_event_sequence,
@@ -214,8 +228,11 @@ def update_customization(request, pk):
             customization.pdf_ticket_attach = form.cleaned_data['pdf_ticket_attach']
             custom_email.message = form.cleaned_data['message']
             custom_email.image_partner = form.cleaned_data['image_partner']
-            ticket_template.select_design_template = form.cleaned_data[
-                'select_design_template']
+
+            ticket_template.select_design_template = get_object_or_404(
+                BaseTicketTemplate,
+                pk=form.cleaned_data['select_design_template']
+            )
             ticket_template.message_ticket = form.cleaned_data[
                 'message_ticket']
             ticket_template.footer_description = form.cleaned_data[

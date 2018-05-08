@@ -1,36 +1,46 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import requests
+import datetime
 import json
+import requests
 import threading
-from eventbrite import Eventbrite
+import time
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from social_django.models import UserSocialAuth
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import BadHeaderError, EmailMessage
-from django.core.urlresolvers import reverse as r
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template.loader import render_to_string
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import FormView
-from mail.forms import FormSendEmailPreview
-import datetime
-import time
-from mail.utils import (
-    PDF,
+from django.core.mail import (
+    BadHeaderError,
+    EmailMessage,
 )
+from django.core.urlresolvers import reverse as r
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,
+)
+from django.shortcuts import (
+    render,
+    get_object_or_404,
+)
+from django.template.loader import render_to_string
+
+from django.views.generic import FormView
+from social_django.models import UserSocialAuth
+
+from customizations.utils import process_logo
+from customizations.models import (
+    Customization,
+    TicketSequence,
+)
+from eventbrite import Eventbrite
+from mail.forms import FormSendEmailPreview
 from mail.domain import (
     all_data,
     CustomData,
     data_to_dict_all_models,
-    data_fake
+    data_fake,
 )
-# from customizations.utils import file_exist, download
-from customizations.utils import process_logo
-from customizations.models import (
-    Customization,
-    TicketSequence)
+from mail.utils import PDF
 
 
 def get_pdf_ticket(request, pk):

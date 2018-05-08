@@ -1,32 +1,34 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib.auth import get_user_model
-from unittest import skip
-import json
+
+from django.core import mail
+from django.test import TestCase
 from mock import (
     MagicMock,
     patch,
 )
 from social_django.models import UserSocialAuth
-from django.core import mail
-from django.test import TestCase, RequestFactory
-from customizations.models import Customization, CustomEmail, TicketTemplate, BaseTicketTemplate
-from .views import (
+
+from customizations.models import (
+    BaseTicketTemplate,
+    Customization,
+    CustomEmail,
+    TicketTemplate,
+)
+
+from mail.domain import CustomData
+from mail.views import (
+    accept_webhook,
     do_send_email,
     get_data,
-    get_social_user,
-    get_social_user_id,
-    accept_webhook,
-    get_venue,
-    get_data,
-    GetEmailTest,
-    process_data,
     get_organizer,
+    get_social_user_id,
+    get_venue,
+    process_data,
     social_user_exists,
     webhook_available_to_process
 )
-from .forms import FormSendEmailPreview
-from domain import CustomData
 
 
 class TestBase(TestCase):
