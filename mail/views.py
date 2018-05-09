@@ -286,6 +286,7 @@ def do_send_email(custom_data):
     )
     email.content_subtype = 'html'
     url = custom_data.template_url
+
     if data['pdf_ticket_attach'] is True:
         pdf = PDF(url, [data]).render().getvalue()
         # pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
@@ -316,6 +317,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
         # attendee_quantity = form.cleaned_data['attendee_quantity']
         # attendee_question = form.cleaned_data['attendee_question']
         # event_image = form.cleaned_data['event_image']
+
         attendees = []
         attendee = {
             'attendee_first_name': form.cleaned_data['attendee_first_name'],
@@ -326,15 +328,16 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             'ticket_class': form.cleaned_data['ticket_class']
         }
         customization = Customization.objects.get(pk=self.kwargs['pk'])
+        ticket_template = customization.ticket_template
+        template_url = customization.ticket_template.select_design_template.template_source
         attendees.append(dict(attendee))
         custom_data = CustomData(
             customization=customization,
             attendees=attendees,
-            organizer_logo=form.cleaned_data['organizer_logo'],
             event_name_text=form.cleaned_data['event_name_text'],
             event_start=form.cleaned_data['event_start'],
             event_venue_location={form.cleaned_data['event_venue_location']},
-            organizer_name={form.cleaned_data['organizer_name']},
+            organizer_name=form.cleaned_data['organizer_name'],
             organizer_email={form.cleaned_data['organizer_email']},
             #   reserved seating
             user_order_email=form.cleaned_data['user_order_email'],
@@ -346,8 +349,9 @@ class GetEmailTest(LoginRequiredMixin, FormView):
             # payment_datetime='',
             from_email=form.cleaned_data['from_email'],
             emails=[form.cleaned_data['emails']],
-            footer_description=[form.cleaned_data['footer_description']],
+            footer_description=ticket_template.footer_description,
             is_test=True,
+            template_url=template_url,
         )
         return do_send_email(custom_data)
         # Fixme: double response.
