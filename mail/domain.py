@@ -29,7 +29,7 @@ def data_to_dict_custom_email(id):
         return {}
     data = {
         'message': query.message,
-        'logo': query.logo.url,
+        # 'logo': query.logo.url,
         'logo_local': query.logo_local,
         'logo_path': query.logo_path,
         'logo_name': query.logo_name,
@@ -53,6 +53,7 @@ def data_to_dict_ticket_template(id):
         'select_design_template': query.select_design_template,
         'message_ticket': query.message_ticket,
         'footer_description': query.footer_description,
+        'double_ticket': query.double_ticket,
     }
     return data
 

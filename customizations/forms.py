@@ -122,16 +122,16 @@ class FormCustomization(forms.ModelForm):
         )
     )
 
-    additional_info = forms.CharField(
-        required=False,
-        widget=forms.Textarea(
-            attrs={
-                'placeholder': 'Add a partner description, useful information for your attendees or whatever you want to.',
-                'class': 'form-control',
-                'rows': 6
-            }
-        )
-    )
+    # additional_info = forms.CharField(
+    #     required=False,
+    #     widget=forms.Textarea(
+    #         attrs={
+    #             'placeholder': 'Add a partner description, useful information for your attendees or whatever you want to.',
+    #             'class': 'form-control',
+    #             'rows': 6
+    #         }
+    #     )
+    # )
 
     footer_description = forms.CharField(
         required=False,
