@@ -52,6 +52,7 @@ def data_to_dict_ticket_template(id):
     data = {
         'select_design_template': query.select_design_template,
         'message_ticket': query.message_ticket,
+        'footer_description': query.footer_description,
     }
     return data
 
@@ -120,7 +121,6 @@ def data_fake(id):
             'user_order_email': u'ana@email.com',
             'user_order_first_name': u'Ana',
             'user_order_last_name': u'Campbell',
-            'footer_description': u'Tax number | Company name',
             'template_url': u'tickets/default.html',
             'organizer_name': u'Organizer Name'
             }

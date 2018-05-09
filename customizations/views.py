@@ -224,10 +224,21 @@ def update_customization(request, pk):
         form = FormCustomization(request.POST, request.FILES)
         if form.is_valid():
             customization.name = form.cleaned_data['name']
-            custom_email.logo = form.cleaned_data['logo']
+            if form.cleaned_data['logo'] is not None:
+                links = upload_file(request, 'logo')
+                custom_email.logo = links['dropbox'],
+                custom_email.logo_local = links['local'],
+                custom_email.logo_path = links['path'],
+                custom_email.logo_name = links['name'],
+                custom_email.logo_url = links['dropbox'],
             customization.pdf_ticket_attach = form.cleaned_data['pdf_ticket_attach']
             custom_email.message = form.cleaned_data['message']
-            custom_email.image_partner = form.cleaned_data['image_partner']
+            if form.cleaned_data['image_partner'] is not None:
+                partner_links = upload_file(request, 'image_partner')
+                custom_email.image_partner = partner_links['dropbox'],
+                custom_email.image_partner_local = partner_links['local'],
+                custom_email.image_partner_path = partner_links['path'],
+                custom_email.image_partner_name = partner_links['name'],
 
             ticket_template.select_design_template = get_object_or_404(
                 BaseTicketTemplate,
