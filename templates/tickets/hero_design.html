@@ -37,7 +37,7 @@ hr.line {
 .logo {
 float: left;
 width: 160px;
-height: 60px;
+height: 45px;
 }
 .partner-img{
   width: 240px;
@@ -55,7 +55,11 @@ height: 100px;
   <tr >
     <th style="background: white; font-weight: bold;">
          <div class="logo">
-        <img src="{{ logo_url }}" alt="LOGO" border="0" >
+        {% if logo_url %}
+              <img  style="font-family: myFirstFont;padding: 20px;" src="{{ logo_url }}" alt="LOGO" border="0" >
+          {% else %}
+          <img class="front"  src="static/images/logohori.png" alt="">
+          {% endif %}
         </div>
     </th>
 
@@ -154,12 +158,12 @@ height: 100px;
 </table>
 <!-- - - - -  - - - - - - - - END TICKET DETAIL - - - - - - - - - - - - - -->
 <!-- - - - -  - - - - - - - - FOOTER TICKET - - - - - - - - - - - - - -->
-{% if image_partner_url %}
+{% if image_partner %}
 <table>
   <tr>
     <td style="color: #001b47; padding-left: 10px">
       <div class="partner-img">
-        <img style="width: 240px; height: 135px;" src="{{ image_partner_url }}" alt="LOGO" border="0" > <br><br>
+        <img style="width: 240px; height: 135px;" src="{{ image_partner }}" alt="LOGO" border="0" > <br><br>
         </div>
 
     </td>

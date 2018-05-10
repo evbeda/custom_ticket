@@ -33,9 +33,11 @@
                         <tr>
                             <td>
                                 <div class="logo">
-                                <!-- LOGO -->
-                                <img src="{{ logo_url }}" alt="LOGO" border="0" >
-                                <!-- END LOGO -->
+                                {% if logo_url %}
+                                 <img  style="font-family: myFirstFont;padding: 20px;" src="{{ logo_url }}" alt="LOGO" border="0" >
+                                {% else %}
+                                <img class="front"  src="static/images/eblogo.png" alt="">
+                                {% endif %}
                             </div>
                             </td>
 
@@ -52,6 +54,7 @@
                             <td colspan="2">
                                 <h2 style="color:#404040;font-weight:300;margin:0 0 12px 0;font-size:24px;line-height:30px">
                                 {{event_name_text}} </h2>
+
                                 <br>
                             </td>
                         </tr>
@@ -143,12 +146,12 @@
   <br>
     </td>
 </table>
-    {% if image_partner_url %}
+    {% if image_partner %}
     <table>
          <tr>
            <td style="color: #001b47; padding-left: 10px">
             <div>
-                <img style="width: 240px; height: 135px;" src="{{ image_partner_url }}" alt="LOGO" border="0" > <br><br>
+                <img style="width: 240px; height: 135px;" src="{{ image_partner }}" alt="LOGO" border="0" > <br><br>
             </div>
              </td>
              <td style="color: #878685; text-align: left;">

@@ -29,5 +29,9 @@ ul.thumbnails.image_picker_selector {
         height: 380px;
         -webkit-user-drag: none; }
     ul.thumbnails.image_picker_selector li .thumbnail.selected {
-      background: #0088cc;
+      background: black;
+      color:white !important;
+    }
+    .thumbnail.selected{
+      color:white !important;
     }

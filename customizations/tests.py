@@ -106,7 +106,7 @@ class IndexViewTest(TestBase):
                 u'hide_ticket_type_price': [u'on'],
                 u'select_event': [u'Apply All Events'],
                 u'message_ticket': [u'prueba ticket'],
-                u'additional_info': [u'asdasd'],
+                # u'additional_info': [u'asdasd'],
                 u'footer_description': [u'asdasd'],
                 u'show_event_sequence': [u'on'],
                 u'create_customization': [u'Create'],

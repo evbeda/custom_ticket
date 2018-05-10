@@ -135,15 +135,14 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
     success_url = 'create.html'
 
     def post(self, request, *args, **kwargs):
-        is_form_valid = super(ViewCreateCustomization, self).post(
-            request, *args, **kwargs)
         form = FormCustomization(request.POST)
         links = upload_file(request, 'logo')
         partner_links = upload_file(request, 'image_partner')
         if Customization.objects.filter(user=request.user).exists():
             return HttpResponseRedirect('/customizations/error-create')
         else:
-            if form.is_valid() and links['status']:
+            # if we keep links['status'] the logo is a required field
+            if form.is_valid():
                 name = request.POST.get('name')
                 message = request.POST.get('message')
                 select_design_template = request.POST.get('select_design_template')

@@ -263,13 +263,13 @@ def get_url(attendee):
 
 def do_send_email(custom_data):
     data = all_data(custom_data)
-    process_logo(data['logo_path'], data['logo_url'], data['logo_name'])
+    if not data['logo_path'] is u'':
+        process_logo(data['logo_path'], data['logo_url'], data['logo_name'])
     if custom_data.customization.ticket_template.show_ticket_type_sequence:
         for attendee in custom_data.attendees:
             attendee['ticket_type_sequence'] = get_ticket_type_sequence(
                 attendee['barcode']
             )['ticket_type_sequence']
-
     if custom_data.customization.ticket_template.show_event_sequence:
         for attendee in custom_data.attendees:
             attendee['event_sequence'] = get_event_sequence(
@@ -289,7 +289,6 @@ def do_send_email(custom_data):
 
     if data['pdf_ticket_attach'] is True:
         pdf = PDF(url, [data]).render().getvalue()
-        # pdf = PDF('tickets/template_default.html', [data]).render().getvalue()
         email.attach('ticket', pdf, 'application/pdf')
     else:
         pass
