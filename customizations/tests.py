@@ -43,7 +43,7 @@ class TestBase(TestCase):
             is_staff=True,
             is_superuser=True
         )
-        group_name = "admin"
+        group_name = "admins"
         self.group = Group(name=group_name)
         self.group.save()
         self.user.groups.add(self.group)

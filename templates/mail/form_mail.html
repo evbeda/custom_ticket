@@ -18,6 +18,7 @@
   <li><a data-toggle="tab" href="#menu1">Ticket</a></li>
   <li><a data-toggle="tab" href="#menu2">Event</a></li>
   <li><a data-toggle="tab" href="#menu3">User Order</a></li>
+   <li><a data-toggle="tab" href="#menu4">Organizer</a></li>
 </ul>
 
 <div class="tab-content">
@@ -26,7 +27,7 @@
         <p>Barcode Attende : {{ form.attendee_barcode }}</p>
         <p>Name : {{ form.attendee_first_name }}</p>
         <p>Last Name : {{ form.attendee_last_name }}</p>
-        <p>PDF Attach : {{ form.pdf_ticket_attach }}</p>
+
   </div>
   <div id="menu1" class="tab-pane fade">
     <h3>Ticket</h3>
@@ -39,6 +40,7 @@
   </div>
   <div id="menu2" class="tab-pane fade">
     <h3>Event</h3>
+
         <p>Event Name : {{ form.event_name_text }}</p>
         <p>Event Image url : {{ form.event_image }}</p>
         <p>Event Start : {{ form.event_start }}</p>
@@ -55,10 +57,8 @@
   </div>
   <div id="menu4" class="tab-pane fade">
     <h3>Organizer</h3>
-        <p>Name : {{ form.organizer_name }}</p>
-        <p>Email : {{ form.organizer_email }}</p>
-        <p>Logo : {{ form.organizer_logo }}</p>
-        <p>Message : {{ form.organizer_message }}</p>
+        <p>Organizer name : {{ form.organizer_name }}</p>
+        <p>Organizer name : {{ form.organizer_email }}</p>
   </div>
 </div>
 <div style="text-align: center">
