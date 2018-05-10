@@ -60,9 +60,15 @@ class Customization(TimeStampedModel):
         on_delete=models.CASCADE,
     )
     name = models.CharField(max_length=50)
-    ticket_template = models.ForeignKey(TicketTemplate, blank=True, null=True)
-    custom_email = models.ForeignKey(CustomEmail, blank=True, null=True)
-    pdf_ticket_attach = models.NullBooleanField(default=True, blank=True, null=True)
+    ticket_template = models.ForeignKey(
+        TicketTemplate, blank=True, null=True, on_delete=models.CASCADE
+    )
+    custom_email = models.ForeignKey(
+        CustomEmail, blank=True, null=True, on_delete=models.CASCADE
+    )
+    pdf_ticket_attach = models.NullBooleanField(
+        default=True, blank=True, null=True
+    )
 
 
 class UserWebhook(models.Model):
