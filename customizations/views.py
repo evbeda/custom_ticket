@@ -271,12 +271,32 @@ class DeleteCustomization(CustomizationConfig, DeleteView):
     success_url = reverse_lazy('list_customizations')
     context_object_name = 'customizations'
 
+    def post(self, request, *args, **kwargs):
+        if self.request.method == 'POST':
+            pk = self.kwargs['pk']
+            user = self.request.user
+            delete_customizations(pk, user)
+            return redirect('/')
+
     def get_context_data(self, **kwargs):
-        if Customization.objects.filter(user=self.request.user).count() == 1:
-            webhook_id = UserWebhook.objects.get(user=self.request.user).webhook_id
-            token = get_token(self.request.user)
-            delete_webhook(token, webhook_id)
         context = super(DeleteCustomization, self).get_context_data(**kwargs)
         context['user'] = self.get_object().user
 
         return context
+
+
+def delete_customizations(pk, user):
+    if Customization.objects.filter(user=user).exists():
+        webhook_id = UserWebhook.objects.get(user=user).webhook_id
+        token = get_token(user)
+        delete_webhook(token, webhook_id)
+    customization = Customization.objects.get(id=pk)
+    custom_email = CustomEmail.objects.get(
+        id=customization.custom_email.id
+    )
+    ticket_template = TicketTemplate.objects.get(
+        id=customization.ticket_template.id
+    )
+    customization.delete()
+    custom_email.delete()
+    ticket_template.delete()
