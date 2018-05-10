@@ -10,13 +10,7 @@
 
     <div class="js-search-bar">
       <div style="text-align: center;">
-        {% if is_admin %}
-         <h3><p class="label label-danger">USER ADMIN
-         </p></h3><br>
-         <a href="{% url 'customizations:home_baseticket'  %}" class="js-search-click-action js-d-track-link btn btn--secondary" >
-      Base Tickets
-    </a>
-        {% endif %}
+
 
       <h3><p class="label label-danger">{{ message }}</p></h3>
       </div>
@@ -28,7 +22,6 @@
                     <span data-automation="home-popular-events-header" aria-hidden="true">Hi {{ user.first_name }} {{ user.last_name }}, these are your </span>
                     <a href="#" class="js-consumer-location-link" >
                         Customizations
-
                     </a>
 
                 </h3>
@@ -58,7 +51,11 @@
 
                     <div class="poster-card__image" style="background-color:#ccc;">
 
+                       {% if customs.custom_email.logo %}
                         <img class="js-poster-image " src="{{ customs.custom_email.logo }}"  alt="{{ customization_name }}">
+                        {% else %}
+                        <img class="js-poster-image " src="{% static 'images/eblogo.png' %}"  alt="{{ customization_name }}">
+                      {% endif %}
 
                     </div>
 
@@ -117,17 +114,19 @@
 
 
   {% else %}
-
+<br><br><br>
 <div style="text-align: center">
 
-          <img class="index-img" src="{% static 'images/nocus.png' %}" />
+          <h2 style="color: #0278b8; font-weight: bold">It's look like you don't have any customization</h2>
+          <br><br>
+
             <p hidden>You don't have any customization created yet</p>
             <!-- <div hidden>No banners yet!<div> -->
 
 </div>
 
 {% endif %}
-
+<br><br>
 <footer class="w3-container ">
             <br>
             <p class="btn-group">
@@ -142,5 +141,10 @@
 </div>
 
 {% endblock %}
+
+
+
+
+
 
 

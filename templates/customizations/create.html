@@ -44,12 +44,26 @@
         <hr>
         <p>Add important information, brand logo, poster image or messages on the email and tickets. </p>
         <br/>
+        {% if instance %}
+            {% if instance.custom_email.logo %}
+                <p>Logo :<img src="{{ instance.custom_email.logo }}" width="250" height="200" /></p>
+              <br/>
+            {% endif %}
+        {% endif %}
+
         <p><b>Logo</b> {{ form.logo }}</p>
         <br/>
         <p><b>Ticket message</b> {{ form.message_ticket }} {% if form.message_ticket.errors %}<div class="alert alert-danger">
                 <strong>{{ form.message_ticket.errors }}</strong>
             </div>{% endif %}</p>
         <br/>
+        {% if instance %}
+            {% if instance.custom_email.ticket_image %}
+                <p>Ticket image:<img src="{{ instance.custom_email.image_partner }}" width="250" height="200" /></p>
+                <br/>
+
+            {% endif %}
+        {% endif %}
         <p><b>Ticket Image:</b> {{ form.image_partner }}</p>
         <br>
         <p><b>Email message</b> {{ form.message }}  {% if form.message.errors %}<div class="alert alert-danger">
@@ -95,7 +109,7 @@
 
     <div style="text-align: center">
         <a class="btn btn-danger" href="{% url 'list_customizations' %}">Cancel</a>
-        <input type="submit" class="btn btn-success" name="create_customization"  value="Create"/>
+        <input type="submit" class="btn btn-success" name="create_customization"  value="Save"/>
     </div>
 
     </form>
