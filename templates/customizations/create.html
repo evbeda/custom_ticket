@@ -76,12 +76,6 @@
         <br>
         <a onclick="toggle('info')"  class="btn">Insert additional info</a>
         <div id='info' style='display: none;' class="col-md-12 d-none js-custom-event-form">
-            <b><br><input onclick="toggle('add')" id="checkBox" type="checkbox"> Additional Info</b>
-            <div id="add" style='display: none;'>
-                <br>
-                {{ form.additional_info }}
-            </div>
-            <br>
             <b><br><input onclick="toggle('footer')" id="checkBox" type="checkbox"> Footer description</b>
             <p>The footer description is a short text that will be placed at the bottom ticket in which is usually put legal information such as ssn, name of the organizer, etc.</p>
             <div id="footer" style='display: none;'>
