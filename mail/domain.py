@@ -146,6 +146,7 @@ class CustomData(object):
 
     def __init__(self,
                  customization=Customization(),
+                 domain='',
                  attendees=[],
                  organizer_logo='',
                  event_name_text='',
@@ -173,6 +174,7 @@ class CustomData(object):
                  pdf_ticket_attach='',
                  ):
 
+        self.domain = domain
         self.customization = customization
         self.attendees = attendees
         self.organizer_logo = organizer_logo
