@@ -123,22 +123,22 @@ def get_social_user(user_id):
 
 def accept_webhook(request):
     print 'Here! accepting webhook'
-    threading.Thread(target=get_data, args=(request.body,)).start()
+    threading.Thread(target=get_data, args=(request,)).start()
     print "responding webhook"
     return HttpResponse()
 
 
-def get_data(body):
+def get_data(request):
     print 'Here! get_data'
-    print body
-    config_data = json.loads(body)
+    print request.body
+    config_data = json.loads(request.body)
     user_id = config_data['config']['user_id']
     if webhook_available_to_process(user_id):
         social_user = get_social_user(user_id)
         access_token = social_user.extra_data['access_token']
         data = requests.get(
             json.loads(
-                body
+                request.body
             )['api_url'] +
             '?token=' +
             access_token +
@@ -153,6 +153,7 @@ def get_data(body):
             organizer_id=data.json()['event']['organizer_id']
         )
         return process_data(
+            domain=request.build_absolute_uri('/')[:-1],
             order=data.json(),
             venue=venue,
             organizer=organizer,
@@ -202,7 +203,7 @@ def get_ticket_type_sequence(barcode):
     }
 
 
-def process_data(order, venue, organizer, user_id):
+def process_data(domain, order, venue, organizer, user_id):
     list_attendee = order['attendees']
     customization = Customization.objects.select_related(
         'ticket_template'
@@ -235,6 +236,7 @@ def process_data(order, venue, organizer, user_id):
     format_date_start = date_start.strftime("%d/%m/%y %I:%M%p")
     ticket_template = customization.ticket_template
     custom_data = CustomData(
+        domain=domain,
         customization=customization,
         attendees=attendees,
         user_first_name=order['first_name'],
@@ -331,6 +333,7 @@ class GetEmailTest(LoginRequiredMixin, FormView):
         template_url = customization.ticket_template.select_design_template.template_source
         attendees.append(dict(attendee))
         custom_data = CustomData(
+            domain=self.request.build_absolute_uri('/')[:-1],
             customization=customization,
             attendees=attendees,
             event_name_text=form.cleaned_data['event_name_text'],

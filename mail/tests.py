@@ -262,7 +262,8 @@ class TestDefs(TestBase, TestBaseUser):
         venue = {'address_1': 'Test'}
         organizer = 'agustin'
         user_id = 1
-        process_data(data, venue, organizer, user_id)
+        domain = 'http://localhost'
+        process_data(domain, data, venue, organizer, user_id)
         mock_do_send_mail.assert_called_once()
 
     @patch(
@@ -559,7 +560,7 @@ class TestDefs(TestBase, TestBaseUser):
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
         with self.settings(SERVER_ACCESS_TOKEN='HJDTUHYQ3ZVTVLMN52VZ'):
-            get_data(request.body)
+            get_data(request)
         # assert eventbrite api call
         mock_requests.assert_called_once()
         self.assertEquals(
@@ -765,7 +766,7 @@ class TestMailsWithCostumization(TestBase, TestBaseUser):
             body='{"config":{"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
         with self.settings(SERVER_ACCESS_TOKEN='HJDTUHYQ3ZVTVLMN52VZ'):
-            get_data(request.body)
+            get_data(request)
         # assert eventbrite api call
         mock_requests.assert_called_once()
         self.assertEquals(
@@ -969,7 +970,7 @@ class TestMailsWithCostumization(TestBase, TestBaseUser):
         request = MagicMock(
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
-        response = get_data(request.body)
+        response = get_data(request)
         sended_mails = len(mail.outbox)
         self.assertEquals(sended_mails, 1)
         email = mail.outbox[0]
