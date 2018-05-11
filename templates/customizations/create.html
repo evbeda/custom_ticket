@@ -1,6 +1,7 @@
 {% extends 'base_.html' %}
 {% load static from staticfiles %}
 {% block content %}
+{% load auth_extras %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/image-picker.css' %}">
 <style type=“text/css”>
    .thumbnail>img{
@@ -8,8 +9,22 @@
        max-height: 380px;
    }
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="{% static 'js/image-picker.js' %}"></script>
+
+
+    {% if form.error %}
+    <span class="label label-danger"> {{ form.error}}</span>
+    <br>
+    {% endif %}
+    <br>
+    {% if form.errors %}
+        <strong>Fix the following errors.</strong>
+        {% for key, value in form.errors.items %}
+            <li><span class="label label-danger">{{ key }}:{{ value.0 }}</span></li>
+        {% endfor %}
+    {% endif %}
+    <br>
+   {{ modal_crop_image }}
+
 
     <h2>Customization Details</h2>
     <hr>
@@ -17,6 +32,7 @@
     <p>After purchasing a ticket or registering for your events, attendees will receive an email with a ticket attached, both of which you can customize below. </p>
     <br>
     <form role="form" method="post" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.image_data }}
 
         <p><b>{{ form.name.label }}</b> {{ form.name }} {% if form.name.errors %}<div class="alert alert-danger">
                 <strong>{{ form.name.errors }}</strong>
@@ -64,7 +80,19 @@
 
             {% endif %}
         {% endif %}
-        <p><b>Ticket Image:</b> {{ form.image_partner }}</p>
+
+    {% if instance %}
+            {% if instance.custom_email.image_partner %}
+                <p>Ticket Image :<img src="{{ instance.custom_email.image_partner_url }}" width="250" height="200" /></p>
+              <br/>
+            {% endif %}
+        {% endif %}
+    <div id="alert" class="label label-success" role="alert"></div>
+        <label class="label" data-toggle="tooltip" title="Change your Ticket Image">
+      <img class="rounded" id="avatar" src="{% static 'images/placeholder.jpg' %}" width="150px" alt="avatar">
+
+     <p><b>Ticket Image:</b> {{ form.image_partner }}</p>
+    </label>
         <br>
         <p><b>Email message</b> {{ form.message }}  {% if form.message.errors %}<div class="alert alert-danger">
                 <strong>{{ form.message.errors }}</strong>
@@ -113,6 +141,86 @@
         })
 </script>
 
+
+<script>
+image_data = document.getElementById('id_image_data');
+image_data.value = '';
+var ticket_template = [];
+var logo_aspect_ratio = [];
+var image_aspect_ratio = [];
+var ticket_array = [];
+</script>
+{% for tickets in form.tickets_templates %}
+<script>
+    var ticket_id = {{ tickets.id | is_safe }};
+    var ticket_name = {{ tickets.name | is_safe }};
+    var aspect_ratio_logo_x = {{ tickets.aspect_ratio_logo_x | is_safe }};
+    var aspect_ratio_logo_y = {{ tickets.aspect_ratio_logo_y| is_safe }};
+    var aspect_ratio_image_x = {{ tickets.aspect_ratio_image_x | is_safe }};
+    var aspect_ratio_image_y = {{ tickets.aspect_ratio_image_y | is_safe }};
+
+    ticket_template.push(ticket_id);
+    ticket_template.push(ticket_name);
+
+    logo_aspect_ratio.push(aspect_ratio_logo_x);
+    logo_aspect_ratio.push(aspect_ratio_logo_y);
+
+    image_aspect_ratio.push(aspect_ratio_image_x);
+    image_aspect_ratio.push(aspect_ratio_image_y);
+
+    ticket_template.push(logo_aspect_ratio);
+    ticket_template.push(image_aspect_ratio);
+
+    ticket_array.push(ticket_template);
+    ticket_template = [];
+    logo_aspect_ratio = [];
+    image_aspect_ratio = [];
+
+</script>
+{% endfor %}
+
+<script type="text/javascript">
+
+    function get_ticket_template(target, ticket_array){
+        template = [];
+        for (i = 0; i < ticket_array.length; i++) {
+            ticket_id = ticket_array[i][0]
+            if (ticket_id == target) {
+                ticket_id = ticket_array[i][0];
+                ticket_name = ticket_array[i][1];
+                logo_aspect_ratio_x = ticket_array[i][2][0]
+                logo_aspect_ratio_y = ticket_array[i][2][1]
+                image_aspect_ratio_x = ticket_array[i][3][0]
+                image_aspect_ratio_y = ticket_array[i][3][1]
+                break;
+            }
+        }
+
+        template.push(ticket_id);
+        template.push(ticket_name);
+        template.push(logo_aspect_ratio_x);
+        template.push(logo_aspect_ratio_y);
+        template.push(image_aspect_ratio_x);
+        template.push(image_aspect_ratio_y);
+        return template
+    }
+    var template_selected = '';
+    default_id = $('#id_select_design_template').val();
+    template_selected = get_ticket_template(default_id, ticket_array);
+
+
+    $('#id_select_design_template').change(function() {
+        design_id =  $(this).val();
+        template_selected = get_ticket_template(design_id, ticket_array);
+
+    });
+
+
+
+
+
+</script>
+<script src="{% static 'js/cropper/config.js' %}"></script>
 <script>
   function toggle(id) {
     var x = document.getElementById(id);

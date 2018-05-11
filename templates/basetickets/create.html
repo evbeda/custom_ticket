@@ -22,18 +22,24 @@
         <br/>
         <p>{{ form.content_html.label }} : {{ form.content_html }}</p>
         <br/>
+        <p>{{ form.aspect_ratio_logo_x.label }} : {{ form.aspect_ratio_logo_x }}</p>
+        <br/>
+        <p>{{ form.aspect_ratio_logo_y.label }} : {{ form.aspect_ratio_logo_y }}</p>
+        <br/>
+        <p>{{ form.aspect_ratio_image_x.label }} : {{ form.aspect_ratio_image_x }}</p>
+        <br/>
+        <p>{{ form.aspect_ratio_image_y.label }} : {{ form.aspect_ratio_image_y }}</p>
+        <br/>
         <br>
+
+
 
         <div style="text-align: center">
         <a class="btn btn-danger" href="{% url 'customizations:home_baseticket' %}">Cancel</a>
-        <input type="submit" class="btn btn-success" name="create_customization"  value="Create"/>
+        <input type="submit" class="btn btn-success" name="create_customization"  value="SAVE"/>
     </div>
     </form>
-<script type="text/javascript">
-    $("#id_select_design_template").imagepicker({
-          show_label  : true
-        })
-</script>
+
 
 {% endblock %}
 

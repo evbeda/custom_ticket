@@ -2,7 +2,11 @@ import dropbox
 import hashlib
 import os.path
 import time
+import cStringIO
+import re
+import binascii
 
+from django.core.files.base import ContentFile
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
@@ -175,3 +179,49 @@ def delete_webhook(token, webhook_id):
 def get_token(user):
     token = user.social_auth.get(provider='eventbrite').access_token
     return token
+
+
+def decode_image_from_base64(image_string_base64):
+    try:
+        image_string_base64 = re.sub(
+            '^data:image/.+;base64,',
+            '',
+            image_string_base64,
+        ).decode('base64')
+        return {
+            'status': True,
+            'image': image_string_base64,
+        }
+    except binascii.Error as err:
+        return {
+            'status': False,
+            'error': err.message,
+        }
+
+
+def save_image(image_string_base64):
+    img_io = cStringIO.StringIO()
+    image_decoded = decode_image_from_base64(image_string_base64)
+    if image_decoded['status']:
+        image = Image.open(cStringIO.StringIO(image_decoded['image']))
+        image.save(img_io, format=image.format, quality=100)
+        return img_io
+    else:
+        print image_decoded['error']
+        return None
+
+
+def get_image_and_save(image_string_base64, user):
+    if bool(image_string_base64):
+        image_file = save_image(image_string_base64)
+        if image_file is not None:
+            name_image = get_unique_file_name(user, 'imagen.jpg')
+            img_content = ContentFile(
+                image_file.getvalue(),
+                name_image
+            )
+            return img_content
+        else:
+            return None
+    else:
+        return None

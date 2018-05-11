@@ -4,6 +4,7 @@ from customizations.views import (
     DeleteBaseTickets,
     DeleteCustomization,
     update_customization,
+    update_base_tickets,
     ViewCreateBaseTickets,
     ViewCreateCustomization,
     ViewGenerateBaseTickets,
@@ -37,6 +38,11 @@ urlpatterns = [
         r'^(?P<pk>[0-9]+)/update$',
         update_customization,
         name='update_customization'
+    ),
+    url(
+        r'^(?P<pk>[0-9]+)/update-baseticket$',
+        update_base_tickets,
+        name='update_baseticket'
     ),
     url(
         r'^create-baseticket/$',

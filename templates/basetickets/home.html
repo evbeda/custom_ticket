@@ -30,6 +30,7 @@
          <b> Source: </b>{{ bases.template_source }}<br>
          <b> Content HTML:</b> {{ bases.content_html }}<br>
          <a class="glyphicon glyphicon-trash" title="Delete Customization" href="{% url 'customizations:delete_baseticket' pk=bases.id  %}"></a>
+         <a class="glyphicon glyphicon-pencil" title="Update Customization" href="{% url 'customizations:update_baseticket' pk=bases.id  %}"></a>
           <hr>
 
         </p>

@@ -13,8 +13,13 @@ class FormBaseTickets(forms.ModelForm):
             'name',
             'template_source',
             'preview',
-            'content_html'
+            'content_html',
+            'aspect_ratio_logo_x',
+            'aspect_ratio_logo_y',
+            'aspect_ratio_image_x',
+            'aspect_ratio_image_y',
         ]
+
     name = forms.CharField(
         required=True,
         widget=forms.TextInput(
@@ -23,7 +28,7 @@ class FormBaseTickets(forms.ModelForm):
                 'class': 'form-control',
                 'value': 'Default design',
             }
-        )
+        ),
     )
     template_source = forms.CharField(
         required=True,
@@ -33,26 +38,57 @@ class FormBaseTickets(forms.ModelForm):
                 'class': 'form-control',
                 'value': 'tickets/template_default.html',
             }
-        )
+        ),
     )
 
     preview = forms.ImageField(
-        required=True,
+        required=False,
         validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
         widget=forms.FileInput(
-            attrs={'class': 'form-control'}
-        )
+            attrs={
+                'class': 'form-control',
+            }
+        ),
     )
 
     content_html = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.Textarea(
             attrs={
                 'placeholder': 'You can put here the html content.',
                 'class': 'form-control',
-                'rows': 6
+                'rows': 6,
             }
-        )
+        ),
+    )
+
+    aspect_ratio_logo_x = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'type': 'number',
+            }
+        ),
+    )
+    aspect_ratio_logo_y = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'type': 'number',
+            }
+        ),
+    )
+    aspect_ratio_image_x = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'type': 'number',
+            }
+        ),
+    )
+    aspect_ratio_image_y = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'type': 'number',
+            }
+        ),
     )
 
 
@@ -68,8 +104,19 @@ class FormCustomization(forms.ModelForm):
             'select_design_template',
             'message_ticket',
             'image_partner',
-            'pdf_ticket_attach'
+            'pdf_ticket_attach',
+            'image_data',
         ]
+
+    image_data = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'type': 'hidden',
+                'class': 'form-control',
+            }
+        ),
+    )
 
     name = forms.CharField(
         required=True,
@@ -78,22 +125,27 @@ class FormCustomization(forms.ModelForm):
                 'placeholder': 'Name to identify the customization',
                 'class': 'form-control',
             }
-        )
+        ),
     )
     options_event = (('Apply All Events', 'Apply to All'),)
     select_event = forms.ChoiceField(
         choices=options_event,
         widget=forms.Select(
-            attrs={'class': 'form-control'}
-        )
+            attrs={
+                'class': 'form-control',
+            }
+        ),
     )
 
     logo = forms.ImageField(
         required=False,
         validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
         widget=forms.FileInput(
-            attrs={'class': 'form-control'}
-        )
+            attrs={
+                'class': 'form-control',
+                'accept': 'image/*',
+            }
+        ),
     )
 
     message = forms.CharField(
@@ -101,37 +153,34 @@ class FormCustomization(forms.ModelForm):
         max_length=800,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'e.g. Thanks for registering please keep your tickets handy. Print them out and bring them with you',
+                'placeholder': 'e.g. Thanks for registering ' +
+                               'please keep your tickets handy. ' +
+                               'Print them out and bring them with you',
                 'class': 'form-control',
-                'rows': 6
+                'rows': 6,
             }
-        )
+        ),
     )
+
     tickets_templates = BaseTicketTemplate.objects.all()
-    # options_design = (('DESIGN 1', 'Default Design'),)
-    select_design_template = forms.IntegerField(widget=forms.HiddenInput())
+
+    select_design_template = forms.IntegerField(
+        widget=forms.HiddenInput(),
+    )
+
     message_ticket = forms.CharField(
         required=True,
         max_length=400,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'Tell your attendees what they should bring the event, or specific info that they may need.',
+                'placeholder': 'Tell your attendees what they ' +
+                               'should bring the event, or specific ' +
+                               'info that they may need.',
                 'class': 'form-control',
-                'rows': 6
+                'rows': 6,
             }
-        )
+        ),
     )
-
-    # additional_info = forms.CharField(
-    #     required=False,
-    #     widget=forms.Textarea(
-    #         attrs={
-    #             'placeholder': 'Add a partner description, useful information for your attendees or whatever you want to.',
-    #             'class': 'form-control',
-    #             'rows': 6
-    #         }
-    #     )
-    # )
 
     footer_description = forms.CharField(
         required=False,
@@ -140,41 +189,52 @@ class FormCustomization(forms.ModelForm):
             attrs={
                 'placeholder': ' e.g. Eventbrite Inc. /  Reg. No. 4742147',
                 'class': 'form-control',
-                'rows': 1
+                'rows': 1,
             }
-        )
+        ),
     )
 
     show_event_sequence = forms.BooleanField(
         required=False,
-        label="Show sequence of ticket by event",
+        label='Show sequence of ticket by event',
     )
 
     show_ticket_type_sequence = forms.BooleanField(
         required=False,
-        label="Show sequence of ticket by type",
+        label='Show sequence of ticket by type',
     )
 
     hide_ticket_type_price = forms.BooleanField(
         required=False,
-        label="Hide price of ticket purchased",
+        label='Hide price of ticket purchased',
     )
 
     double_ticket = forms.BooleanField(
         required=False,
-        label="Double Ticket",
+        label='Double Ticket',
     )
     image_partner = forms.ImageField(
         required=False,
-        validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg'])],
+        validators=[
+            FileExtensionValidator(allowed_extensions=['png', 'jpg', ])
+        ],
         widget=forms.FileInput(
-            attrs={'class': 'form-control'}
-        )
-    )
-    TRUE_FALSE_CHOICES = (
-        (True, 'Yes'),
-        (False, 'No')
+            attrs={
+                'class': 'form-control',
+                'accept': 'image/*',
+            }
+        ),
     )
 
-    pdf_ticket_attach = forms.ChoiceField(choices=TRUE_FALSE_CHOICES, label="PDF Ticket Attach",
-                                          initial='', widget=forms.Select(), required=True)
+    TRUE_FALSE_CHOICES = (
+        (True, 'Yes'),
+        (False, 'No'),
+    )
+
+    pdf_ticket_attach = forms.ChoiceField(
+        choices=TRUE_FALSE_CHOICES,
+        label='PDF Ticket Attach',
+        initial='',
+        widget=forms.Select(),
+        required=True,
+    )

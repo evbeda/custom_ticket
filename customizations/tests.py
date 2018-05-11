@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from io import BytesIO
 import shutil
 import tempfile
+import base64
+import cStringIO
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
@@ -28,7 +30,11 @@ from customizations.utils import (
     get_unique_file_name,
     image_exist,
     valid_image_format,
+    decode_image_from_base64,
+    save_image,
+    get_image_and_save,
 )
+import os
 
 
 class TestBase(TestCase):
@@ -38,10 +44,10 @@ class TestBase(TestCase):
             username=fake.name(),
             password='12345',
             email=fake.email(),
-            first_name='edacticket',
+            first_name='test_user',
             is_active=True,
             is_staff=True,
-            is_superuser=True
+            is_superuser=True,
         )
         group_name = "admins"
         self.group = Group(name=group_name)
@@ -56,7 +62,9 @@ class TestBase(TestCase):
             user=self.user,
             provider='eventbrite',
             uid="249759038146",
-            extra_data={'access_token': 'HJDTUHYQ3ZVTVLMN52VZ'}
+            extra_data={
+                'access_token': 'HJDTUHYQ3ZVTVLMN52VZ',
+            },
         )
         login = self.client.login(
             username=self.user.username,
@@ -76,6 +84,18 @@ class IndexViewTest(TestBase):
             preview="Test",
             content_html="Test",
         )
+        self.file = cStringIO.StringIO()
+        size = (200, 200)
+        color = (255, 0, 0, 0)
+        self.image = Image.new("RGBA", size, color)
+        self.image.save(self.file, format='PNG')
+        self.temp_image = self.file
+        prefix = 'data:image/png;base64,'
+        self.base64_string = base64.b64encode(self.file.getvalue())
+        self.image_base64_string = prefix + self.base64_string
+        self.image_content = get_image_and_save(
+            self.image_base64_string, self.user
+        )
 
     def test_homepage(self):
         response = self.client.get('/')
@@ -83,49 +103,94 @@ class IndexViewTest(TestBase):
 
     def test_no_customizations(self):
         response = self.client.get('/')
-        self.assertContains(response, "You don't have any customization created yet")
-
-    @patch('customizations.views.get_token', return_value='HJDTUHYQ3ZVTVLMN52VZ')
-    @patch('customizations.views.create_webhook', return_value='646089')
-    @patch('customizations.views.upload_file',
-           return_value={
-               'path': u'/Users/asaiz/eventbrite/custom_ticket/static/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png',
-               'local': u'http://localhost:8000/media/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png',
-               'name': u'EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png',
-               'dropbox': u'https://www.dropbox.com/s/2h44xdq9x6466ip/EDAc-1-631b830c043352f057c4da164cf20b3227a88870603bbd3edb1d94bc-Foto-1.png?dl=1',
-               'status': True,
-           })
-    def test_post(self, mock_upload_file, mock_webhook, mock_token):
-        img = BytesIO(b'mybinarydata')
-        img.name = 'myimage.jpg'
-        response = self.client.post(
-            '/customizations/create-customization/',
-            data={
-                u'name': [u'prueba'],
-                u'show_ticket_type_sequence': [u'on'],
-                u'hide_ticket_type_price': [u'on'],
-                u'select_event': [u'Apply All Events'],
-                u'message_ticket': [u'prueba ticket'],
-                # u'additional_info': [u'asdasd'],
-                u'footer_description': [u'asdasd'],
-                u'show_event_sequence': [u'on'],
-                u'create_customization': [u'Create'],
-                u'select_design_template': [u'1'],
-                u'csrfmiddlewaretoken': [u'b7wtBfWYFKGkxNxDPrwS8WLZxv001isUjKBrCvrjg9ZibLSKaru2ozuuaS3JMOi1'],
-                u'message': [u'prueba mensaje'],
-                'logo': img,
-                'image_partner': img,
-                'pdf_ticket_attach': True,
-            },
-            follow=True,
+        self.assertContains(
+            response,
+            "You don't have any customization created yet"
         )
-        mock_webhook.assert_called_once()
 
-        self.assertEquals(
-            mock_upload_file.call_count,
-            2,
-        )
-        self.assertEquals(200, response.status_code)
+    @patch(
+        'customizations.views.upload_file',
+        return_value={
+            'path': u'/path/image/image.png',
+            'local': u'http://localhost:8000/image.png',
+            'name': u'image.png',
+            'dropbox': u'https://www.dropbox.com/s/image.png?dl=1',
+            'status': True,
+        }
+    )
+    @patch(
+        'customizations.services.upload_file_dropbox',
+        return_value='www.image.com',
+    )
+    @patch(
+        'customizations.services.get_token',
+        return_value='HJDTUHYQ3ZVTVLMN52VZ',
+    )
+    @patch(
+        'customizations.services.create_webhook',
+        return_value='646089',
+    )
+    @patch(
+        'customizations.views.upload_file',
+        return_value={
+            'path': u'/path/image/image.png',
+            'local': u'http://localhost:8000/image.png',
+            'name': u'image.png',
+            'dropbox': u'https://www.dropbox.com/s/image.png?dl=1',
+            'status': True,
+        }
+    )
+    def test_post(
+            self,
+            mock_upload_file_services,
+            mock_webhook,
+            mock_token,
+            mock_upload_drop,
+            mock_upload_file_views,
+    ):
+        with patch(
+                'customizations.services.get_image_and_save',
+                return_value=self.image_content,
+        ) as mock_image_save:
+
+            img = BytesIO(b'mybinarydata')
+            img.name = 'logo.jpg'
+            file = cStringIO.StringIO()
+            size = (200, 200)
+            color = (255, 0, 0, 0)
+            image = Image.new("RGBA", size, color)
+            image.save(file, format='PNG')
+            prefix = 'data:image/png;base64,'
+            base64_string = base64.b64encode(file.getvalue())
+            image_base64_string = prefix + base64_string
+            response = self.client.post(
+                '/customizations/create-customization/',
+                data={
+                    u'name': [u'prueba'],
+                    u'show_ticket_type_sequence': [u'on'],
+                    u'hide_ticket_type_price': [u'on'],
+                    u'select_event': [u'Apply All Events'],
+                    u'message_ticket': [u'prueba ticket'],
+                    u'image_data': image_base64_string,
+                    u'footer_description': [u'asdasd'],
+                    u'show_event_sequence': [u'on'],
+                    u'create_customization': [u'Create'],
+                    u'select_design_template': [u'1'],
+                    u'csrfmiddlewaretoken': [u'b7wtBfWYFKjKBruuaS3JMOi1'],
+                    u'message': [u'prueba mensaje'],
+                    'logo': img,
+                    'image_partner': img,
+                    'pdf_ticket_attach': True,
+                },
+                follow=True,
+            )
+            os.remove(
+                'static/media/partner/' +
+                mock_image_save.return_value.name
+            )
+
+            mock_webhook.assert_called_once()
+            self.assertEquals(200, response.status_code)
 
     @patch(
         'customizations.utils.Eventbrite.post',
@@ -133,8 +198,8 @@ class IndexViewTest(TestBase):
             u'user_id': u'249759038146',
             u'created': u'2018-04-13T07:19:38Z',
             u'event_id': None,
-            u'resource_uri': u'https://www.eventbriteapi.com/v3/webhooks/646089/',
-            u'endpoint_url': u'https://custom-ticket-heroku.herokuapp.com/mail/mail/',
+            u'resource_uri': u'https://www.eventbriteapi.com/v3/',
+            u'endpoint_url': u'https://app/endpint',
             u'actions': [u'order.placed'],
             u'id': u'646089'
         }
@@ -164,16 +229,22 @@ class IndexViewTest(TestBase):
             request.user, 'nombre del archivo.png')
         self.assertEquals(
             unique_name,
-            'edacticket-4-e4122a5c7387fc823e534bdfa600f176cef7cb27732f90323cba4b29-nombre-del-archivo.png'
+            'test_user-4-e4122a5c7387fc823e534bdfa600f1' +
+            '76cef7cb27732f90323cba4b29-nombre-del-archivo.png'
         )
 
 
 class TestFormCustomization(TestCase):
     def test_form(self):
         form_data = {
-            'name': 'testform', 'select_event': 'Apply to All', 'logo': None,
-            'message': 'Test', 'select_design_template': 'Default Design',
-            'message_ticket': 'Test', 'image_partner': None, 'pdf_ticket_attach': True
+            'name': 'testform',
+            'select_event': 'Apply to All',
+            'logo': None,
+            'message': 'Test',
+            'select_design_template': 'Default Design',
+            'message_ticket': 'Test',
+            'image_partner': None,
+            'pdf_ticket_attach': True,
         }
         form = FormCustomization(form_data)
         self.assertTrue(form.is_valid)
@@ -204,12 +275,12 @@ class TestCustomizationsWithWebhook(TestCase):
         )
         self.webhook = UserWebhook.objects.create(
             user=self.user,
-            webhook_id='646089'
+            webhook_id='646089',
         )
 
     @patch(
         'customizations.utils.get_token',
-        return_value='HJDTUHYQ3ZVTVLMN52VZ'
+        return_value='HJDTUHYQ3ZVTVLMN52VZ',
     )
     @patch('customizations.utils.create_webhook', return_value='646089')
     def test_post(self, mock_webhook, mock_token):
@@ -269,3 +340,53 @@ class TestDropboxHandler(TestCase):
     def test_download_image_from_url(self, mock_urlopen, mock_openfile):
         res = download('www.url.com', 'image_name.png')
         self.assertEquals(res, True)
+
+
+class TestUtils(TestCase):
+    def setUp(self):
+        fake = Factory.create()
+        self.user = get_user_model().objects.create_user(
+            username=fake.name(),
+            password='12345',
+            email=fake.email(),
+            first_name='test_user',
+            is_active=True,
+            is_staff=True,
+            is_superuser=True
+        )
+        self.file = cStringIO.StringIO()
+        size = (200, 200)
+        color = (255, 0, 0, 0)
+        self.image = Image.new("RGBA", size, color)
+        self.image.save(self.file, format='PNG')
+        self.temp_image = self.file
+        prefix = 'data:image/png;base64,'
+        self.base64_string = base64.b64encode(self.file.getvalue())
+        self.image_base64_string = prefix + self.base64_string
+
+    def tearDown(self):
+        self.file.close()
+
+    def test_success_decode_image_from_base64(self):
+        image_decoded = decode_image_from_base64(self.image_base64_string)
+        self.assertEquals(image_decoded['status'], True)
+
+    def test_error_decode_image_from_base64(self):
+        image_decoded = decode_image_from_base64('test string')
+        self.assertEquals(image_decoded['status'], False)
+
+    def test_save_image_from_base64(self):
+        image_file = save_image(self.image_base64_string)
+        self.assertEquals(image_file is None, False)
+
+    def test_get_image_and_save_from_base64(self):
+        image_content = get_image_and_save(self.image_base64_string, self.user)
+        self.assertEquals(image_content is None, False)
+
+    def test_get_image_and_save_from_empty_string(self):
+        image_content = get_image_and_save('', self.user)
+        self.assertEquals(image_content is None, True)
+
+    def test_get_image_and_save_from_false_string(self):
+        image_content = get_image_and_save('test_string_no_base_64', self.user)
+        self.assertEquals(image_content is None, True)
