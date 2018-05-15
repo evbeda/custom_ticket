@@ -1,321 +1,325 @@
 {% load static %}
 {% load qr_tags %}
+{% for attendee in attendees %}
 
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-</head>
-<style>
+  </head>
+  <style>
 
-.qr{
-    width: 120px;
-}
-.front {
-    text-align: center;
+  .qr{
+      width: 120px;
+  }
+  .front {
+      text-align: center;
 
-}
+  }
 
-.text
-{
-line-height: 1.2
-}
-.logo {
-text-align: left;
-float: left;
-padding: 10px;
-width: 120px;
-height: 34px;
-}
+  .text
+  {
+  line-height: 1.2
+  }
+  .logo {
+  text-align: left;
+  float: left;
+  padding: 10px;
+  width: 120px;
+  height: 34px;
+  }
 
-.partner-img{
-  width: 220px;
-  height: 125px;
-}
+  .partner-img{
+    width: 220px;
+    height: 125px;
+  }
 
-/* Regular */
-@font-face {
-font-family: myFirstFont;
-src: url(static/font/BentonSans-Regular_sOT.otf);
-}
+  /* Regular */
+  @font-face {
+  font-family: myFirstFont;
+  src: url(static/font/BentonSans-Regular_sOT.otf);
+  }
 
-/* Regular */
-@font-face {
-font-family: myFirstFont;
-src: url(static/font/BentonSans-Bold_sOT.otf);
-font-weight: bold;
-}
+  /* Regular */
+  @font-face {
+  font-family: myFirstFont;
+  src: url(static/font/BentonSans-Bold_sOT.otf);
+  font-weight: bold;
+  }
 
-@page {
+  @page {
 
-background-image: url('static/images/img_pattern_back.jpg');
-size: letter portrait;
-@frame front_image { /* front_image */
-        -pdf-frame-content: front_image;
-    left: 0pt; width: 306pt; top: 0pt; height: 220pt;
-}
+  background-image: url('static/images/img_pattern_back.jpg');
+  size: letter portrait;
+  @frame front_image { /* front_image */
+          -pdf-frame-content: front_image;
+      left: 0pt; width: 306pt; top: 0pt; height: 220pt;
+  }
 
-@frame qr_code { /* QR */
-    -pdf-frame-content: qr_code;
-left: 106pt; width: 90pt; top: 150pt; height: 100pt;
+  @frame  { /* QR */
+      -pdf-frame-content: qr_code;
+  left: 106pt; width: 90pt; top: 150pt; height: 100pt;
 
-}
-@frame st_quad { /* Content frame 1 */
-    -pdf-frame-content: st_quad;
-left: 0pt; width: 306pt; top: 240pt; height: 160pt;
-}
-@frame nd_quad { /* Content frame 2 */
-    -pdf-frame-content: nd_quad;
-right: 0pt; width: 306pt; top: 0pt; height: 396pt; border:1px dashed #ccc;
-}
+  }
+  @frame { /* Content frame 1 */
+      -pdf-frame-content: st_quad;
+  left: 0pt; width: 306pt; top: 240pt; height: 160pt;
+  }
+  @frame { /* Content frame 2 */
+      -pdf-frame-content: nd_quad;
+  right: 0pt; width: 306pt; top: 0pt; height: 396pt; border:1px dashed #ccc;
+  }
 
-@frame rd_quad { /* Content frame 3 */
-    -pdf-frame-content: rd_quad;
-left: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;
-}
-@frame th_quad { /* Content frame 4 */
-    -pdf-frame-content: th_quad;
-right: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;}
+  @frame rd_quad { /* Content frame 3 */
+      -pdf-frame-content: rd_quad;
+  left: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;
+  }
+  @frame th_quad { /* Content frame 4 */
+      -pdf-frame-content: th_quad;
+  right: 0pt; width: 306pt; top: 396pt; height: 396pt;border:1px dashed #ccc;}
 
 
-}
-</style>
-{% for attendee in attendees %}
-<body >
+  }
+  </style>
 
+  <body >
+
+<div>
 <!-- - - - - - - - - - - - - - - QR CODE - - - - - - - - - - - - - - - - - -->
-    <div id="qr_code" ">
+<table>
+  <tr>
+    <td>
+    <div class="images" style="width: 900px" >
 
 <!-- - - - - - - - - - - - - - - FRONT IMAGE - - - - - - - - - - - - - - - - - -->
-            <div id="front_image" style=" text-align: center;width: 900px">
-                 <img class="front"  src="static/images/event-byn.png" alt="">
-            </div>
+      <div id="front_image" style=" text-align: center;width: 900px">
+           <img class="front"  src="static/images/event-byn.png" alt="">
+      </div>
 <!-- - - - - - - - - - - - - - - END FRONT IMAGE - - - - - - - - - - - - - - - - - -->
-    <div class="qr">
-    {% qr_from_text attendee.barcode "m" %}
-    </div>
+      <div class="qr" style="padding-top: 200px; text-align: center">
+      {% qr_from_text attendee.barcode "m" %}
+      </div>
     </div>
 <!-- - - - - - - - - - - - - - - END QR CODE - - - - - - - - - - - - - - - - - -->
 
 <!-- - - - - - - - - - - - - - - 1ST QUAD - - - - - - - - - - - - - - - - - -->
-    <div id="st_quad" >
-        <div style="font-family: myFirstFont;text-align: center;color: #282C35;">
+    <div class="quad_1" style="text-align: center">
+        <div style="font-family: myFirstFont;color: #282C35;">
             {{ attendee.barcode }}
         </div>
 
-        <div style="font-family: myFirstFont;text-align: center; font-size: 22px;color: #282C35;">
+        <div style="font-family: myFirstFont;font-size: 22px;color: #282C35;">
 
               {{attendee.attendee_first_name}} {{attendee.attendee_last_name}}
 
 
         </div>
 
-        <div style="font-family: myFirstFont;text-align: center; font-weight: bold; font-size: 9px;color: #282C35;">
+        <div style="font-family: myFirstFont; font-weight: bold; font-size: 9px;color: #282C35;">
                     <br><br><br><br><br><br><br><br><br><br>
               {{footer_description}}
 
         </div>
 
     </div>
+
+  </td>
+  <td>
 <!-- - - - - - - - - - - - - - - END 1ST QUAD - - - - - - - - - - - - - - - - - -->
 
 <!-- - - - - - - - - - - - - - - 2ND QUAD - - - - - - - - - - - - - - - - - -->
-    <div id="nd_quad" >
-        <div class="text">
-        <div style="font-family: myFirstFont;padding: 10px;text-align: right;">
-        <span style="font-family: myFirstFont;font-weight: bold; padding: 5px;color:#ADB0B6;">
-         <br>
-         {% if attendee.ticket_type_sequence %}
-              Sequence #{{ attendee.ticket_type_sequence }}
-          {% endif %}
-          {% if attendee.event_sequence %}
-              Sequence #{{ attendee.event_sequence }}
-          {% endif %}
-        </span>
-        </div>
+    <div class="quad_2" style="position: absolute;top: 0;right: 0">
+        <div class="text" style="text-align: right; padding-right: 10px">
+            <span style="font-family: myFirstFont;font-weight: bold;color:#ADB0B6; text-align: right;">
+             {% if attendee.ticket_type_sequence %}
+                  Sequence #{{ attendee.ticket_type_sequence }}
+              {% endif %}
+              {% if attendee.event_sequence %}
+                  Sequence #{{ attendee.event_sequence }}
+              {% endif %}
+            </span>
+          </div>
 
-        <div class="logo" style="padding: 20px;">
-          {% if logo_url %}
-              <img  style="font-family: myFirstFont;padding: 20px;" src="{{ logo_url }}" alt="LOGO" border="0" >
-          {% else %}
-          <img class="front"  src="static/images/logohori.png" alt="">
-          {% endif %}
-
-        </div>
+          <div class="logo" style="padding: 5px;">
+            {% if logo_url %}
+              <img  style="font-family: myFirstFont;padding: 10px;" src="{{ logo_url }}" alt="LOGO" border="0" >
+            {% else %}
+              <img class="front"  src="static/images/logohori.png" alt="">
+            {% endif %}
+          </div>
 
         <div class="content" style="font-family: myFirstFont;padding: 10px;">
 
-               <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;">EVENT</span>
+          <span style="font-weight: bold; font-family: myFirstFont;font-size: 20px;color:#282C35; text-align: center">
+            <br>{{event_name_text}}<br>
+          </span>
 
-                <span style="font-weight: bold; font-family: myFirstFont;font-size: 20px;color:#282C35;">
-                <br>{{event_name_text}}</br>
-                </span>
+          <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>DATE & TIME<br></span>
 
-                <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>DATE & TIME<br></span>
-
-                <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
-                {{event_start}}</br>
-                </span>
+          <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+          {{event_start}}<br>
+          </span>
 
 
-               <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>LOCATION</span>
-               <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
-                <br>
-                {{event_venue_location.address_1|default_if_none:""}}
-                {{event_venue_location.address_2|default_if_none:""}}
-                <br>
-                {{event_venue_location.city|default_if_none:""}}, CA {{event_venue_location.postal_code|default_if_none:"" }}
-                <br>
-                {{event_venue_location.region|default_if_none:""}}
-                <br>
-                {{event_venue_location.country|default_if_none:""}}
-                <br>
-               </span>
-               <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>TICKET TYPE</span>
-               <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
-                <br>
-               {{attendee.ticket_class}} <br>
-                {% if not customization.ticket_template.hide_ticket_type_price %}
-                                                      {{ attendee.cost_gross }}
-                                                {% endif %}</br>
+         <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>LOCATION</span>
+         <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+          <br>
+          {{event_venue_location.address_1|default_if_none:""}}
+          {{event_venue_location.address_2|default_if_none:""}}
+          <br>
+          {{event_venue_location.city|default_if_none:""}}, CA {{event_venue_location.postal_code|default_if_none:"" }}
+          <br>
+          {{event_venue_location.region|default_if_none:""}}
+          <br>
+          {{event_venue_location.country|default_if_none:""}}
+          <br>
+         </span>
+         <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>TICKET TYPE</span>
+         <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+          <br>
+            {{attendee.ticket_class}} <br>
+            {% if not customization.ticket_template.hide_ticket_type_price %}
+              {{ attendee.cost_gross }}
+            {% endif %}<br>
+         </span>
+        {% if attendee.reserved_seating %}
+         <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>RESERVED SEATING</span>
+         <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+          <br>
 
-               </span>
+                {{ attendee.reserved_seating }}<br>
 
-               <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>RESERVED SEATING</span>
-               <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
-                <br>
-               {% if attendee.reserved_seating %}
-                                                      {{ attendee.reserved_seating }}<br>
-                                                {% endif %}<br>
-
-               </span>
-                <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>DETAILS</span>
-               <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
-                <br>
-                  {{message_ticket}}
-                </span>
+         </span>
+         {% endif %}
+          <span style="font-family: myFirstFont;font-size: 10px; color:#ADB0B6;"><br>DETAILS</span>
+         <span style="font-weight: bold; font-family: myFirstFont;font-size: 10px;color:#282C35;">
+          <br>
+            {{message_ticket}}
+          </span>
 
         </div>
-
-        </div>
+      </div>
     </div>
+  </td>
+</tr>
 <!-- - - - - - - - - - - - - - - END 2ND QUAD - - - - - - - - - - - - - - - - - -->
 
 <!-- - - - - - - - - - - - - - - 3RD QUAD - - - - - - - - - - - - - - - - - -->
-     <div id="rd_quad">
-        <div style="font-family: myFirstFont;padding: 10px;text-align: right;">
-          <span style="font-family: myFirstFont;font-weight: bold; padding: 20px;color:#ADB0B6;">
+<tr>
+  <td>
+     <div class="quad_3">
+        <div id="rd_quad" style="text-align: right; padding: 7px">
+          <span style="font-family: myFirstFont;font-weight: bold;color:#ADB0B6;font-family: limyFirstFont;text-align: right;">
              Then here
           <img width="18px" src="static/images/arrow_right.png" alt="arrow">
           </span>
+          <br><br><br>
         </div>
+
           {% if double_ticket %}
 
-        <table>
-          <tr>
-            <br><br>
-            <th style="color: #515150;font-weight: normal;">
-            <span style="font-size: 20px;">{{event_name_text}}</span>
-            </th>
-          </tr>
-        </table>
-<!-- - - - -  - - - - - - - - END EVENT NAME - - - - - - - - - - - - - -->
+       <table>
 
-<!-- - - - -  - - - - - - - - TICKET DETAIL - - - - - - - - - - - - - -->
-        <table>
           <tr>
             <td style="padding-left: 10px;">
-              <span style="font-size: 10px; font-weight: bold;"">LOCATION<br></span>
-              <span style="font-size: 10px;color:#878685;">
+               <span style="font-size: 10px; font-weight: bold;">LOCATION<br></span>
+               <span style="font-size: 10px;color:#878685;">
                 {{event_venue_location.address_1|default_if_none:""}}, {{event_venue_location.address_2|default_if_none:""}} - {{event_venue_location.postal_code|default_if_none:"" }}
                 {{event_venue_location.city|default_if_none:""}}, {{event_venue_location.country|default_if_none:""}}
                 {{event_venue_location.region|default_if_none:""}}
-              </span>
-              <p>
+
+                </span>
+
+                <p>
                 <span style="font-size: 10px; font-weight: bold;">DATE<br></span>
                 <span style="font-size: 10px;color:#878685;">
-                  {{event_start}}
-              </p>
-              </span>
-
-              <span style="font-size: 10px; font-weight: bold;">TICKET TYPE<br></span>
-              <span style="font-size: 10px;color:#878685;">
-             {{attendee.ticket_class}} <br>
-                  {{ attendee.cost_gross }}
-              </p>
-              </span>
-            </td>
-            <td  style="width: 150px;text-align: center;">
+                {{event_start}}
+                </p>
+                </span>
+                <span style="font-size: 10px; font-weight: bold;">TICKET TYPE<br></span>
+                  <span style="font-size: 10px;color:#878685;">
+                 {{attendee.ticket_class}} <br>
+                      {{ attendee.cost_gross }}
+                 </p>
+                </span>
+              </td>
+            <td style="width: 150px;text-align: center;">
               <div class="qrdob">
-                {% qr_from_text attendee.barcode "s" %}<br>
-                <span style="font-size: 10px;">
+                    {% qr_from_text attendee.barcode "s" %}<br>
+                    <span style="font-size: 10px;">
                   Order #{{order_id}} <br>
                   {% if attendee.ticket_type_sequence %}
-                      TicketType Sequence  #{{ attendee.ticket_type_sequence }}<br>
+                      Sequence  #{{ attendee.ticket_type_sequence }}<br>
                   {% endif %}
                   {% if attendee.event_sequence %}
-                      Event Sequence  #{{ attendee.event_sequence }}<br>
+                      Sequence  #{{ attendee.event_sequence }}<br>
                   {% endif %}
-                </span>
-              </div>
-           </td>
-         </tr>
-        </table>
+                 </span>
+                </div>
 
+            </td>
+      </tr>
       <br>
-     <span style="text-align: center;">
+      <tr>
+        <td colspan="2" style="text-align: center;">
+          <br>
+      <span style="text-align: center;">
        {{footer_description}}
-     </span>
-{% else %}
+      </span></td>
+    </tr>
+  </table>
 
-   <!--  <div style="font-family: myFirstFont;padding: 10px;text-align: left;" class="transition scaleX text">
-        <span style="font-family: myFirstFont;text-align: center;">
-            <br><br><br><br><br>
-        <img src="static/images/img_find_event.png" alt="">
-        </p>
-        </span>
-    </div> -->
+      {% else %}
 
-{% endif %}
+
+      {% endif %}
 
   </div>
-
-
-
+</td>
 <!-- - - - - - - - - - - - - - - END 3RD QUAD - - - - - - - - - - - - - - - - - -->
 
 <!-- - - - - - - - - - - - - - - 4TH QUAD - - - - - - - - - - - - - - - - - -->
+<td>
 
-    <div id="th_quad">
-        <div style="font-family: myFirstFont;padding: 10px;text-align: left;">
-        <span style="font-family: myFirstFont;font-weight: bold; padding: 20px;color:#ADB0B6;">
+    <div class="quad_4">
+        <div id="th_quad" style="font-family: myFirstFont;padding: 7px;text-align: left;">
+          <span style="font-family: myFirstFont;font-weight: bold; padding: 20px;color:#ADB0B6;">
             <img width="18px" src="static/images/arrow_up.png" alt="arrow">Fold here first
-        </span>
+          </span>
         </div>
-        <div style="font-family: myFirstFont;padding: 10px;text-align: left;" class="transition scaleX text">
-        <span style="font-family: myFirstFont;text-align: center;">
-            <br><br><br><br><br>
+        <br><br><br><br>
+        <div style="font-family: myFirstFont;padding: 10px;text-align: center;" class="transition scaleX text">
             {% if image_partner %}
-        <div class="partner-img">
-        <img style="width: 220px; height: 125px;" src="{{ image_partner }}" alt="LOGO" border="0" > <br><br>
-        </div>
-        {% else %}
-        <img src="static/images/img_find_event.png" alt="">
-        {% endif %}
-        </p>
-        </span>
+          <span style="font-family: myFirstFont;text-align: center;">
+            <div class="partner-img">
+              <img style="width: 285px; height: 410px;" src="{{ image_partner }}" alt="LOGO" border="0" > <br><br>
+            </div>
+          </span>
+            {% else %}
+          <span style="font-family: myFirstFont;text-align: center;">
+            <img src="static/images/img_find_event.png" alt="">
+          </span>
+            {% endif %}
         </div>
     </div>
+  </td>
+</tr>
+</table>
 <!-- - - - - - - - - - - - - - - END 4TH QUAD - - - - - - - - - - - - - - - - - -->
-
-
-</body>
+</div>
 <div style="display:block; page-break-before:always;"></div>
+
 {% endfor %}
+
+
+  </body>
+
 </html>
-
-
+<style>
+table {
+}
+</style>
 
 
