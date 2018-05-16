@@ -234,4 +234,9 @@ LOGGING = {
     },
 }
 
-
+# REDIS related settings
+REDIS_URL = get_env_variable('REDIS_URL')
+BROKER_URL = REDIS_URL # + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_BROKER_URL = BROKER_URL
+CELERY_RESULT_BACKEND = BROKER_URL
