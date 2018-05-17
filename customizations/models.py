@@ -5,10 +5,6 @@ from django.conf import settings
 
 
 class TimeStampedModel(models.Model):
-    '''
-        An abstract base class model that provides self updating
-        ``created`` and ``modified`` fields.
-    '''
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
@@ -21,13 +17,32 @@ class BaseTicketTemplate(TimeStampedModel):
     name = models.CharField(max_length=255)
     preview = models.CharField(max_length=255)
     content_html = models.TextField()
+    aspect_ratio_logo_x = models.IntegerField(
+        default=1,
+        blank=False,
+        null=False,
+    )
+    aspect_ratio_logo_y = models.IntegerField(
+        default=1,
+        blank=False,
+        null=False,
+    )
+    aspect_ratio_image_x = models.IntegerField(
+        default=1,
+        blank=False,
+        null=False,
+    )
+    aspect_ratio_image_y = models.IntegerField(
+        default=1,
+        blank=False,
+        null=False,
+    )
 
     def __str__(self):
         return self.name
 
 
 class TicketTemplate(TimeStampedModel):
-    # select_design_template = models.CharField(max_length=255)
     select_design_template = models.ForeignKey(
         BaseTicketTemplate,
         blank=True,
@@ -36,7 +51,11 @@ class TicketTemplate(TimeStampedModel):
     show_event_sequence = models.BooleanField(default=False)
     show_ticket_type_sequence = models.BooleanField(default=False)
     hide_ticket_type_price = models.BooleanField(default=False)
-    footer_description = models.CharField(max_length=100, blank=True, null=True)
+    footer_description = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
     double_ticket = models.BooleanField(default=False)
 
 
@@ -87,3 +106,44 @@ class TicketSequence(models.Model):
     event_sequence = models.IntegerField(blank=True, null=True)
     ticket_type_sequence = models.IntegerField(blank=True, null=True)
     customization = models.ForeignKey(Customization, blank=True)
+
+
+class DTOCustomization(object):
+
+    def __init__(
+        self,
+        name,
+        message,
+        select_event,
+        select_design_template,
+        message_ticket,
+        show_event_sequence,
+        show_ticket_type_sequence,
+        hide_ticket_type_price,
+        footer_description,
+        double_ticket,
+        pdf_ticket_attach,
+        image_partner,
+        image_data,
+        logo,
+        customization=None,
+        custom_email=None,
+        ticket_template=None,
+    ):
+        self.select_event = select_event
+        self.name_customization = name
+        self.message = message
+        self.select_design_template = select_design_template
+        self.message_ticket = message_ticket
+        self.show_event_sequence = show_event_sequence
+        self.show_ticket_type_sequence = show_ticket_type_sequence
+        self.hide_ticket_type_price = hide_ticket_type_price
+        self.footer_description = footer_description
+        self.double_ticket = double_ticket
+        self.pdf_ticket_attach = pdf_ticket_attach
+        self.image_partner = image_partner
+        self.image_data = image_data
+        self.logo = logo
+        self.customization = customization
+        self.custom_email = custom_email
+        self.ticket_template = ticket_template
