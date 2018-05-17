@@ -31,10 +31,6 @@
   height: 34px;
   }
 
-  .partner-img{
-    width: 220px;
-    height: 125px;
-  }
 
   /* Regular */
   @font-face {
@@ -84,9 +80,10 @@
   }
   </style>
 
-  <body >
+  <body>
 
 <div>
+
 <!-- - - - - - - - - - - - - - - QR CODE - - - - - - - - - - - - - - - - - -->
 <table>
   <tr>
@@ -293,7 +290,7 @@
         <div style="font-family: myFirstFont;padding: 10px;text-align: center;" class="transition scaleX text">
             {% if image_partner %}
           <span style="font-family: myFirstFont;text-align: center;">
-            <div class="partner-img">
+            <div>
               <img style="width: 285px; height: 410px;" src="{{ image_partner }}" alt="LOGO" border="0" > <br><br>
             </div>
           </span>
