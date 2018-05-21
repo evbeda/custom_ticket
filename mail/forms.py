@@ -167,7 +167,7 @@ class FormSendEmailPreview(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'value': 'edacticket@gmail.com',
+                'value': 'agustinsaiz02@gmail.com',
                 'placeholder': 'User Order Email',
                 'class': 'form-control'
             }
@@ -228,7 +228,7 @@ class FormSendEmailPreview(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'value': 'edacticket@gmail.com',
+                'value': 'agustinsaiz02@gmail.com',
                 'placeholder': 'From Email',
                 'class': 'form-control'
             }

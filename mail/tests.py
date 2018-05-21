@@ -23,7 +23,7 @@ from mail.domain import CustomData
 from mail.views import (
     accept_webhook,
 )
-from mail.tasks import (
+from mail.views import (
     do_send_email,
     get_data,
     get_organizer,
@@ -81,7 +81,7 @@ class TestDefs(TestBase, TestBaseUser):
     def setUp(self):
         super(TestDefs, self).setUp()
 
-    @patch('mail.tasks.do_send_email')
+    @patch('mail.views.do_send_email')
     def test_process_data(self, mock_do_send_mail):
         data = {
             "costs": {
@@ -269,7 +269,7 @@ class TestDefs(TestBase, TestBaseUser):
         mock_do_send_mail.assert_called_once()
 
     @patch(
-        'mail.tasks.Eventbrite.get',
+        'mail.views.Eventbrite.get',
         return_value={
                 'address': {
                     'address_1': 'address_1 Test',
@@ -324,7 +324,7 @@ class TestDefs(TestBase, TestBaseUser):
         self.assertEquals(social_user_id, 1)
 
     @patch(
-        'mail.tasks.Eventbrite.get',
+        'mail.views.Eventbrite.get',
         return_value={
             "description": {
                 "text": None,
@@ -369,11 +369,11 @@ class TestDefs(TestBase, TestBaseUser):
             u'/organizers/13035972485',
         )
 
-    @patch('mail.tasks.get_organizer', return_value='agustin')
-    @patch('mail.tasks.get_venue', return_value={'address_1 Test'})
-    @patch('mail.tasks.process_data')
+    @patch('mail.views.get_organizer', return_value='agustin')
+    @patch('mail.views.get_venue', return_value={'address_1 Test'})
+    @patch('mail.views.process_data')
     @patch(
-        'mail.tasks.requests.get',
+        'mail.views.requests.get',
         return_value=MagicMock(
             json=MagicMock(
                 return_value={
@@ -562,7 +562,7 @@ class TestDefs(TestBase, TestBaseUser):
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
         with self.settings(SERVER_ACCESS_TOKEN='HJDTUHYQ3ZVTVLMN52VZ'):
-            get_data(request.body, request.build_absolute_uri('/')[:-1])
+            get_data(request)
         # assert eventbrite api call
         mock_requests.assert_called_once()
         self.assertEquals(
@@ -575,11 +575,11 @@ class TestMailsWithCostumization(TestBase, TestBaseUser):
     def setUp(self):
         super(TestMailsWithCostumization, self).setUp()
 
-    @patch('mail.tasks.get_organizer', return_value='agustin')
-    @patch('mail.tasks.get_venue', return_value={'address_1 Test'})
-    @patch('mail.tasks.process_data')
+    @patch('mail.views.get_organizer', return_value='agustin')
+    @patch('mail.views.get_venue', return_value={'address_1 Test'})
+    @patch('mail.views.process_data')
     @patch(
-        'mail.tasks.requests.get',
+        'mail.views.requests.get',
         return_value=MagicMock(
             json=MagicMock(
                 return_value={
@@ -767,7 +767,7 @@ class TestMailsWithCostumization(TestBase, TestBaseUser):
         request = MagicMock(
             body='{"config":{"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
-        get_data(request.body, request.build_absolute_uri('/')[:-1])
+        get_data(request)
         # assert eventbrite api call
         mock_requests.assert_called_once()
         self.assertEquals(
@@ -781,7 +781,7 @@ class TestMailsWithCostumization(TestBase, TestBaseUser):
 
     @patch('customizations.utils.download', return_value=True)
     @patch(
-        'mail.tasks.requests.get',
+        'mail.views.requests.get',
         return_value=MagicMock(
             json=MagicMock(
                 return_value={
@@ -965,19 +965,19 @@ class TestMailsWithCostumization(TestBase, TestBaseUser):
             )
         )
     )
-    @patch('mail.tasks.get_venue', return_value='address_1 Test')
-    @patch('mail.tasks.get_organizer', return_value='agustin')
+    @patch('mail.views.get_venue', return_value='address_1 Test')
+    @patch('mail.views.get_organizer', return_value='agustin')
     def test_integration_data_send_mail(self, mock_organizer, mock_venue, mock_requests, mock_download):
         request = MagicMock(
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
-        response = get_data(request.body, request.build_absolute_uri('/')[:-1])
+        response = get_data(request)
         sended_mails = len(mail.outbox)
         self.assertEquals(sended_mails, 1)
         email = mail.outbox[0]
         from_email = email.from_email
         to_email = email.to
-        self.assertEquals(from_email, settings.EMAIL_HOST_USER)
+        self.assertEquals(from_email, self.user.email)
         self.assertEquals(to_email, [u'edacticket@gmail.com'])
         self.assertEquals(response.status_code, 200)
 
@@ -1021,8 +1021,8 @@ class TestMailsWithCostumization(TestBase, TestBaseUser):
 
 class TestMailWithoutCustomization(TestBase):
 
-    @patch('mail.views.get_data')
-    def test_integration_data_send_mail(self, mock_get_data):
+    @patch('customizations.utils.download', return_value=True)
+    def test_integration_data_send_mail(self, mock_download):
         request = MagicMock(
             body='{"config": {"action": "order.placed", "user_id": "249759038146", "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/", "webhook_id": "633079"}, "api_url": "https://www.eventbriteapi.com/v3/orders/752327237/"}'
         )
