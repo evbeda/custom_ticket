@@ -206,7 +206,7 @@ class IndexViewTest(TestBase):
     )
     def test_create_webhook(self, mock_requests):
         token = 'HJDTUHYQ3ZVTVLMN52VZ'
-        id_webhook = create_webhook(token)
+        id_webhook = create_webhook(token, 'http://localhost:8000')
         self.assertEquals(id_webhook, '646089')
         mock_requests.assert_called_once()
         self.assertEquals(
