@@ -41,6 +41,16 @@
         padding-bottom: 80px;
         padding-top: 30px;
         min-height: 900px;
+
+        }
+        .list p{
+            line-height:10px !important;
+            padding:5px 5px 5px 5px !important;
+        }
+
+        .list a.log:hover {
+            background-color: white !important;
+            cursor: default !important;
         }
         </style>
     </head>
@@ -90,47 +100,19 @@
                             </div>
                             <div class="gh-dd gh-help-box js-gh-dd">
                             </div>
-                            <div class="gh-dd gh-profile-box js-gh-dd">
-                                <a id="user_menu_responsive" class="user-avatar header-link js-gh-action hide-large" onclick="toggle_menu_responsive()" href="#" data-automation="global-nav-user-avatar" aria-controls="js-global-nav-account-menu" aria-haspopup="true" aria-expanded="false">
-                                    M
-                                    <span class="is-hidden-accessible">Menu</span>
-                                </a>
-                                <div id="user_menu_list_responsive" class="gh-dd-menu on-right js-gh-dd-menu" id="js-global-nav-account-menu" aria-hidden="true" aria-expanded="false" role="group" data-automation="global-nav-account-dropdown">
-                                    <ul class="list">
-                                        <li>
-                                            <a class="js-d-track-link" href="{% url 'list_customizations'  %}" >
-                                                Customizations
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="js-d-track-link" href="{% url 'events:home_events'  %}" >
-                                                Events
-                                            </a>
-                                        </li>
-                                        {% if request.user|has_group:"admin" %}
-                                            <li class="list--with-divider-top active">
-                                                <a class="js-d-track-link" href="{% url 'customizations:home_baseticket'  %}" >
-                                                    Base Tickets <span class="label label-danger">ADMIN</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                        <li>
-                                            <a class="js-d-track-link" href="{% url 'customizations:create_customization'  %}" >
-                                                New Customization
-                                            </a>
-                                        </li>
-                                        <li class="list--with-divider-top">
-                                            <a class="js-d-track-link" href="{% url 'logout'  %}" >
-                                                Sign out
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+
                             <div class="hide-small hide-medium gh-dd js-gh-dd">
                                 <div class="gh-dd gh-profile-box js-gh-dd show-large">
                                     <a id="user_menu" class="header-link gh-help js-gh-action" onclick="toggle_menu()" href="#" aria-controls="gh-organize-list" aria-haspopup="true" aria-expanded="false" data-automation="gh-organize-action">{{ user.first_name }} {{ user.last_name }}</a>
                                     <div id="user_menu_list"  class="gh-dd-menu on-right js-gh-dd-menu" id="gh-organize-list" aria-hidden="true" aria-expanded="false" role="group" data-automation="gh-organize-dropdown">
+                                        <ul class="list">
+                                            <li style="font-size: 12px">
+                                                <a class="log" style="color:gray !important; text-align: center;">
+                                                    <p>Logged as:</p>
+                                                    {{user.email}}
+                                                </a>
+                                            </li>
+                                        </ul>
                                         <ul class="list list--has-highlight">
                                             <li>
                                                 <a class="js-d-track-link" href="{% url 'list_customizations'  %}" >
