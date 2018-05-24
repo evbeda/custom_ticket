@@ -107,7 +107,8 @@
             <b><br><input onclick="toggle('footer')" id="checkBox" type="checkbox"> Footer description</b>
             <p>The footer description is a short text that will be placed at the bottom ticket in which is usually put legal information such as ssn, name of the organizer, etc.</p>
             <div id="footer" style='display: none;'>
-                <br><p><b>Ticket message</b> {{ form.footer_description }} {% if form.footer_description.errors %}<div class="alert alert-danger">
+                <br>
+                <p> {{ form.footer_description }} {% if form.footer_description.errors %}<div class="alert alert-danger">
                 <strong>{{ form.footer_description.errors }}</strong>
             </div>{% endif %}</p>
                 <br>
@@ -119,8 +120,9 @@
                 <br>
                 {{ form.show_ticket_type_sequence }} {{ form.show_ticket_type_sequence.label }}
                 <br>
+                <br>
             </div>
-
+            >
             {{ form.hide_ticket_type_price }} <b>Price</b> <br> Select if you need to hide the price of ticket purchased<br>
 
             <br><b>{{ form.double_ticket }} {{ form.double_ticket.label }} </b> <br>Select if you need the information of the tickets duplicated one page for each attendee.<br>
