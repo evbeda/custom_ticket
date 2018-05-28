@@ -24,7 +24,7 @@ from customizations.utils import (
 )
 
 
-def compose_customization(dto, user, links_logo):
+def compose_customization(dto, user, links_logo, url_request):
     has_image = bool(dto.image_data)
     if has_image:
         img_content = get_image_and_save(
@@ -90,7 +90,7 @@ def compose_customization(dto, user, links_logo):
 
             if not UserWebhook.objects.filter(user=user).exists():
                 token = get_token(user)
-                webhook_id = create_webhook(token)
+                webhook_id = create_webhook(token, url_request)
                 UserWebhook.objects.create(
                     user=user,
                     webhook_id=webhook_id,

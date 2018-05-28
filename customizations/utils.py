@@ -159,9 +159,11 @@ def upload_file_dropbox(path_file, file_name_saved):
     return public_url
 
 
-def create_webhook(token):
+def create_webhook(token, url):
+    if settings.URL_LOCAL:
+        url = settings.URL_LOCAL
     data = {
-        "endpoint_url": "https://custom-ticket-heroku.herokuapp.com/mail/mail/",
+        "endpoint_url": url + "/mail/mail/",
         "actions": "order.placed",
         # "event_id": "all_events",
     }

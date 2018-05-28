@@ -217,6 +217,7 @@ class ViewCreateCustomization(LoginRequiredMixin, FormView):
                     dto=dto_customization,
                     user=request.user,
                     links_logo=links_logo,
+                    url_request=request.build_absolute_uri('/')[:-1]
                 )
                 if customization['status']:
                     return HttpResponseRedirect('/')
