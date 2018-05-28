@@ -214,7 +214,7 @@ class FormCustomization(forms.ModelForm):
         label='Double Ticket',
     )
     image_partner = forms.ImageField(
-        required=False,
+        required=True,
         validators=[
             FileExtensionValidator(allowed_extensions=['png', 'jpg', ])
         ],
