@@ -81,7 +81,7 @@ prompt_toolkit = "==1.0.15"
 Pygments = "==2.2.0"
 PyJWT = "==1.6.1"
 "PyPDF2" = "==1.26.0"
-PyYAML = "==3.12"
+PyYAML = "==5.4"
 
 [dev-packages]
 
